@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('groups', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
-            //$table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            //$table->foreign('category_id')->references('id')->on('category')->onDelete('cascade');
+            $table->string('name');
+            $table->string('description');
             $table->timestamp('start_date');
             $table->timestamp('end_date');
             $table->timestamps();
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('groups');
+        Schema::dropIfExists('events');
     }
 };
