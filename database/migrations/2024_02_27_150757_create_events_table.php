@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            //$table->foreign('category_id')->references('id')->on('category')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id');
+            
             $table->string('name');
             $table->string('description');
-            $table->timestamp('start_date')->nullable();
-            $table->timestamp('end_date')->nullable();
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('category_events')->onDelete('cascade');
         });
     }
 
