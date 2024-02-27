@@ -16,8 +16,8 @@ return new class extends Migration
             //$table->foreign('category_id')->references('id')->on('category')->onDelete('cascade');
             $table->string('name');
             $table->string('description');
-            $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
             $table->timestamps();
         });
     }
