@@ -12,6 +12,7 @@ class promoter extends Model
     protected $fillable = [
         'NIF',
         'name',
-        'description'
+        'description',
+        'category_id'
     ];
 }
