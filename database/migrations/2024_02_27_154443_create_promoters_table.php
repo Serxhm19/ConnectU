@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('description');
             $table->primary(['NIF']);
             $table->unsignedBigInteger('category_id');
-            
+            $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('category_events')->onDelete('cascade');
 
