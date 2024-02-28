@@ -18,21 +18,21 @@ class CreatePromoterSeeder extends Seeder
         $promoters = [
             [
                 'NIF' => 1,
-                'name' => '2024-06-10',
+                'name' => 'Promoter 1',
                 'description' => 'Description promoter 1',
-                'category_id' => ''
+                'category_id' => 1
             ],
             [
                 'NIF' => 2,
-                'name' => '2024-02-28',
+                'name' => 'Promoter 2',
                 'description' => 'Description promoter 2',
-                'category_id' => ''
+                'category_id' => 2
             ],
             [
                 'NIF' => 3,
-                'name' => '2024-01-15',
+                'name' => 'Promoter 3',
                 'description' => 'Description promoter 3',
-                'category_id' => ''
+                'category_id' => 3
             ],
         ];
 

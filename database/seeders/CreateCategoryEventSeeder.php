@@ -22,10 +22,12 @@ class CreateCategoryEventSeeder extends Seeder
                 'description' => 'desc category1'
             ],
             [
+                'id' => 2,
                 'name' => 'category2',
                 'description' => 'desc category2'
             ],
             [
+                'id' => 3,
                 'name' => 'category3',
                 'description' => 'desc category3'
             ],
