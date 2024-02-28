@@ -12,11 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('promoters', function (Blueprint $table) {
+            $table->unsignedBigInteger('category_id');
             $table->string('NIF');
             $table->string('name');
             $table->string('description');
             $table->primary(['NIF']);
-            //
+            
+
+            $table->foreign('category_id')->references('id')->on('category_events')->onDelete('cascade');
+
         });
     }
 
