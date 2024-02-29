@@ -8,51 +8,56 @@ use App\Models\Task;
 
 class TaskController extends Controller
 {
-public function index(){
-//return "hola";
+    public function index()
+    {
+        //return "hola";
 
-$task = Task::all()->toArray();
+        $task = Task::all()->toArray();
 
-return $task;
-}
+        return $task;
+    }
 
-public function store(Request $request){
-$request->validate([
-'name' => 'required|max:5',
-'description' => 'required',
-]);
-$task = $request->all();
-$tarea = Task::create($task);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:5',
+            'description' => 'required',
+        ]);
+        $task = $request->all();
+        $tarea = Task::create($task);
 
-return response()->json(['success' => true, 'data' => $tarea]);
-}
+        return response()->json(['success' => true, 'data' => $tarea]);
+    }
 
-public function update($id, Request $request){
-$task = Task::find($id);
+    public function update($id, Request $request)
+    {
+        $task = Task::find($id);
 
-$request->validate([
-'name' => 'required|max:5',
-'description' => 'required',
-]);
+        $request->validate([
+            'name' => 'required|max:5',
+            'description' => 'required',
+        ]);
 
-$dataToUpdate = $request->all();
-$task->update($dataToUpdate);
+        $dataToUpdate = $request->all();
+        $task->update($dataToUpdate);
 
-return response()->json(['success' => true, 'data' => $task]);
-}
+        return response()->json(['success' => true, 'data' => $task]);
+    }
 
-public function destroy($id){
-$task = Task::find($id);
+    public function destroy($id)
+    {
+        $task = Task::find($id);
 
-$task->delete();
+        $task->delete();
 
-return response()->json(['success' => true, 'data' => 'eliminada correctamente']);
-}
+        return response()->json(['success' => true, 'data' => 'eliminada correctamente']);
+    }
 
-public function show($id){
-    
-    $task = Task::find($id);
-    return response()->json($task);
+    public function show($id)
+    {
 
-}
+        $task = Task::find($id);
+        return response()->json($task);
+
+    }
 }
