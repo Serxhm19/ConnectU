@@ -26,13 +26,25 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forget.password.post');
 Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
-//---------------------------------------------------------------//
-Route::get('user', [UserController::class, 'index']);
+
+
+//--------------------------Event----------------------------------//
+Route::get('user', [UserController::class, 'allUsers']);
 Route::post('user/', [UserController::class, 'store']);
 Route::put('user/update/{id}', [UserController::class, 'update']);
 Route::delete('user/{id}', [UserController::class, 'destroy']);
 Route::post('user/{id}', [UserController::class, 'update']);
 Route::post('user/update/{id}', [UserController::class, 'update']);
+//---------------------------------------------------------------//
+
+
+//--------------------------Event----------------------------------//
+Route::get('event', [EventController::class, 'index']);
+Route::post('event/', [EventController::class, 'store']);
+Route::put('event/update/{id}', [EventController::class, 'update']);
+Route::delete('event/{id}', [EventController::class, 'destroy']);
+Route::post('event/{id}', [EventController::class, 'update']);
+Route::post('event/update/{id}', [EventController::class, 'update']);
 //---------------------------------------------------------------//
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
