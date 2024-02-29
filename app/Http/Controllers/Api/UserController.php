@@ -48,6 +48,13 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
+    public function allUsers()
+    {
+        $users = User::all()->toArray();
+        
+        return $users;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
