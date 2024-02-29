@@ -8,6 +8,16 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+
+//---------------------------------------------------------------//
+use App\Http\Controllers\Api\Category_eventController;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\GroupController;
+use App\Http\Controllers\Api\GroupUserController;
+use App\Http\Controllers\Api\MessagesController;
+use App\Http\Controllers\Api\PromoterController;
+//---------------------------------------------------------------//
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,16 +26,25 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forget.password.post');
 Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
-Route::group(['middleware' => 'auth:sanctum'], function() {
+//---------------------------------------------------------------//
+Route::get('user', [UserController::class, 'index']);
+Route::post('user/', [UserController::class, 'store']);
+Route::put('user/update/{id}', [UserController::class, 'update']);
+Route::delete('user/{id}', [UserController::class, 'destroy']);
+Route::post('user/{id}', [UserController::class, 'update']);
+Route::post('user/update/{id}', [UserController::class, 'update']);
+//---------------------------------------------------------------//
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
     //Route::apiResource('exercises', ExerciseController::class);
-    Route::post('exercises/', [ExerciseController::class,'store']); //Guardar
-    Route::get('exercises', [ExerciseController::class,'index']); //Listar
-    Route::get('exercises/{exercise}', [ExerciseController::class,'show']); //Mostrar
-    Route::post('exercises/update/{id}', [ExerciseController::class,'update']); //Editar
+    Route::post('exercises/', [ExerciseController::class, 'store']); //Guardar
+    Route::get('exercises', [ExerciseController::class, 'index']); //Listar
+    Route::get('exercises/{exercise}', [ExerciseController::class, 'show']); //Mostrar
+    Route::post('exercises/update/{id}', [ExerciseController::class, 'update']); //Editar
 
     Route::get('role-list', [RoleController::class, 'getList']);
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);
@@ -35,7 +54,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('/user', [ProfileController::class, 'user']);
     Route::put('/user', [ProfileController::class, 'update']);
 
-    Route::get('abilities', function(Request $request) {
+    Route::get('abilities', function (Request $request) {
         return $request->user()->roles()->with('permissions')
             ->get()
             ->pluck('permissions')
