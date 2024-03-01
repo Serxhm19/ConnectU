@@ -10,7 +10,7 @@ class MessagesController extends Controller
 {
     public function index(){
         
-        $messages = Message::all()->toArray();
+        $messages = Messages::all()->toArray();
         
         return $messages;
     }
@@ -22,13 +22,13 @@ class MessagesController extends Controller
         ]);
 
         $message = $request->all();
-        $mensaje = Message::create($message);
+        $mensaje = Messages::create($message);
         
         return response()->json(['success' => true, 'data' => $mensaje]);
     }
 
     public function update($id, Request $request){
-        $message = Message::find($id);
+        $message = Messages::find($id);
         
         $request->validate([
             'message' => 'sometimes',
@@ -42,7 +42,7 @@ class MessagesController extends Controller
     }
 
     public function destroy($id){
-        $message = Message::find($id);
+        $message = Messages::find($id);
         
         $message->delete();
         
@@ -51,7 +51,7 @@ class MessagesController extends Controller
         
     public function show($id){
             
-        $message = Message::find($id);
+        $message = Messages::find($id);
         return response()->json($message);
         
     }

@@ -28,13 +28,23 @@ Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('
 
 
 
-//--------------------------Event----------------------------------//
+//--------------------------User---------------------------------//
 Route::get('user', [UserController::class, 'allUsers']);
 Route::post('user/', [UserController::class, 'store']);
 Route::put('user/update/{id}', [UserController::class, 'update']);
 Route::delete('user/{id}', [UserController::class, 'destroy']);
 Route::post('user/{id}', [UserController::class, 'update']);
 Route::post('user/update/{id}', [UserController::class, 'update']);
+//---------------------------------------------------------------//
+
+
+//--------------------------CategoryEvent---------------------------------//
+Route::get('category', [Category_eventController::class, 'index']);
+Route::post('category/', [Category_eventController::class, 'store']);
+Route::put('category/update/{id}', [Category_eventController::class, 'update']);
+Route::delete('category/{id}', [Category_eventController::class, 'destroy']);
+Route::post('category/{id}', [Category_eventController::class, 'update']);
+Route::post('category/update/{id}', [Category_eventController::class, 'update']);
 //---------------------------------------------------------------//
 
 
@@ -46,6 +56,47 @@ Route::delete('event/{id}', [EventController::class, 'destroy']);
 Route::post('event/{id}', [EventController::class, 'update']);
 Route::post('event/update/{id}', [EventController::class, 'update']);
 //---------------------------------------------------------------//
+
+
+//--------------------------Group----------------------------------//
+Route::get('group', [GroupController::class, 'index']);
+Route::post('group/', [GroupController::class, 'store']);
+Route::put('group/update/{id}', [GroupController::class, 'update']);
+Route::delete('group/{id}', [GroupController::class, 'destroy']);
+Route::post('group/{id}', [GroupController::class, 'update']);
+Route::post('group/update/{id}', [GroupController::class, 'update']);
+//---------------------------------------------------------------//
+
+
+//--------------------------GroupUser----------------------------//
+Route::get('groupuser', [GroupUserController::class, 'index']);
+Route::post('groupuser/', [GroupUserController::class, 'store']);
+Route::put('groupuser/update/{id}', [GroupUserController::class, 'update']);
+Route::delete('groupuser/{id}', [GroupUserController::class, 'destroy']);
+Route::post('groupuser/{id}', [GroupUserController::class, 'update']);
+Route::post('groupuser/update/{id}', [GroupUserController::class, 'update']);
+//---------------------------------------------------------------//
+
+
+//--------------------------Messages-----------------------------//
+Route::get('message', [MessagesController::class, 'index']);
+Route::post('message/', [MessagesController::class, 'store']);
+Route::put('message/update/{id}', [MessagesController::class, 'update']);
+Route::delete('message/{id}', [MessagesController::class, 'destroy']);
+Route::post('message/{id}', [MessagesController::class, 'update']);
+Route::post('message/update/{id}', [MessagesController::class, 'update']);
+//---------------------------------------------------------------//
+
+
+//--------------------------Promoter-----------------------------//
+Route::get('promoter', [PromoterController::class, 'index']);
+Route::post('promoter/', [PromoterController::class, 'store']);
+Route::put('promoter/update/{id}', [PromoterController::class, 'update']);
+Route::delete('promoter/{id}', [PromoterController::class, 'destroy']);
+Route::post('promoter/{id}', [PromoterController::class, 'update']);
+Route::post('promoter/update/{id}', [PromoterController::class, 'update']);
+//---------------------------------------------------------------//
+
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UserController::class);
