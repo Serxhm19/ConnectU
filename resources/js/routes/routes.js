@@ -11,6 +11,43 @@ const ExercisesIndex  = ()  => import('../views/admin/exercises/Index.vue');
 const ExercisesCreate  = ()  => import('../views/admin/exercises/Create.vue');
 const ExercisesEdit  = ()  => import('../views/admin/exercises/Edit.vue');
 
+/*---------------------------------------------------------------------------------//
+const EventList  = ()  => import('../views/event/index.vue');
+const EventCreate  = ()  => import('../views/event/create.vue');
+const EventUpdate  = ()  => import('../views/event/update.vue');
+//---------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------//
+const GroupList  = ()  => import('../views/group/index.vue');
+const GroupCreate  = ()  => import('../views/group/create.vue');
+const GroupUpdate  = ()  => import('../views/group/update.vue');
+//---------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------//
+const PromoterList  = ()  => import('../views/promoter/index.vue');
+const PromoterCreate  = ()  => import('../views/promoter/create.vue');
+const PromoterUpdate  = ()  => import('../views/promoter/update.vue'); 
+//---------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------//
+const CategoryEventList  = ()  => import('../views/categoryEvent/index.vue');
+const CategoryEventCreate  = ()  => import('../views/categoryEvent/create.vue');
+const CategoryEventUpdate  = ()  => import('../views/categoryEvent/update.vue');
+//---------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------//
+const MessagesList  = ()  => import('../views/messages/index.vue');
+const MessagesCreate  = ()  => import('../views/messages/create.vue');
+const MessagesUpdate  = ()  => import('../views/messages/update.vue');
+//---------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------//
+const GroupUserList  = ()  => import('../views/groupUser/index.vue');
+const GroupUserCreate  = ()  => import('../views/groupUser/create.vue');
+const GroupUserUpdate  = ()  => import('../views/groupUser/update.vue');
+//---------------------------------------------------------------------------------*/
+
+
 function requireLogin(to, from, next) {
     let isLogin = false;
     isLogin = !!store.state.auth.authenticated;

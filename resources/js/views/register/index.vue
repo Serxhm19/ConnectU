@@ -7,7 +7,7 @@
                     <div class="card-body">
                         <form @submit.prevent="submitRegister">
                             <div class="">
-                                <!-- Email -->
+                                <!-- name -->
                                 <div class="mb-3">
                                     <label for="name" class="form-label">{{ $t('name') }}</label>
                                     <input v-model="registerForm.name" id="name" type="text" class="form-control" autofocus>
@@ -18,6 +18,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="surname" class="form-label">{{ $t('surname') }}</label>
+                                    <input v-model="registerForm.surname" id="surname" type="text" class="form-control" autofocus>
+
+                                </div>
+                                <!-- Email -->
                                 <div class="mb-3">
                                     <label for="email" class="form-label">{{ $t('email') }}</label>
                                     <input v-model="registerForm.email" id="email" type="email" class="form-control" autocomplete="username">
@@ -73,6 +79,8 @@
 
 import useAuth from '@/composables/auth'
 
-const { registerForm, validationErrors, processing, submitRegister } = useAuth();
+const { loginForm, registerForm, validationErrors, processing, submitRegister } = useAuth();
+
+console.log(registerForm);
 
 </script>
