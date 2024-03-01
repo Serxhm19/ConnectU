@@ -32,5 +32,7 @@
     "new_password": "Nueva Contraseña",
     "login_with": "Iniciar Sesión con",
     "register_with": "Registro con",
-    "surname": "Surname"
+    "surname": "Apellido",
+    "genre": "Genero",
+    "nickname": "Nombre de Usuario"
 }
