@@ -21,7 +21,10 @@
                                 <div class="mb-3">
                                     <label for="surname" class="form-label">{{ $t('surname') }}</label>
                                     <input v-model="registerForm.surname" id="surname" type="text" class="form-control" autofocus>
-
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nickname" class="form-label">{{ $t('nickname') }}</label>
+                                    <input v-model="registerForm.nickname" id="nickname" type="text" class="form-control" autofocus>
                                 </div>
                                 <!-- Email -->
                                 <div class="mb-3">
@@ -33,6 +36,10 @@
                                             {{ message }}
                                         </div>
                                     </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="genre" class="form-label">{{ $t('genre') }}</label>
+                                    <input v-model="registerForm.genre" id="genre" type="text" class="form-control" autofocus>
                                 </div>
                                 <!-- Password -->
                                 <div class="mb-4">
