@@ -35,12 +35,8 @@ const CategoryEventCreate  = ()  => import('../views/categoryEvent/create.vue');
 const CategoryEventUpdate  = ()  => import('../views/categoryEvent/update.vue');
 //---------------------------------------------------------------------------------*/
 
-/*---------------------------------------------------------------------------------//
-const MessagesList  = ()  => import('../views/messages/index.vue');
-const MessagesCreate  = ()  => import('../views/messages/create.vue');
-const MessagesUpdate  = ()  => import('../views/messages/update.vue');
-//---------------------------------------------------------------------------------*/
-
+//const ChatList  = ()  => import('../views/admin/chat/index.vue');
+//const ChatView  = ()  => import('../views/admin/chat/chat.vue');
 /*---------------------------------------------------------------------------------//
 const GroupUserList  = ()  => import('../views/groupUser/index.vue');
 const GroupUserCreate  = ()  => import('../views/groupUser/create.vue');
@@ -149,6 +145,24 @@ export default [
                 path: 'profile',
                 component: () => import('../views/admin/profile/index.vue'),
                 meta: { breadCrumb: 'Profile' }
+            },
+            {
+                name: 'chat.index',
+                path: 'chat',
+                component: () => import('../views/admin/chat/index.vue'),
+                meta: { breadCrumb: 'Chat' }
+            },
+            {
+                name: 'calendar.calendar',
+                path: 'calendar',
+                component: () => import('../views/admin/calendar/calendar.vue'),
+                meta: { breadCrumb: 'Calendar' }
+            },
+            {
+                name: 'account.account',
+                path: 'account',
+                component: () => import('../views/admin/account/account.vue'),
+                meta: { breadCrumb: 'Account' }
             },
             {
                 name: 'posts.index',
