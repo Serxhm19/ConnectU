@@ -72,10 +72,8 @@ const checkActiveRoute = (item) => {
 </script>
 
 <template>
-    <div  v-if="root || item.permision === 'all' || can(item.permision) ">
-    <li :class="{ 'layout-root-menuitem': root, 'active-menuitem': isActiveMenu }">
-        <div v-if="root && item.visible !== false" class="layout-menuitem-root-text">{{ item.label }}</div>
-        
+    <div>
+    <li :class="{ 'layout-root-menuitem': root, 'active-menuitem': isActiveMenu }">        
         <a v-if="(!item.to || item.items) && item.visible !== false" :href="item.url" @click="itemClick($event, item, index)" :class="item.class" :target="item.target" tabindex="0">
             <i :class="item.icon" class="layout-menuitem-icon"></i>
             <span class="layout-menuitem-text">{{ item.label }}</span>
@@ -91,6 +89,7 @@ const checkActiveRoute = (item) => {
                 <app-menu-item v-for="(child, i) in item.items" :key="child" :index="i" :item="child" :parentItemKey="itemKey" :root="false"></app-menu-item>
             </ul>
         </Transition>
+        <div v-if="root && item.visible !== false " class="layout-menuitem-root-text"><hr></div>
     </li>
     </div>
 

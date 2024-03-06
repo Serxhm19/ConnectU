@@ -1,50 +1,71 @@
 
 <template>
     <ul class="layout-menu">
-        <template v-for="(item, i) in model" :key="item">
-            <app-menu-item v-if="!item.separator" :item="item" :index="i"></app-menu-item>
-            <li v-if="item.separator" class="menu-separator"></li>
+        <template v-if="userClass === 'User'">
+            <template v-for="(item, i) in modelUser" :key="item">
+                <app-menu-item v-if="!item.separator" :item="item" :index="i"></app-menu-item>
+                <li v-if="item.separator" class="menu-separator"></li>
+            </template>
+        </template>
+        <template v-else-if="userClass === 'Promoter'">
+            <template v-for="(item, i) in modelPromoter" :key="item">
+                <app-menu-item v-if="!item.separator" :item="item" :index="i"></app-menu-item>
+                <li v-if="item.separator" class="menu-separator"></li>
+            </template>
         </template>
     </ul>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+
+const storageData = JSON.parse(localStorage.getItem('vuex'));
+
+let userClass;
+if (storageData.auth.user) {
+    userClass = ref('User');
+}else{
+    userClass = ref('Promoter');
+}
+
 import AppMenuItem from './AppMenuItem.vue';
-import {useAbility} from '@casl/vue'
-const {can} = useAbility();
+import { useAbility } from '@casl/vue';
+const { can } = useAbility();
 
 const vela = "pepe";
-
-
-const model = ref([
+const modelPromoter = ref([
     {
-        label: 'Home',
-        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin', permision: 'all'}]
-    },
-    {
-        label: 'Usuarios',
+        label: 'Usuario',
         items: [
-            { label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/admin/users', permision: 'user-list' },
-            { label: 'Roles', icon: 'pi pi-fw pi-check-square', to: '/admin/roles', permision:'role-list' },
-            { label: 'Permisos', icon: 'pi pi-fw pi-bookmark', to: '/admin/permissions', permision:'permission-list' }
+            { label: 'Inicio', icon: 'pi pi-fw pi-home', to: '/admin/inicio', permision: 'post-list' },
+            { label: 'Mensajes', icon: 'pi pi-fw pi-comment', to: '/admin/posts', permision: 'post-list' },
+            { label: 'Calendario', icon: 'pi pi-fw pi-calendar', to: '/admin/posts', permision: 'post-list' },
+            { label: 'Mi perfil', icon: 'pi pi-fw pi-user', to: '/admin/posts', permision: 'post-list' },    
         ]
     },
     {
-        label: 'Ejercicios',
+        label: 'Promotor',
         items: [
-            { label: 'Ejercicios', icon: 'pi pi-fw pi-id-card', to: '/admin/exercises', permision: 'exercise-list' },
-            { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categories', permision: 'category-list' }
-        ]
-    },
-    {
-        label: 'Posts',
-        items: [
-            { label: 'Posts', icon: 'pi pi-fw pi-id-card', to: '/admin/posts', permision: 'post-list' }
+            { label: 'Crear evento', icon: 'pi pi-fw pi-plus', to: '/admin/posts', permision: 'post-list' },
+            { label: 'Mis eventos', icon: 'pi pi-fw pi-users', to: '/admin/posts', permision: 'post-list' },
+            { label: 'Chats de eventos', icon: 'pi pi-fw pi-comments', to: '/admin/posts', permision: 'post-list' },    
         ]
     }
 ]);
-</script>
 
+const modelUser = ref([
+    {
+        label: 'Usuario',
+        items: [
+            { label: 'Inicio', icon: 'pi pi-fw pi-home', to: '/admin/inicio', permision: 'post-list' },
+            { label: 'Mensajes', icon: 'pi pi-fw pi-comment', to: '/admin/posts', permision: 'post-list' },
+            { label: 'Calendario', icon: 'pi pi-fw pi-calendar', to: '/admin/posts', permision: 'post-list' },
+            { label: 'Mi perfil', icon: 'pi pi-fw pi-user', to: '/admin/posts', permision: 'post-list' },    
+        ]
+    }
+]);
+
+console.log(modelPromoter);
+</script>
 
 <style lang="scss" scoped></style>

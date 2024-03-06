@@ -6,10 +6,22 @@
     --surface-e: #ffffff;
     --surface-f: #ffffff;
     --text-color: #495057;
+    --text-color-menu: #0041D2;
     --text-color-secondary: #6c757d;
     --primary-color: #6366F1;
     --primary-color-text: #ffffff;
     --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    --blue-0: #ffffff;
+    --blue-50: #F0F6FF;
+    --blue-100: #D9E8FF;
+    --blue-200: #B0D6FF;
+    --blue-300: #83BFFF;
+    --blue-400: #4D9EFF;
+    --blue-500: #0077FF;
+    --blue-600: #005AFF;
+    --blue-700: #0041D2;
+    --blue-800: #002BA0;
+    --blue-900: #001F75;
     --surface-0: #ffffff;
     --surface-50: #FAFAFA;
     --surface-100: #F5F5F5;
@@ -37,6 +49,10 @@
     --surface-ground: #eff3f8;
     --surface-section: #ffffff;
     --surface-card: #ffffff;
+    --surface-overlay: #B0D6FF;
+    --surface-border: #dfe7ef;
+    --surface-hover: #f6f9fc;
+    --blue-hover: #002BA0;
     --surface-overlay: #ffffff;
     --surface-border: #dfe7ef;
     --surface-hover: #f6f9fc;
@@ -64,6 +80,7 @@
 
 .p-disabled,
 .p-component:disabled {
+    opacity: .6;
     opacity: .6
 }
 
@@ -76,6 +93,7 @@
 }
 
 .pi {
+    font-size: 1rem;
     font-size: 1rem
 }
 
@@ -7250,4 +7268,28 @@
 
 .p-speeddial-item.p-focus>.p-speeddial-action {
     box-shadow: 0 0 0 2px #fff, 0 0 0 4px #b1b3f8, 0 1px 2px 0 #000
+}
+
+
+.p-breadcrumb{
+    padding: 10px 0 30px 10px;
+}
+
+.p-breadcrumb-list{
+    display: flex;
+    flex-direction: row;
+    padding-top: 3px;
+}
+
+.p-breadcrumb .p-menuitem{
+    list-style: none;
+    width: auto;
+    height: 13px;
+}
+
+.p-menuitem-separator{
+    list-style: none;
+    width: auto;
+    height: 13px;
+    padding-top: 4px;
 }
