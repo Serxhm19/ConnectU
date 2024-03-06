@@ -40,9 +40,9 @@ export default function useAuth() {
         email: '',
         password: '',
         password_confirmation: '',
-        genre:''
-
+        genre: ''
     })
+
 
     const submitLogin = async () => {
         if (processing.value) return
@@ -182,7 +182,7 @@ export default function useAuth() {
             })
     }
 
-    const getAbilities = async() => {
+    const getAbilities = async () => {
         await axios.get('/api/abilities')
             .then(response => {
                 const permissions = response.data

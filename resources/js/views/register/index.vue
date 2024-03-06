@@ -16,7 +16,7 @@
 
 /* parámetros para configurar las pestañas */
 :root {
-    --tabs-border-color: #ABCDEF;
+    --tabs-border-color: #ffffff;
     --tabs-border-size: 3px;
     --tabs-text-color: white;
     --tabs-dark-color: #012345;
@@ -198,8 +198,9 @@ a {
                                         <!-- Email input -->
                                         <div class="mb-3">
                                             <label for="email" class="form-label">{{ $t('email') }}</label>
-                                            <input v-model="registerForm.email" id="emailRegister" type="email" class="form-control"
-                                                required autofocus autocomplete="username" placeholder="Email">
+                                            <input v-model="registerForm.email" id="emailRegister" type="email"
+                                                class="form-control" required autofocus autocomplete="username"
+                                                placeholder="Email">
                                             <!-- Validation Errors -->
                                             <div class="text-danger mt-1">
                                                 <div v-for="message in validationErrors?.email">
@@ -212,9 +213,8 @@ a {
                                             <label for="password" class="form-label">
                                                 {{ $t('password') }}
                                             </label>
-                                            <input v-model="registerForm.password" id="passwordRegister" type="password"
-                                                class="form-control" required autocomplete="current-password"
-                                                placeholder="Password">
+                                            <input v-model="registerForm.password" id="password" type="password"
+                                                class="form-control" autocomplete="current-password">
                                             <!-- Validation Errors -->
                                             <div class="text-danger-600 mt-1">
                                                 <div v-for="message in validationErrors?.password">
@@ -227,8 +227,7 @@ a {
                                                 {{ $t('confirm_password') }}
                                             </label>
                                             <input v-model="registerForm.password_confirmation" id="password_confirmation"
-                                                type="password" class="form-control" autocomplete="current-password"
-                                                placeholder="Confirm Password">
+                                                type="password" class="form-control" autocomplete="current-password">
                                             <!-- Validation Errors -->
                                             <div class="text-danger-600 mt-1">
                                                 <div v-for="message in validationErrors?.password_confirmation">
@@ -236,6 +235,7 @@ a {
                                                 </div>
                                             </div>
                                         </div>
+
                                         <!-- Gender -->
                                         <div class="mb-3">
                                             <label class="form-label">{{ $t('genre') }}</label>
@@ -296,8 +296,9 @@ a {
                                                         <label for="password" class="form-label">
                                                             {{ $t('password') }}
                                                         </label>
-                                                        <input v-model="loginForm.password" id="passwordLogin" type="password"
-                                                            class="form-control" required autocomplete="current-password">
+                                                        <input v-model="loginForm.password" id="passwordLogin"
+                                                            type="password" class="form-control" required
+                                                            autocomplete="current-password">
                                                         <!-- Validation Errors -->
                                                         <div class="text-danger-600 mt-1">
                                                             <div v-for="message in validationErrors?.password">
