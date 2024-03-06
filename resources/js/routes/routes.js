@@ -110,6 +110,12 @@ export default [
                 beforeEnter: guest,
             },
             {
+                path: 'registerPromoter',
+                name: 'auth.registerPromoter',
+                component: () => import('../views/registerPromoter/registerPromoter.vue'),
+                beforeEnter: guest,
+            },
+            {
                 path: 'forgot-password',
                 name: 'auth.forgot-password',
                 component: () => import('../views/auth/passwords/Email.vue'),
