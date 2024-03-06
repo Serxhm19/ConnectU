@@ -33,7 +33,6 @@
     --surface-700: #616161;
     --surface-800: #424242;
     --surface-900: #212121;
-
     --gray-50: #FAFAFA;
     --gray-100: #F5F5F5;
     --gray-200: #EEEEEE;
@@ -54,6 +53,9 @@
     --surface-border: #dfe7ef;
     --surface-hover: #f6f9fc;
     --blue-hover: #002BA0;
+    --surface-overlay: #ffffff;
+    --surface-border: #dfe7ef;
+    --surface-hover: #f6f9fc;
     --focus-ring: 0 0 0 0.2rem #C7D2FE;
     --maskbg: rgba(0, 0, 0, 0.4);
     --highlight-bg: #EEF2FF;
@@ -79,6 +81,7 @@
 .p-disabled,
 .p-component:disabled {
     opacity: .6;
+    opacity: .6
 }
 
 .p-error {
@@ -91,6 +94,7 @@
 
 .pi {
     font-size: 1rem;
+    font-size: 1rem
 }
 
 .p-icon {
@@ -5358,6 +5362,7 @@
     background: #fff;
     border: 1px solid #dee2e6;
     border-radius: 6px;
+    padding: 1rem
 }
 
 .p-breadcrumb .p-breadcrumb-list li .p-menuitem-link {

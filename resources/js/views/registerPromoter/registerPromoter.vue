@@ -15,8 +15,50 @@
                         <button type="button" class="btn btn-light"> <router-link class="nav-link" to="/register">{{
                             $t('register') }}</router-link>
                         </button>
+                        <button type="button" class="btn btn-light"> <router-link class="nav-link" to="/registerPromoter">{{
+                            $t('register as promoter') }}</router-link>
+                        </button>
                     </div>
+
                     <form @submit.prevent="submitLogin">
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">{{ $t('name') }}</label>
+                            <input v-model="loginForm.name" id="name" type="name" class="form-control" required autofocus
+                                autocomplete="name" placeholder="Name">
+                            <!-- Validation Errors -->
+                            <div class="text-danger mt-1">
+                                <div v-for="message in validationErrors?.email">
+                                    {{ message }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Surname -->
+                        <div class="mb-3">
+                            <label for="surname" class="form-label">{{ $t('surname') }}</label>
+                            <input v-model="loginForm.surname" id="Surname" type="Surname" class="form-control" required
+                                autofocus placeholder="Surname">
+                            <!-- Validation Errors -->
+                            <div class="text-danger mt-1">
+                                <div v-for="message in validationErrors?.email">
+                                    {{ message }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Nickname -->
+                        <div class="mb-4">
+                            <label for="nickname" class="form-label">
+                                {{ $t('nickname') }}
+                            </label>
+                            <input v-model="loginForm.nickname" id="nickname" type="nickname" class="form-control" required
+                                autocomplete="current-nickname" placeholder="Nickname">
+                            <!-- Validation Errors -->
+                            <div class="text-danger-600 mt-1">
+                                <div v-for="message in validationErrors?.password">
+                                    {{ message }}
+                                </div>
+                            </div>
+                        </div>
                         <!-- Email input -->
                         <div class="mb-3">
                             <label for="email" class="form-label">{{ $t('email') }}</label>
@@ -29,7 +71,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Password -->
                         <div class="mb-4">
                             <label for="password" class="form-label">

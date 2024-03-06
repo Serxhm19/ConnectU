@@ -38,9 +38,10 @@ export default function useAuth() {
         surname: '',
         nickname: '',
         email: '',
-        genre:'',
         password: '',
-        password_confirmation: ''
+        password_confirmation: '',
+        genre:''
+
     })
 
     const submitLogin = async () => {

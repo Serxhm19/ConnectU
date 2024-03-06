@@ -39,6 +39,8 @@
     "verify_email_address": "We sent you an email with an the verification link.",
     "surname": "Surname",
     "genre": "Genre",
-    "nickname": "Nickname"
-
+    "nickname": "Nickname",
+    "male": "Male",
+    "female": "Female",
+    "register_as_promoter": "Register as Promoter"
 }
