@@ -20,8 +20,10 @@ class PromoterController extends Controller
         $request->validate([
             'NIF' => 'sometimes',
             'name' => 'sometimes',
+            'email' => 'sometimes',
             'description' => 'sometimes',
-            'category_id' => 'sometimes'
+            'category_id' => 'sometimes',
+            'password' => 'sometimes'
         ]);
 
         $promoter = $request->all();
@@ -36,7 +38,9 @@ class PromoterController extends Controller
         $request->validate([
             'category_id' => '',
             'name' => '',
+            'email' => '',
             'description' => '',
+            'password' => '',
             'start_date' => '',
             'end_date' => ''
         ]);

@@ -20,19 +20,24 @@ class CreatePromoterSeeder extends Seeder
                 'NIF' => 1,
                 'name' => 'Promoter 1',
                 'description' => 'Description promoter 1',
-                'category_id' => 1
+                'category_id' => 1,
+                'password' => bcrypt('12345678')
             ],
             [
                 'NIF' => 2,
                 'name' => 'Promoter 2',
                 'description' => 'Description promoter 2',
-                'category_id' => 2
+                'category_id' => 2,
+                'password' => bcrypt('12345678')
+
             ],
             [
                 'NIF' => 3,
                 'name' => 'Promoter 3',
                 'description' => 'Description promoter 3',
-                'category_id' => 3
+                'category_id' => 3,
+                'password' => bcrypt('12345678')
+
             ],
         ];
 
