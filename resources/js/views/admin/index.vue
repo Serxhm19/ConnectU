@@ -72,44 +72,29 @@
 
         </div>
         <div class="col-12 lg:col-4 xl:col-4">
-            <div class="card mb-3 fixed-right">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
-            </div>
-            <div class="card mb-3 fixed-right">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
-            </div>
-            <div class="card mb-0 fixed-right">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+            <div class="card-body shadow-sm">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <input v-model="search_global" type="text" placeholder="Search..." class="form-control mb-4">
+                        
+                        <div class="mb-4">
+                            <input v-model="search_id" type="text" class="form-control" placeholder="Filter by ID">
+                        </div>
+                        <div class="mb-4">
+                            <input v-model="search_title" type="text" class="form-control" placeholder="Filter by Title">
+                        </div>
+
+                        <div class="list-group">
+                            <div v-for="post in categories.data" :key="post.id" class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ post.name }}</h5>
+                                    <p class="mb-1">{{ post.id }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
+
             </div>
 
         </div>
@@ -283,8 +268,54 @@
 </template>
 
 <script setup>
+    import {ref, onMounted, watch} from "vue";
+    import useCategories from "../../composables/categories_event";
+    import {useAbility} from '@casl/vue'
+
+    const search_id = ref('')
+    const search_title = ref('')
+    const search_global = ref('')
+    const orderColumn = ref('created_at')
+    const orderDirection = ref('desc')
+    const {categories, getCategories, deleteCategory} = useCategories()
+    const {can} = useAbility()
+    onMounted(() => {
+        getCategories()
+    })
+    const updateOrdering = (column) => {
+        orderColumn.value = column;
+        orderDirection.value = (orderDirection.value === 'asc') ? 'desc' : 'asc';
+        getCategories(
+            1,
+            search_id.value,
+            search_title.value,
+            search_global.value,
+            orderColumn.value,
+            orderDirection.value
+        );
+    }
+    watch(search_id, (current, previous) => {
+        getCategories(
+            1,
+            current,
+            search_title.value,
+            search_global.value
+        )
+    })
+    watch(search_title, (current, previous) => {
+        getCategories(
+            1,
+            search_id.value,
+            current,
+            search_global.value
+        )
+    })
+    watch(search_global, _.debounce((current, previous) => {
+        getCategories(
+            1,
+            search_id.value,
+            search_title.value,
+            current
+        )
+    }, 200))
 </script>
-
-<style scoped>
-
-</style>

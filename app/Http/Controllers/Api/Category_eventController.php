@@ -3,56 +3,73 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCategoryEventRequest;
+use App\Http\Resources\CategoryEventResource;
 use App\Models\Category_event;
+use Illuminate\Http\Request;
 
 class Category_eventController extends Controller
 {
     public function index(){
         
-        $cetegories = Category_event::all()->toArray();
-        
-        return $cetegories;
+        $orderColumn = request('order_column', 'created_at');
+        if (!in_array($orderColumn, ['id', 'name', 'description', 'created_at'])) {
+            $orderColumn = 'created_at';
+        }
+        $orderDirection = request('order_direction', 'desc');
+        if (!in_array($orderDirection, ['asc', 'desc'])) {
+            $orderDirection = 'desc';
+        }
+        $categories = Category_event::
+            when(request('search_id'), function ($query) {
+                $query->where('id', request('search_id'));
+            })
+            ->when(request('search_title'), function ($query) {
+                $query->where('name', 'like', '%'.request('search_title').'%');
+            })
+            ->when(request('search_global'), function ($query) {
+                $query->where(function($q) {
+                    $q->where('id', request('search_global'))
+                        ->orWhere('name', 'like', '%'.request('search_global').'%');
+
+                });
+            })
+            ->orderBy($orderColumn, $orderDirection)
+            ->paginate(50);
+        return CategoryEventResource::collection($categories);
     }
 
-    public function store(Request $request){
-        $request->validate([
-            'name' => 'sometimes',
-            'description' => 'sometimes'
-        ]);
+    public function store(StoreCategoryEventRequest $request)
+    {
+        $this->authorize('category-create');
+        $category = Category_event::create($request->validated());
 
-        $category_event = $request->all();
-        $categoria = Category_event::create($category_event);
-        
-        return response()->json(['success' => true, 'data' => $categoria]);
+        return new StoreCategoryEventRequest($category);
     }
 
-    public function update($id, Request $request){
-        $category_event = Category_event::find($id);
-        
-        $request->validate([
-            'name' => 'sometimes',
-            'description' => 'sometimes'
-        ]);
-        
-        $dataToUpdate = $request->all();
-        $category_event->update($dataToUpdate);
-        
-        return response()->json(['success' => true, 'data' => $category_event]);
+    public function show(Category_event $category)
+    {
+        $this->authorize('category-edit');
+        return new StoreCategoryEventRequest($category);
     }
 
-    public function destroy($id){
-        $category_event = Category_event::find($id);
-        
-        $category_event->delete();
-        
-        return response()->json(['success' => true, 'data' => 'eliminada correctamente']);
+    public function update(Category_event $category, StoreCategoryEventRequest $request)
+    {
+        $this->authorize('category-edit');
+        $category->update($request->validated());
+
+        return new StoreCategoryEventRequest($category);
     }
-        
-    public function show($id){
-            
-        $category_event = Category_event::find($id);
-        return response()->json($category_event);
-        
+
+    public function destroy(Category_event $category) {
+        $this->authorize('category-delete');
+        $category->delete();
+
+        return response()->noContent();
+    }
+
+    public function getList()
+    {
+        return StoreCategoryEventRequest::collection(Category_event::all());
     }
 }

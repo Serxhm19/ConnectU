@@ -257,6 +257,7 @@ export default [
                 ]
             },
 
+
             {
                 name: 'permissions',
                 path: 'permissions',

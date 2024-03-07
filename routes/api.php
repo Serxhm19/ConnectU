@@ -39,12 +39,8 @@ Route::post('user/update/{id}', [UserController::class, 'update']);
 
 
 //--------------------------CategoryEvent---------------------------------//
-Route::get('category', [Category_eventController::class, 'index']);
-Route::post('category/', [Category_eventController::class, 'store']);
-Route::put('category/update/{id}', [Category_eventController::class, 'update']);
-Route::delete('category/{id}', [Category_eventController::class, 'destroy']);
-Route::post('category/{id}', [Category_eventController::class, 'update']);
-Route::post('category/update/{id}', [Category_eventController::class, 'update']);
+Route::get('category_event-list', [Category_eventventController::class, 'getList']);
+Route::apiResource('category_event', Category_eventController::class);
 //---------------------------------------------------------------//
 
 
@@ -101,7 +97,7 @@ Route::post('promoter/update/{id}', [PromoterController::class, 'update']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('posts', PostController::class);
-    Route::apiResource('categories', CategoryController::class);
+    //Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
     //Route::apiResource('exercises', ExerciseController::class);
     Route::post('exercises/', [ExerciseController::class, 'store']); //Guardar
@@ -113,7 +109,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('role-permissions/{id}', [PermissionController::class, 'getRolePermissions']);
     Route::put('/role-permissions', [PermissionController::class, 'updateRolePermissions']);
     Route::apiResource('permissions', PermissionController::class);
-    Route::get('category-list', [CategoryController::class, 'getList']);
+    //Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('/user', [ProfileController::class, 'user']);
     Route::put('/user', [ProfileController::class, 'update']);
 
@@ -130,7 +126,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 
 
-Route::get('category-list', [CategoryController::class, 'getList']);
+//Route::get('category-list', [CategoryController::class, 'getList']);
 Route::get('get-posts', [PostController::class, 'getPosts']);
 Route::get('get-category-posts/{id}', [PostController::class, 'getCategoryByPosts']);
 Route::get('get-post/{id}', [PostController::class, 'getPost']);
