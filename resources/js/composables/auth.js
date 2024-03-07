@@ -112,7 +112,7 @@ export default function useAuth() {
         processing.value = true
         validationErrors.value = {}
 
-        await axios.post('/register', registerFormPromoter)
+        await axios.post('/registerPromoter', registerFormPromoter)
             .then(async response => {
                 // await store.dispatch('auth/getUser')
                 // await loginUser()

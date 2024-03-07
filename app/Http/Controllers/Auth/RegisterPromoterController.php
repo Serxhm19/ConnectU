@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\RegistersPromoters;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterController extends Controller
+class RegisterPromoterController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -50,12 +50,12 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'NIF' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
-            'nickname' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            
+            'category_id' => ['required', 'integer']
         ]);
     }
 
@@ -68,11 +68,11 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
+            'NIF' => $data['NIF'],
             'name' => $data['name'],
-            'surname' => $data['surname'],
-            'nickname' => $data['nickname'],
+            'description' => $data['description'],
             'email' => $data['email'],
-            'genre' => $data['genre'],
+            'category_id' => $data['category_id'],
             'password' => Hash::make($data['password']),
         ]);
     }

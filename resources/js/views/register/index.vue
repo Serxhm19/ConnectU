@@ -476,12 +476,11 @@ const { registerForm, validationErrors, processing, submitRegister, loginForm, s
 // Declaración de la referencia para almacenar la categoría seleccionada
 const selectedCategory = ref(null);
 
-// Función para seleccionar una categoría
-const selectCategory = (category) => {
-    // Asignamos la categoría seleccionada a la referencia
-    selectedCategory.value = category;
-    // Aquí podrías realizar cualquier otra acción que desees cuando se seleccione una categoría
-};
+const selectCategory = (categoryItem) => {
+    registerFormPromoter.category_id = categoryItem.id;
+    selectedCategory = categoryItem;
+}
+
 
 // Carga inicial de las categorías
 const category = ref([]);
