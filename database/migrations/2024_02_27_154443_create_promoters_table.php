@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('NIF');
             $table->string('name');
             $table->string('description');
+            $table->string('email');
+            $table->string('password');
             $table->primary(['NIF']);
             $table->unsignedBigInteger('category_id');
             $table->timestamps();

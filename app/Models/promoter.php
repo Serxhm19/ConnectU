@@ -10,9 +10,11 @@ class promoter extends Model
     use HasFactory;
 
     protected $fillable = [
-        'NIF',
+        'nif',
         'name',
+        'email',
         'description',
-        'category_id'
+        'category_id',
+        'password'
     ];
 }

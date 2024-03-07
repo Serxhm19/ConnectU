@@ -43,6 +43,16 @@ export default function useAuth() {
         genre: ''
     })
 
+    const registerFormPromoter = reactive({
+        nif: '',
+        name: '',
+        description: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+        category_id: ''
+    })
+
 
     const submitLogin = async () => {
         if (processing.value) return
@@ -77,6 +87,32 @@ export default function useAuth() {
         validationErrors.value = {}
 
         await axios.post('/register', registerForm)
+            .then(async response => {
+                // await store.dispatch('auth/getUser')
+                // await loginUser()
+                swal({
+                    icon: 'success',
+                    title: 'Registration successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                await router.push({ name: 'auth.login' })
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                }
+            })
+            .finally(() => processing.value = false)
+    }
+
+    const submitRegisterPromoter = async () => {
+        if (processing.value) return
+
+        processing.value = true
+        validationErrors.value = {}
+
+        await axios.post('/registerPromoter', registerFormPromoter)
             .then(async response => {
                 // await store.dispatch('auth/getUser')
                 // await loginUser()
@@ -208,6 +244,9 @@ export default function useAuth() {
         user,
         getUser,
         logout,
-        getAbilities
+        getAbilities,
+        registerFormPromoter,
+        submitRegisterPromoter
+
     }
 }

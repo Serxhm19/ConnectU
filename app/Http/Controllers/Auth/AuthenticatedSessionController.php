@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\RegisterRequestPromoter;
+use App\Models\promoter;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
@@ -37,7 +39,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-//        $token = $request->session()->regenerate();
+        //        $token = $request->session()->regenerate();
         $token = $request->user()->createToken($request->userAgent())->plainTextToken;
 
         if ($request->wantsJson()) {
@@ -90,5 +92,28 @@ class AuthenticatedSessionController extends Controller
         ]);
 
         return $this->successResponse($user, 'Registration Successfully');
+    }
+    /**
+     * Create User
+     * @param RegisterRequestPromoter $request
+     * @return JsonResponse
+     */
+    public function registerPromoter(RegisterRequestPromoter $request)
+    {
+        $promoter = promoter::where('email', $request['email'])->first();
+        if ($promoter) {
+            return response(['error' => 1, 'message' => 'user already exists'], 409);
+        }
+
+        $promoter = promoter::create([
+            'nif' => $request['nif'],
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'description' => $request['description'],
+            'category_id' => $request['category_id'],
+            'password' => Hash::make($request['password']),
+        ]);
+
+        return $this->successResponse($promoter, 'Registration Successfully');
     }
 }
