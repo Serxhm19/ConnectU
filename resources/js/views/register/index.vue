@@ -244,7 +244,7 @@ a {
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
                                                         <!-- Iterating over categories -->
-                                                        <li v-for="categoryItem in category" :key="categoryItem.id">
+                                                        <li v-for="categoryItem in category" :key="categoryItem.id ">
                                                             <a class="dropdown-item" href="#"
                                                                 @click.prevent="selectCategory(categoryItem)">
                                                                 {{ categoryItem.name }}
@@ -476,11 +476,12 @@ const { registerForm, validationErrors, processing, submitRegister, loginForm, s
 // Declaración de la referencia para almacenar la categoría seleccionada
 const selectedCategory = ref(null);
 
-const selectCategory = (categoryItem) => {
-    registerFormPromoter.category_id = categoryItem.id;
-    selectedCategory = categoryItem;
-}
-
+// Función para seleccionar una categoría
+const selectCategory = (category) => {
+    // Asignamos la categoría seleccionada a la referencia
+    selectedCategory.value = category;
+    // Aquí podrías realizar cualquier otra acción que desees cuando se seleccione una categoría
+};
 
 // Carga inicial de las categorías
 const category = ref([]);

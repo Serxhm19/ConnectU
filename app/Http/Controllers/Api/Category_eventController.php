@@ -10,7 +10,14 @@ use Illuminate\Http\Request;
 
 class Category_eventController extends Controller
 {
+
     public function index(){
+        
+            $categories = Category_event::all()->toArray();
+            
+            return $categories;
+    }
+    public function filtros(){
         
         $orderColumn = request('order_column', 'created_at');
         if (!in_array($orderColumn, ['id', 'name', 'description', 'created_at'])) {
