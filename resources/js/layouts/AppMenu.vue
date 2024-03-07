@@ -37,10 +37,10 @@ const modelPromoter = ref([
     {
         label: 'Usuario',
         items: [
-            { label: 'Inicio', icon: 'pi pi-fw pi-home', to: '/admin/inicio', permision: 'post-list' },
+            { label: 'Inicio', icon: 'pi pi-fw pi-home', to: '/admin/', permision: 'post-list' },
             { label: 'Mensajes', icon: 'pi pi-fw pi-comment', to: '/admin/chat', permision: 'post-list' },
-            { label: 'Calendario', icon: 'pi pi-fw pi-calendar', to: '/admin/posts', permision: 'post-list' },
-            { label: 'Mi perfil', icon: 'pi pi-fw pi-user', to: '/admin/posts', permision: 'post-list' },    
+            { label: 'Calendario', icon: 'pi pi-fw pi-calendar', to: '/admin/calendar', permision: 'post-list' },
+            { label: 'Mi perfil', icon: 'pi pi-fw pi-user', to: '/admin/account', permision: 'post-list' },    
         ]
     },
     {
@@ -57,15 +57,13 @@ const modelUser = ref([
     {
         label: 'Usuario',
         items: [
-            { label: 'Inicio', icon: 'pi pi-fw pi-home', to: '/admin/inicio', permision: 'post-list' },
-            { label: 'Mensajes', icon: 'pi pi-fw pi-comment', to: '/admin/chat', permision: 'post-list' },
+            { label: 'Inicio', icon: 'pi pi-fw pi-home', to: '/admin/', permision: 'post-list' },
+            { label: 'Mensajes', icon: 'pi pi-fw pi-comment', to: '/admin/chats', permision: 'post-list' },
             { label: 'Calendario', icon: 'pi pi-fw pi-calendar', to: '/admin/calendar', permision: 'post-list' },
             { label: 'Mi perfil', icon: 'pi pi-fw pi-user', to: '/admin/account', permision: 'post-list' },    
         ]
     }
 ]);
-
-console.log(modelPromoter);
 </script>
 
 <style lang="scss" scoped></style>

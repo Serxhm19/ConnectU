@@ -72,7 +72,7 @@
 
         </div>
         <div class="col-12 lg:col-4 xl:col-4">
-            <div class="card mb-3">
+            <div class="card mb-3 fixed-right">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Orders</span>
@@ -85,7 +85,7 @@
                 <span class="text-green-500 font-medium">24 new </span>
                 <span class="text-500">since last visit</span>
             </div>
-            <div class="card mb-3">
+            <div class="card mb-3 fixed-right">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Orders</span>
@@ -98,7 +98,7 @@
                 <span class="text-green-500 font-medium">24 new </span>
                 <span class="text-500">since last visit</span>
             </div>
-            <div class="card mb-0">
+            <div class="card mb-0 fixed-right">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Orders</span>

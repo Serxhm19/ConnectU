@@ -1,16 +1,17 @@
 .layout-sidebar {
     position: fixed;
-    width: 300px;
-    height: calc(100vh - 9rem);
+    width: 250px;
+    height: calc(90vh - 9rem);
     z-index: 999;
     overflow-y: auto;
     user-select: none;
-    top: 7rem;
+    top: 12rem;
     left: 2rem;
     transition: transform $transitionDuration, left $transitionDuration;
     background-color: var(--surface-overlay);
-    border-radius: 0;
+    border-radius: 20px;
     padding: 1.5rem 0rem;
+    margin-bottom: 4rem;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02), 0px 0px 2px rgba(0, 0, 0, 0.05), 0px 1px 4px rgba(0, 0, 0, 0.08);
 }
 
@@ -66,7 +67,7 @@
             padding: 0.75rem 1.75rem;
             border-radius: 0;
             transition: background-color $transitionDuration, box-shadow $transitionDuration;
-            font-size: 20px;
+            font-size: 15px;
             
             .layout-menuitem-icon {
                 margin-right: 0.5rem;
@@ -84,8 +85,9 @@
             }
 
             &:hover {
-                background-color: var(--blue-hover);
+                background-color: var(--blue-600);
                 color: var(--blue-200);
+                font-size: 17px;
             }
 
             &:focus {

@@ -147,10 +147,23 @@ export default [
                 meta: { breadCrumb: 'Profile' }
             },
             {
-                name: 'chat.index',
-                path: 'chat',
-                component: () => import('../views/admin/chat/index.vue'),
-                meta: { breadCrumb: 'Chat' }
+                name: 'chats',
+                path: 'chats',
+                meta: { breadCrumb: 'Chats'},
+                children: [
+                    {
+                        name: 'chats.index',
+                        path: '',
+                        component: () => import('../views/admin/chat/index.vue'),
+                        meta: { breadCrumb: 'Chats' }
+                    },
+                    {
+                        name: 'chats.chat',
+                        path: 'chat',
+                        component: () => import('../views/admin/chat/chat.vue'),
+                        meta: { breadCrumb: 'Chat' }
+                    },
+                ]
             },
             {
                 name: 'calendar.calendar',
