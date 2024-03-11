@@ -166,6 +166,31 @@ export default [
                 ]
             },
             {
+                name: 'events',
+                path: 'events',
+                meta: { breadCrumb: 'events'},
+                children: [
+                    {
+                        name: 'events.index',
+                        path: '',
+                        component: () => import('../views/admin/events/index.vue'),
+                        meta: { breadCrumb: 'Events' }
+                    },
+                    {
+                        name: 'events.create',
+                        path: 'create',
+                        component: () => import('../views/admin/events/create.vue'),
+                        meta: { breadCrumb: 'Create' }
+                    },
+                    {
+                        name: 'events.update',
+                        path: 'edit/:id',
+                        component: () => import('../views/admin/events/Edit.vue'),
+                        meta: { breadCrumb: 'Edit' }
+                    },
+                ]
+            },
+            {
                 name: 'calendar.calendar',
                 path: 'calendar',
                 component: () => import('../views/admin/calendar/calendar.vue'),

@@ -51,12 +51,11 @@ Route::post('category/update/{id}', [Category_eventController::class, 'update'])
 
 
 //--------------------------Event----------------------------------//
-Route::get('event', [EventController::class, 'index']);
-Route::post('event/', [EventController::class, 'store']);
-Route::put('event/update/{id}', [EventController::class, 'update']);
-Route::delete('event/{id}', [EventController::class, 'destroy']);
-Route::post('event/{id}', [EventController::class, 'update']);
-Route::post('event/update/{id}', [EventController::class, 'update']);
+Route::get('events', [EventController::class, 'index']);
+Route::post('events/', [EventController::class, 'store']);
+Route::put('events/update/{id}', [EventController::class, 'update']);
+Route::delete('events/{id}', [EventController::class, 'destroy']);
+Route::get('events/show/{id}', [EventController::class, 'show']);
 //---------------------------------------------------------------//
 
 

@@ -18,18 +18,19 @@
 
 <script setup>
 import { ref } from 'vue';
+import AppMenuItem from './AppMenuItem.vue';
+import { useAbility } from '@casl/vue';
 
 const storageData = JSON.parse(localStorage.getItem('vuex'));
 
 let userClass;
 if (storageData.auth.user) {
-    userClass = ref('User');
+    userClass = ref('Promoter');
 }else{
     userClass = ref('Promoter');
 }
 
-import AppMenuItem from './AppMenuItem.vue';
-import { useAbility } from '@casl/vue';
+
 const { can } = useAbility();
 
 const vela = "pepe";
@@ -47,8 +48,8 @@ const modelPromoter = ref([
         label: 'Promotor',
         items: [
             { label: 'Crear evento', icon: 'pi pi-fw pi-plus', to: '/admin/events/create', permision: 'post-list' },
-            { label: 'Mis eventos', icon: 'pi pi-fw pi-users', to: '/admin/events/my', permision: 'post-list' },
-            { label: 'Chats de eventos', icon: 'pi pi-fw pi-comments', to: '/admin/posts', permision: 'post-list' },    
+            { label: 'Mis eventos', icon: 'pi pi-fw pi-users', to: '/admin/events/', permision: 'post-list' },
+            { label: 'Chats de eventos', icon: 'pi pi-fw pi-comments', to: '/admin/events/edit', permision: 'post-list' },    
         ]
     }
 ]);
