@@ -13,10 +13,10 @@ class Category_eventController extends Controller
 
     public function index(){
         
-            $categories = Category_event::all()->toArray();
-            
-            return $categories;
+        $categories = Category_event::all()->toArray();
+        return $categories;
     }
+    
     public function filtros(){
         
         $orderColumn = request('order_column', 'created_at');
@@ -41,8 +41,7 @@ class Category_eventController extends Controller
 
                 });
             })
-            ->orderBy($orderColumn, $orderDirection)
-            ->paginate(50);
+            ->orderBy($orderColumn, $orderDirection);
         return CategoryEventResource::collection($categories);
     }
 

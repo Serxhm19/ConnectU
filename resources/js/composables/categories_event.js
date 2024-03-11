@@ -21,19 +21,14 @@ export default function useCategories() {
         order_column = 'created_at',
         order_direction = 'desc'
     ) => {
-        axios.get('/api/category_event?page=' + page +
-            '&search_id=' + search_id +
-            '&search_name=' + search_name +
-            '&search_global=' + search_global +
-            '&order_column=' + order_column +
-            '&order_direction=' + order_direction)
+        axios.get('/api/category')
             .then(response => {
                 categories.value = response.data;
             })
     }
 
     const getCategory = async (id) => {
-        axios.get('/api/category_event/' + id)
+        axios.get('/api/category/' + id)
             .then(response => {
                 category.value = response.data.data;
             })
@@ -45,7 +40,7 @@ export default function useCategories() {
         isLoading.value = true
         validationErrors.value = {}
 
-        axios.post('/api/category_event', category)
+        axios.post('/api/category', category)
             .then(response => {
                 router.push({name: 'category_event.index'})
                 swal({
@@ -62,7 +57,7 @@ export default function useCategories() {
     }
 
     const getCategoryList = async () => {
-        axios.get('/api/category_event-list')
+        axios.get('/api/category-list')
             .then(response => {
                 categoryList.value = response.data.data;
             })

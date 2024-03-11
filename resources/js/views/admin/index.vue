@@ -69,27 +69,23 @@
                 <span class="text-green-500 font-medium">24 new </span>
                 <span class="text-500">since last visit</span>
             </div>
-
         </div>
         <div class="col-12 lg:col-4 xl:col-4">
             <div class="card-body shadow-sm">
                 <div class="card mb-4">
                     <div class="card-body">
                         <input v-model="search_global" type="text" placeholder="Search..." class="form-control mb-4">
-                        
-                        <div class="mb-4">
-                            <input v-model="search_id" type="text" class="form-control" placeholder="Filter by ID">
-                        </div>
-                        <div class="mb-4">
-                            <input v-model="search_title" type="text" class="form-control" placeholder="Filter by Title">
-                        </div>
-
                         <div class="list-group">
-                            <div v-for="post in categories.data" :key="post.id" class="list-group-item">
+
+                            <div v-for="category in categories" :key="category.id" class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">{{ post.name }}</h5>
-                                    <p class="mb-1">{{ post.id }}</p>
+                                    <h5 class="mb-1">{{ category.name }}</h5>
+                                    <p class="mb-1">{{ category.id }}</p>
+                                    
                                 </div>
+                                <span>
+                                    {{ category.description }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -279,9 +275,11 @@
     const orderDirection = ref('desc')
     const {categories, getCategories, deleteCategory} = useCategories()
     const {can} = useAbility()
+
     onMounted(() => {
         getCategories()
     })
+
     const updateOrdering = (column) => {
         orderColumn.value = column;
         orderDirection.value = (orderDirection.value === 'asc') ? 'desc' : 'asc';
@@ -318,4 +316,7 @@
             current
         )
     }, 200))
+
+
+   
 </script>

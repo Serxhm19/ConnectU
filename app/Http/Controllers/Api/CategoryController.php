@@ -35,7 +35,7 @@ class CategoryController extends Controller
                 });
             })
             ->orderBy($orderColumn, $orderDirection)
-            ->paginate(50);
+            ->paginate(5);
         return CategoryResource::collection($categories);
     }
 

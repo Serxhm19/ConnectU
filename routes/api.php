@@ -39,9 +39,9 @@ Route::post('user/update/{id}', [UserController::class, 'update']);
 
 
 //--------------------------CategoryEvent---------------------------------//
-//Route::get('category_event-list', [Category_eventController::class, 'getList']);
-//Route::apiResource('category_event', Category_eventController::class);
-Route::get('category', [Category_eventController::class, 'index']);
+Route::get('category_event-list', [Category_eventController::class, 'getList']);
+//Route::get('category/filtros', [Category_eventController::class, 'filtros']);
+Route::apiResource('category', Category_eventController::class);
 Route::post('category/', [Category_eventController::class, 'store']);
 Route::put('category/update/{id}', [Category_eventController::class, 'update']);
 Route::delete('category/{id}', [Category_eventController::class, 'destroy']);
