@@ -164,7 +164,7 @@ a {
                                         <!-- surname -->
                                         <div class="mb-3">
                                             <label for="name" class="form-label">{{ $t('name') }}</label>
-                                            <input v-model="registerFormPromoter.name" id="name" type="name"
+                                            <input v-model="registerFormPromoter.name" id="namePromoter" type="name"
                                                 class="form-control" required autofocus placeholder="Name">
                                             <!-- Validation Errors -->
                                             <div class="text-danger mt-1">
@@ -191,7 +191,7 @@ a {
                                         <!-- Email input -->
                                         <div class="mb-3">
                                             <label for="email" class="form-label">{{ $t('email') }}</label>
-                                            <input v-model="registerFormPromoter.email" id="emailRegister" type="email"
+                                            <input v-model="registerFormPromoter.email" id="emailRegisterPromoter" type="email"
                                                 class="form-control" required autofocus autocomplete="username"
                                                 placeholder="Email">
                                             <!-- Validation Errors -->
@@ -206,7 +206,7 @@ a {
                                             <label for="password" class="form-label">
                                                 {{ $t('password') }}
                                             </label>
-                                            <input v-model="registerFormPromoter.password" id="password" type="password"
+                                            <input v-model="registerFormPromoter.password" id="passwordPromoter" type="password"
                                                 class="form-control" autocomplete="current-password" placeholder="Password">
                                             <!-- Validation Errors -->
                                             <div class="text-danger-600 mt-1">
@@ -220,7 +220,7 @@ a {
                                                 {{ $t('confirm_password') }}
                                             </label>
                                             <input v-model="registerFormPromoter.password_confirmation"
-                                                id="password_confirmation" type="password" class="form-control"
+                                                id="password_confirmationPromoter" type="password" class="form-control"
                                                 autocomplete="current-password" placeholder="Confirm Password">
                                             <!-- Validation Errors -->
                                             <div class="text-danger-600 mt-1">
