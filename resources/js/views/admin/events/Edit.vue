@@ -1,9 +1,8 @@
 <template>
     <div class="card">
-        <p>hola edit</p>
         <div class="card-body">
-            <div class="d-flex justify-content-between pb-2 mb-2">
-                <h5 class="card-title">Añade una tarea nueva</h5>
+            <div class="d-flex justify-content-right pb-2 mb-2">
+                <h5 class="card-title">Edición de el evento <b>{{event.name}}</b></h5>
             </div>
 
 
@@ -48,7 +47,7 @@
                 </div>
 
 
-                <button type="submit" class="btn btn-primary mt-4 mb-4">Añadir Tarea</button>
+                <button type="submit" class="btn btn-primary mt-4 mb-4">Guardar evento</button>
 
 
             </form>
@@ -119,7 +118,7 @@ function saveEvent() {
     validate().then(form => {
         console.log('validate');
         if (form.valid){
-            axios.post('/api/events/update/'+route.params.id, event)
+            axios.put('/api/events/update/'+route.params.id, event)
             .then(response => {
                 strError.value = ""
                 strSuccess.value = response.data.success

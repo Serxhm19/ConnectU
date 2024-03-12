@@ -2,74 +2,23 @@
     <div class="grid">
         <div class="col-12 lg:col-8 xl:col-8">
             <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+                <div class="list-group">
+                    <div v-for="event in events" :key="event.id" class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ event.name }}</h5>
+                            <p class="mb-1">{{ event.id }}</p>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <p class="mb-1">{{ event.description }}</p>
+                        </div>
+                        <span>
+                            {{ getCategoryName(event.category_id) }}
+                        </span>
                     </div>
                 </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3">Orders</span>
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
             </div>
         </div>
+
         <div class="col-12 lg:col-4 xl:col-4">
             <div class="card-body shadow-sm">
                 <div class="card mb-4">
@@ -266,6 +215,7 @@
 <script setup>
     import {ref, onMounted, watch} from "vue";
     import useCategories from "../../composables/categories_event";
+    import useEvents from "../../composables/events";
     import {useAbility} from '@casl/vue'
 
     const search_id = ref('')
@@ -274,10 +224,12 @@
     const orderColumn = ref('created_at')
     const orderDirection = ref('desc')
     const {categories, getCategories, deleteCategory} = useCategories()
+    const {events, getEvents, deleteEvent} = useEvents()
     const {can} = useAbility()
 
     onMounted(() => {
         getCategories()
+        getEvents()
     })
 
     const updateOrdering = (column) => {
@@ -318,5 +270,9 @@
     }, 200))
 
 
-   
+   function getCategoryName(categoryId) {
+        const category = categories.value.find(cat => cat.id === categoryId);
+        // Retornar el nombre de la categoría si se encuentra, de lo contrario, retorna un mensaje de error
+        return category ? category.name : 'Uncategorized';
+   }
 </script>

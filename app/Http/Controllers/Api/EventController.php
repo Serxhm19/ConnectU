@@ -19,7 +19,7 @@ class EventController extends Controller
     public function store(Request $request)
     {
 
-        $request = validate([
+        $request->validate([
             'category_id' => 'required',
             'name' => 'required',
             'description' => 'required',

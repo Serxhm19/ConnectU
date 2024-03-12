@@ -47,8 +47,8 @@ const modelPromoter = ref([
     {
         label: 'Promotor',
         items: [
-            { label: 'Crear evento', icon: 'pi pi-fw pi-plus', to: '/admin/events/create', permision: 'post-list' },
             { label: 'Mis eventos', icon: 'pi pi-fw pi-users', to: '/admin/events/', permision: 'post-list' },
+            { label: 'Crear evento', icon: 'pi pi-fw pi-plus', to: '/admin/events/create', permision: 'post-list' },
             { label: 'Chats de eventos', icon: 'pi pi-fw pi-comments', to: '/admin/events/edit', permision: 'post-list' },    
         ]
     }
