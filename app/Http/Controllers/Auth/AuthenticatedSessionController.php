@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\LoginRequestPromoter;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\RegisterRequestPromoter;
 use App\Models\promoter;
@@ -44,6 +45,19 @@ class AuthenticatedSessionController extends Controller
 
         if ($request->wantsJson()) {
             return response()->json(['user' => $request->user(), 'token' => $token]);
+        }
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
+    public function loginPromoter(LoginRequestPromoter $request)
+    {
+        $request->authenticate();
+
+        //        $token = $request->session()->regenerate();
+        $token = $request->promoter()->createToken($request->userAgent())->plainTextToken;
+
+        if ($request->wantsJson()) {
+            return response()->json(['promoter' => $request->promoter(), 'token' => $token]);
         }
 
         return redirect()->intended(RouteServiceProvider::HOME);

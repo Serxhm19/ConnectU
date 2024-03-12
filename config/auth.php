@@ -34,11 +34,21 @@ return [
     | Supported: "session"
     |
     */
-
     'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+
+        'promoter' => [ // Nuevo guard para el promotor
+            'driver' => 'session',
+            'provider' => 'promoters', // Debes definir el proveedor correspondiente para el promotor
         ],
     ],
 
@@ -59,17 +69,24 @@ return [
     |
     */
 
+
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'promoters' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Promoter::class,
+        ],
     ],
+
+    // 'users' => [
+    //     'driver' => 'database',
+    //     'table' => 'users',
+    // ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -107,5 +124,6 @@ return [
     */
 
     'password_timeout' => 10800,
+
 
 ];

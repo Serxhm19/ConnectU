@@ -23,32 +23,45 @@ export default {
         }
     },
     actions: {
-        login({commit}) {
-            return axios.get('/api/user').then(({data}) => {
-                commit('SET_USER', data)
-                commit('SET_AUTHENTICATED', true)
-            }).catch(({res}) => {
-                commit('SET_USER', {})
-                commit('SET_AUTHENTICATED', false)
-            })
+        async login({ commit }) {
+            try {
+                const userResponse = await axios.get('/api/user');
+                commit('SET_USER', userResponse.data);
+                commit('SET_AUTHENTICATED', true);
+            } catch (error) {
+                try {
+                    const promoterResponse = await axios.get('/api/promoter');
+                    commit('SET_USER', promoterResponse.data);
+                    commit('SET_AUTHENTICATED', true);
+                } catch (error) {
+                    commit('SET_USER', {});
+                    commit('SET_AUTHENTICATED', false);
+                }
+            }
         },
-        getUser({commit}) {
-            return axios.get('/api/user').then(({data}) => {
+        getUser({ commit }) {
+            return axios.get('/api/user').then(({ data }) => {
                 if (data.success) {
                     commit('SET_USER', data.data)
                     commit('SET_AUTHENTICATED', true)
-                    // router.push({name: 'dashboard'})
                 }
-                // else {
-                //     commit('SET_USER', {})
-                //     commit('SET_AUTHENTICATED', false)
-                // }
-            }).catch(({res}) => {
+            }).catch(error => {
                 commit('SET_USER', {})
                 commit('SET_AUTHENTICATED', false)
             })
         },
-        logout({commit}) {
+        getPromoter({ commit }) {
+            return axios.get('/api/promoter').then(({ data }) => {
+                if (data.success) {
+                    commit('SET_USER', data.data)
+                    commit('SET_AUTHENTICATED', true)
+                }
+            }).catch(error => {
+                commit('SET_USER', {})
+                commit('SET_AUTHENTICATED', false)
+            })
+        },
+        logout({ commit }) {
             commit('SET_USER', {})
             commit('SET_AUTHENTICATED', false)
         }
