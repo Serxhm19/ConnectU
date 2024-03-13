@@ -19,7 +19,6 @@ export default function useAuth() {
     const loginForm = reactive({
         email: '',
         password: '',
-        userType: '',
         remember: false
     })
 
@@ -57,44 +56,33 @@ export default function useAuth() {
 
     const submitLogin = async () => {
         if (processing.value) return
-
+    
         processing.value = true
         validationErrors.value = {}
-
-        let loginEndpoint = '/login';
-
-        // Verificar el tipo de usuario seleccionado en el formulario
-        if (loginForm.userType === 'promoter') {
-            loginEndpoint = '/loginPromoter';
-        }
-
-        await axios.post(loginEndpoint, loginForm)
+    
+        await axios.post('/login', loginForm)
             .then(async response => {
-                // Obtener datos del usuario o promotor dependiendo del tipo de usuario
-                if (loginForm.userType === 'promoter') {
-                    await store.dispatch('auth/getPromoter');
-                    await loginPromoter();
-                } else {
-                    await store.dispatch('auth/getUser');
-                    await loginUser();
-                }
+                await store.dispatch('auth/getUser')
+                await store.dispatch('auth/getPromoter') // Buscar promotores
+                await loginUser()
+                await loginPromoter()
+
                 swal({
                     icon: 'success',
                     title: 'Login correcto',
                     showConfirmButton: false,
                     timer: 1500
-                });
-                await router.push({ name: 'admin.index' });
+                })
+                await router.push({ name: 'admin.index' })
             })
             .catch(error => {
                 if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
+                    validationErrors.value = error.response.data.errors
                 }
             })
-            .finally(() => processing.value = false);
+            .finally(() => processing.value = false)
     }
-
-
+    
 
     const submitRegister = async () => {
         if (processing.value) return
@@ -203,7 +191,7 @@ export default function useAuth() {
     }
 
     const loginPromoter = () => {
-        promoter = store.state.auth.promoter
+        user = store.state.auth.promoter
         // Cookies.set('loggedIn', true)
         getAbilities()
     }

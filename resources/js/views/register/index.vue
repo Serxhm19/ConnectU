@@ -110,7 +110,6 @@ a {
     border: var(--tabs-border-size) solid var(--tabs-border-color);
     border-radius: 0 0 10px 10px;
     position: relative;
-    z-index: 100;
     height: 600px;
 }
 
@@ -401,13 +400,6 @@ a {
                                         <div class="row justify-content-center my-5">
                                             <form @submit.prevent="submitLogin">
                                                 <!-- Tipo de usuario -->
-                                                <div class="mb-3">
-                                                    <label for="userType" class="form-label">{{ $t('user_type') }}</label>
-                                                    <select v-model="loginForm.userType" id="userType" class="form-select">
-                                                        <option value="user">{{ $t('regular_user') }}</option>
-                                                        <option value="promoter">{{ $t('promoter') }}</option>
-                                                    </select>
-                                                </div>
                                                 <div class="">
                                                     <!-- Email -->
                                                     <div class="mb-3">
