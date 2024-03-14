@@ -31,11 +31,4 @@ class ProfileController extends Controller
 
         return $this->successResponse($user, 'User found');
     }
-
-    public function promoter(Request $request)
-    {
-        $promoter = $request->promoter();
-
-        return $this->successResponse($promoter, 'User found');
-    }
 }
