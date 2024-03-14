@@ -28,7 +28,7 @@ class promoter extends Authenticatable
         'category_id',
         'password'
     ];
-
+ 
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -39,7 +39,7 @@ class CreatePromoterSeeder extends Seeder
                 'description' => 'Description promoter 3',
                 'email' => 'email@promoter.com',
                 'category_id' => 3,
-                'password' => bcrypt('12345678')
+                'password' => bcrypt('12345678') 
 
             ],
         ];

@@ -1,4 +1,3 @@
-
 <style>
 /* funcionamiento básico del sistema de pestañas */
 .tab-content {
@@ -138,140 +137,12 @@ a {
         <div class="container-fluid h-custom">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img src="images\LOGOPROV.svg" alt="Descripción de la imagen" style="height: 300px; width: 600px; " />
+                    <img src="images\LOGOPROV.svg" alt="Descripción de la imagen"
+                        style="height: 300px; width: 600px; " />
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <div class="tabs">
                         <div class="tab-container">
-                            <div id="tab3" class="tab">
-                                <a href="#tab3">{{ $t('register_as_promoter') }}</a>
-                                <div class="tab-content">
-                                    <form @submit.prevent="submitRegisterPromoter">
-                                        <!-- Name -->
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">{{ $t('nif') }}</label>
-                                            <input v-model="registerFormPromoter.nif" id="nif" type="nif"
-                                                class="form-control" required autofocus autocomplete="nif"
-                                                placeholder="nif">
-                                            <!-- Validation Errors -->
-                                            <div class="text-danger mt-1">
-                                                <div v-for="message in validationErrors?.nif">
-                                                    {{ message }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- surname -->
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">{{ $t('name') }}</label>
-                                            <input v-model="registerFormPromoter.name" id="namePromoter" type="name"
-                                                class="form-control" required autofocus placeholder="Name">
-                                            <!-- Validation Errors -->
-                                            <div class="text-danger mt-1">
-                                                <div v-for="message in validationErrors?.name">
-                                                    {{ message }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Nickname -->
-                                        <div class="mb-4">
-                                            <label for="description" class="form-label">
-                                                {{ $t('description') }}
-                                            </label>
-                                            <input v-model="registerFormPromoter.description" id="description"
-                                                type="description" class="form-control" required
-                                                autocomplete="current-description" placeholder="Nickname">
-                                            <!-- Validation Errors -->
-                                            <div class="text-danger-600 mt-1">
-                                                <div v-for="message in validationErrors?.description">
-                                                    {{ message }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Email input -->
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">{{ $t('email') }}</label>
-                                            <input v-model="registerFormPromoter.email" id="emailRegisterPromoter"
-                                                type="email" class="form-control" required autofocus autocomplete="username"
-                                                placeholder="Email">
-                                            <!-- Validation Errors -->
-                                            <div class="text-danger mt-1">
-                                                <div v-for="message in validationErrors?.email">
-                                                    {{ message }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Password -->
-                                        <div class="mb-4">
-                                            <label for="password" class="form-label">
-                                                {{ $t('password') }}
-                                            </label>
-                                            <input v-model="registerFormPromoter.password" id="passwordPromoter"
-                                                type="password" class="form-control" autocomplete="current-password"
-                                                placeholder="Password">
-                                            <!-- Validation Errors -->
-                                            <div class="text-danger-600 mt-1">
-                                                <div v-for="message in validationErrors?.password">
-                                                    {{ message }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="password_confirmation" class="form-label">
-                                                {{ $t('confirm_password') }}
-                                            </label>
-                                            <input v-model="registerFormPromoter.password_confirmation"
-                                                id="password_confirmationPromoter" type="password" class="form-control"
-                                                autocomplete="current-password" placeholder="Confirm Password">
-                                            <!-- Validation Errors -->
-                                            <div class="text-danger-600 mt-1">
-                                                <div v-for="message in validationErrors?.password_confirmation">
-                                                    {{ message }}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Category Selector -->
-                                        <div class="mb-3">
-                                            <label class="form-label">{{ $t('category') }}</label>
-                                            <div>
-                                                <!-- Dropdown -->
-                                                <div class="dropdown">
-                                                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                        id="categoryDropdown" data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                        {{ selectedCategory ? selectedCategory.name : $t('select_category')
-                                                        }}
-                                                    </button>
-                                                    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                                                        <!-- Iterating over categories -->
-                                                        <li v-for="categoryItem in category" :key="categoryItem.id">
-                                                            <a class="dropdown-item" href="#"
-                                                                @click.prevent="selectCategory(categoryItem)">
-                                                                {{ categoryItem.name }}
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-
-                                                <!-- Validation Errors -->
-                                                <div class="text-danger-600 mt-1">
-                                                    <div v-for="message in validationErrors?.category">
-                                                        {{ message }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="flex items-center justify-end mt-4">
-                                            <button class="btn btn-primary" :class="{ 'opacity-25': processing }"
-                                                :disabled="processing">
-                                                {{ $t('register') }}
-                                            </button>
-                                        </div>
-
-                                    </form>
-                                </div>
-                            </div>
                             <div id="tab2" class="tab">
                                 <a href="#tab2">{{
                                     $t('register') }}</a>
@@ -280,8 +151,9 @@ a {
                                         <!-- Name -->
                                         <div class="mb-3">
                                             <label for="name" class="form-label">{{ $t('name') }}</label>
-                                            <input v-model="registerForm.name" id="name" type="name" class="form-control"
-                                                required autofocus autocomplete="name" placeholder="Name">
+                                            <input v-model="registerForm.name" id="name" type="name"
+                                                class="form-control" required autofocus autocomplete="name"
+                                                placeholder="Name">
                                             <!-- Validation Errors -->
                                             <div class="text-danger mt-1">
                                                 <div v-for="message in validationErrors?.name">
@@ -335,7 +207,8 @@ a {
                                                 {{ $t('password') }}
                                             </label>
                                             <input v-model="registerForm.password" id="password" type="password"
-                                                class="form-control" autocomplete="current-password" placeholder="Password">
+                                                class="form-control" autocomplete="current-password"
+                                                placeholder="Password">
                                             <!-- Validation Errors -->
                                             <div class="text-danger-600 mt-1">
                                                 <div v-for="message in validationErrors?.password">
@@ -347,9 +220,9 @@ a {
                                             <label for="password_confirmation" class="form-label">
                                                 {{ $t('confirm_password') }}
                                             </label>
-                                            <input v-model="registerForm.password_confirmation" id="password_confirmation"
-                                                type="password" class="form-control" autocomplete="current-password"
-                                                placeholder="Confirm Password">
+                                            <input v-model="registerForm.password_confirmation"
+                                                id="password_confirmation" type="password" class="form-control"
+                                                autocomplete="current-password" placeholder="Confirm Password">
                                             <!-- Validation Errors -->
                                             <div class="text-danger-600 mt-1">
                                                 <div v-for="message in validationErrors?.password_confirmation">
@@ -366,13 +239,21 @@ a {
                                                     <input class="form-check-input" type="radio" id="genre-male"
                                                         value="male" v-model="registerForm.genre">
                                                     <label class="form-check-label" for="genre-male">{{ $t('male')
-                                                    }}</label>
+                                                        }}</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" id="genre-female"
                                                         value="female" v-model="registerForm.genre">
                                                     <label class="form-check-label" for="genre-female">{{ $t('female')
-                                                    }}</label>
+                                                        }}</label>
+                                                </div>
+                                                <!-- Remember me -->
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="is_Promoter"
+                                                        v-model="loginForm.remember" id="is_Promoter">
+                                                    <label class="form-check-label" for="flexCheckIndeterminate">
+                                                        {{ $t('is_Promoter') }}
+                                                    </label>
                                                 </div>
                                                 <!-- Validation Errors -->
                                                 <div class="text-danger-600 mt-1">
@@ -404,9 +285,10 @@ a {
                                                     <!-- Email -->
                                                     <div class="mb-3">
                                                         <label for="email" class="form-label">{{ $t('email')
-                                                        }}</label>
+                                                            }}</label>
                                                         <input v-model="loginForm.email" id="emailLogin" type="email"
-                                                            class="form-control" required autofocus autocomplete="username">
+                                                            class="form-control" required autofocus
+                                                            autocomplete="username">
                                                         <!-- Validation Errors -->
                                                         <div class="text-danger mt-1">
                                                             <div v-for="message in validationErrors?.email">
@@ -441,13 +323,14 @@ a {
                                                     <!-- Buttons -->
                                                     <div class="flex items-center justify-end mt-4">
                                                         <button class="btn btn-primary"
-                                                            :class="{ 'opacity-25': processing }" :disabled="processing">
+                                                            :class="{ 'opacity-25': processing }"
+                                                            :disabled="processing">
                                                             {{ $t('login') }}
                                                         </button>
                                                     </div>
                                                 </div>
                                                 <router-link :to="{ name: 'auth.forgot-password' }">{{
-                                                    $t('forgot_password') }}</router-link>
+                                    $t('forgot_password') }}</router-link>
                                             </form>
                                         </div>
                                     </div>
@@ -491,4 +374,4 @@ axios.get("/api/category")
         category.value = response.data;
     })
     .catch(error => { console.log(error.message) });
-</script> 
+</script>
