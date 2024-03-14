@@ -3,14 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Notifications\UserResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\promoter as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class promoter extends Authenticatable
+class promoter
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -22,6 +20,7 @@ class promoter extends Authenticatable
 
      protected $fillable = [
         'nif',
+        'user',
         'name',
         'email',
         'description',

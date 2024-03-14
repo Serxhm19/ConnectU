@@ -28,16 +28,6 @@ Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('
 
 
 
-//--------------------------User---------------------------------//
-Route::get('user', [UserController::class, 'allUsers']);
-Route::post('user/', [UserController::class, 'store']);
-Route::put('user/update/{id}', [UserController::class, 'update']);
-Route::delete('user/{id}', [UserController::class, 'destroy']);
-Route::post('user/{id}', [UserController::class, 'update']);
-Route::post('user/update/{id}', [UserController::class, 'update']);
-//---------------------------------------------------------------//
-
-
 //--------------------------CategoryEvent---------------------------------//
 Route::get('category_event-list', [Category_eventController::class, 'getList']);
 //Route::get('category/filtros', [Category_eventController::class, 'filtros']);

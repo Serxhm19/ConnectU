@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('promoters', function (Blueprint $table) {
             $table->string('NIF');
+            $table->unsignedBigInteger('user');
             $table->string('name');
             $table->string('description');
             $table->string('email');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('category_events')->onDelete('cascade');
+            $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
 
         });
     }

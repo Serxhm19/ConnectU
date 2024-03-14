@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Promoter;
 
+
 class PromoterController extends Controller
 {
     public function index(){
@@ -19,6 +20,7 @@ class PromoterController extends Controller
     public function store(Request $request){
         $request->validate([
             'NIF' => 'sometimes',
+            'user' => 'sometimes',
             'name' => 'sometimes',
             'email' => 'sometimes',
             'description' => 'sometimes',

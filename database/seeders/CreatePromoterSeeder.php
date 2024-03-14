@@ -17,7 +17,8 @@ class CreatePromoterSeeder extends Seeder
     {
         $promoters = [
             [
-                'NIF' => 1,
+                'NIF' => '1234656',
+                'user' => 1,
                 'name' => 'Promoter 1',
                 'description' => 'Description promoter 1',
                 'email' => 'email@promoter.com',
@@ -25,7 +26,8 @@ class CreatePromoterSeeder extends Seeder
                 'password' => bcrypt('12345678')
             ],
             [
-                'NIF' => 2,
+                'NIF' => '1256456',
+                'user' => 3,
                 'name' => 'Promoter 2',
                 'description' => 'Description promoter 2',
                 'email' => 'email@promoter.com',
@@ -34,7 +36,8 @@ class CreatePromoterSeeder extends Seeder
 
             ],
             [
-                'NIF' => 3,
+                'NIF' => '5241646',
+                'user' => 2,
                 'name' => 'Promoter 3',
                 'description' => 'Description promoter 3',
                 'email' => 'email@promoter.com',
