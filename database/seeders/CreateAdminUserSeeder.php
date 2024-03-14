@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -95,6 +97,16 @@ class CreateAdminUserSeeder extends Seeder
             'password' => bcrypt('12345678')
         ]);
 
+
+        // Crear el usuario regular
+        $user2 = User::create([
+            'name' => 'Manu',
+            'surname' => 'Caler',
+            'nickname' => 'mcy03',
+            'genre' => 'Male',
+            'email' => 'mcy03@gmail.com',
+            'password' => bcrypt('12345678')
+        ]);
         // Crear el rol de usuario
         $userRole = Role::create(['name' => 'user']);
 
@@ -120,5 +132,7 @@ class CreateAdminUserSeeder extends Seeder
 
         // Asignar el rol de usuario al usuario regular
         $user->assignRole($userRole);
+        $user2->assignRole($userRole);
+
     }
 }
