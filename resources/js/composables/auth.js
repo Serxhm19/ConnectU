@@ -40,7 +40,10 @@ export default function useAuth() {
         email: '',
         password: '',
         password_confirmation: '',
-        genre: ''
+        genre: '',
+        nif: '',
+        description: '',
+        category_id: ''
     })
 
     const registerFormPromoter = reactive({
@@ -89,7 +92,7 @@ export default function useAuth() {
 
         processing.value = true
         validationErrors.value = {}
-
+        console.log(registerForm)
         await axios.post('/register', registerForm)
             .then(async response => {
                 // await store.dispatch('auth/getUser')
