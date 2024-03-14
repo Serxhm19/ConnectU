@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('genre');
-            $table->string('NIF')->unique();
-            $table->string('description');
-            $table->unsignedBigInteger('category_id');
+            $table->string('NIF')->unique()->nullable();
+            $table->string('description')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->rememberToken();
             $table->timestamps(); 
 

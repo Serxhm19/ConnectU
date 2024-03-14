@@ -87,19 +87,70 @@ class CreateAdminUserSeeder extends Seeder
         // Asignar el rol de Admin al usuario administrador
         $admin->assignRole($adminRole);
 
+        // Crear el usuario administrador
+        $promoter = User::create([
+            'name' => 'Sergio',
+            'surname' => 'Jimenez',
+            'nickname' => 'Sergio69',
+            'genre' => 'Other',
+            'email' => 'tuSergioMorenito69@gmail.com',
+            'password' => bcrypt('12345678'),
+            'NIF' => '123456E',
+            'description' => 'Promotor de eventos',
+            'category_id' => 1
+        ]);
+        
+        // Crear el rol de Admin
+        $promoterRole = Role::create(['name' => 'Promoter']);
+        
+        $promoterPermissions = [
+            'user-list',
+            'user-edit',
+            'user-delete',
+            'post-list',
+            'post-create',
+            'post-edit',
+            'post-delete',
+            'exercise-list',
+            'exercise-create',
+            'exercise-edit',
+            'exercise-delete',
+            'category-list',
+            'category-create',
+            'category-edit',
+            'category-delete',
+            'category_event-list',
+            'category_event-create',
+            'category_event-edit',
+            'category_event-delete',
+            'event-list',
+            'event-create',
+            'event-edit',
+            'event-delete',
+            'group_user-list',
+            'group_user-create',
+            'group_user-edit',
+            'group_user-delete',
+            'promoter-list',
+            'promoter-create',
+            'promoter-edit',
+            'promoter-delete',
+            'message-list',
+            'message-create',
+            'message-edit',
+            'message-delete',
+            'group-list',
+            'group-create',
+            'group-edit',
+            'group-delete',
+        ];
+
+        // Asignar los permisos al rol de Admin
+        $promoterRole->syncPermissions($promoterPermissions);
+        $promoter->assignRole($promoterRole);
+
         // Crear el usuario regular
         $user = User::create([
-            'name' => 'Serx',
-            'surname' => 'Hernández',
-            'nickname' => 'serxhm19',
-            'genre' => 'Male',
-            'email' => 'sergihm9@gmail.com',
-            'password' => bcrypt('12345678')
-        ]);
-
-
-        // Crear el usuario regular
-        $user2 = User::create([
             'name' => 'Manu',
             'surname' => 'Caler',
             'nickname' => 'mcy03',
@@ -112,9 +163,9 @@ class CreateAdminUserSeeder extends Seeder
 
         // Definir los permisos para el rol de usuario
         $userPermissions = [
-            'role-list',
-            'permission-list',
             'user-list',
+            'user-edit',
+            'user-delete',
             'post-list',
             'exercise-list',
             'category-list',
@@ -132,7 +183,6 @@ class CreateAdminUserSeeder extends Seeder
 
         // Asignar el rol de usuario al usuario regular
         $user->assignRole($userRole);
-        $user2->assignRole($userRole);
 
     }
 }

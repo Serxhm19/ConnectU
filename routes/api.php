@@ -89,14 +89,6 @@ Route::post('message/update/{id}', [MessagesController::class, 'update']);
 //---------------------------------------------------------------//
 
 
-//--------------------------Promoter-----------------------------//
-Route::get('promoter', [PromoterController::class, 'index']);
-Route::post('promoter/', [PromoterController::class, 'store']);
-Route::put('promoter/update/{id}', [PromoterController::class, 'update']);
-Route::delete('promoter/{id}', [PromoterController::class, 'destroy']);
-Route::post('promoter/{id}', [PromoterController::class, 'update']);
-Route::post('promoter/update/{id}', [PromoterController::class, 'update']);
-//---------------------------------------------------------------//
 
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
