@@ -21,8 +21,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('genre');
+            $table->string('NIF')->unique();
+            $table->string('description');
+            $table->unsignedBigInteger('category_id');
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamps(); 
+
+            $table->foreign('category_id')->references('id')->on('category_events')->onDelete('cascade');
         });
     }
 
