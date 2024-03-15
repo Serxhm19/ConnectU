@@ -103,31 +103,11 @@ class AuthenticatedSessionController extends Controller
             'email' => $request['email'],
             'genre' => $request['genre'],
             'password' => Hash::make($request['password']),
+            'nif' => $request['nif'],
+            'description' => $request['description'],
+            'category_id' => $request['category_id'],
         ]);
 
         return $this->successResponse($user, 'Registration Successfully');
-    }
-    /**
-     * Create User
-     * @param RegisterRequestPromoter $request
-     * @return JsonResponse
-     */
-    public function registerPromoter(RegisterRequestPromoter $request)
-    {
-        $promoter = promoter::where('email', $request['email'])->first();
-        if ($promoter) {
-            return response(['error' => 1, 'message' => 'user already exists'], 409);
-        }
-
-        $promoter = promoter::create([
-            'nif' => $request['nif'],
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'description' => $request['description'],
-            'category_id' => $request['category_id'],
-            'password' => Hash::make($request['password']),
-        ]);
-
-        return $this->successResponse($promoter, 'Registration Successfully');
     }
 }
