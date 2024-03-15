@@ -26,6 +26,9 @@ class User extends Authenticatable
         'email',
         'genre',
         'password',
+        'nif',
+        'description',
+        'category_id',
     ];
 
     /**

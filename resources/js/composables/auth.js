@@ -66,9 +66,7 @@ export default function useAuth() {
         await axios.post('/login', loginForm)
             .then(async response => {
                 await store.dispatch('auth/getUser')
-                await store.dispatch('auth/getPromoter') // Buscar promotores
                 await loginUser()
-                await loginPromoter()
 
                 swal({
                     icon: 'success',
@@ -97,6 +95,8 @@ export default function useAuth() {
             .then(async response => {
                 // await store.dispatch('auth/getUser')
                 // await loginUser()
+                console.log(registerForm)
+                console.log(await response)
                 swal({
                     icon: 'success',
                     title: 'Registration successfully',
@@ -189,12 +189,6 @@ export default function useAuth() {
 
     const loginUser = () => {
         user = store.state.auth.user
-        // Cookies.set('loggedIn', true)
-        getAbilities()
-    }
-
-    const loginPromoter = () => {
-        user = store.state.auth.promoter
         // Cookies.set('loggedIn', true)
         getAbilities()
     }
