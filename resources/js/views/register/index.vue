@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid h-custom">
         <div class="col-md-12 col-lg-6 col-xl-4 offset-xl-1">
-            <div class="card">
+            <div class=" card card-login">
                 <div class="login-box">
                     <div class="login-snip">
                         <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1"
@@ -240,7 +240,7 @@
 </template>
 <style>
 
-.login-box {
+.login-box { 
     width: 100%;
     margin: auto;
     max-width: 525px;
@@ -426,7 +426,7 @@ a {
     text-align: center;
 }
 
-.card {
+.card-login {
     width: 500px;
     left: 100px;
 }
