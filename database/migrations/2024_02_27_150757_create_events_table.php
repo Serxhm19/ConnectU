@@ -16,12 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             
             $table->string('name');
+            $table->unsignedBigInteger('user_id');
             $table->string('description');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->timestamps();
 
-            $table->foreign('category_id')->references('id')->on('category_events')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

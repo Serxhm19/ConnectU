@@ -16,6 +16,15 @@ class EventController extends Controller
         return $event;
     }
 
+    public function promoterEvents($id)
+    {
+          // Encuentra todos los eventos relacionados con el promotor identificado por $id
+            $events = Event::where('user_id', $id)->get();
+
+            // Devuelve los eventos como un array JSON
+            return response()->json($events);
+    }
+
     public function store(Request $request)
     {
 

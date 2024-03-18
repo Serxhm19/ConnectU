@@ -20,6 +20,7 @@ class CreateEventSeeder extends Seeder
                 'category_id' => 1,
                 'name' => 'event 1',
                 'description' => 'description event 1',
+                'user_id' => 1,
                 'start_date' => '2024-01-15',
                 'end_date' => '2024-01-25' 
             ],
@@ -27,13 +28,15 @@ class CreateEventSeeder extends Seeder
                 'category_id' => 2,
                 'name' => 'event 2',
                 'description' => 'description event 2',
+                'user_id' => 1,
                 'start_date' => '2024-01-15',
                 'end_date' => '2024-01-25' 
             ],
             [
                 'category_id' => 3,
                 'name' => 'event 3',
-                'description' => 'description event 3',
+                'description' => 'no visto',
+                'user_id' => 2,
                 'start_date' => '2024-01-15',
                 'end_date' => '2024-01-25' 
             ],

@@ -42,6 +42,7 @@ Route::post('category/update/{id}', [Category_eventController::class, 'update'])
 
 //--------------------------Event----------------------------------//
 Route::get('events', [EventController::class, 'index']);
+Route::get('events/promoter/{id}', [EventController::class, 'promoterEvents']);
 Route::post('events/', [EventController::class, 'store']);
 Route::put('events/update/{id}', [EventController::class, 'update']);
 Route::delete('events/{id}', [EventController::class, 'destroy']);
