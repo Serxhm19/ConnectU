@@ -16,12 +16,18 @@ use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\GroupUserController;
 use App\Http\Controllers\Api\MessagesController;
 use App\Http\Controllers\Api\PromoterController;
+use App\Http\Controllers\ArchivoController;
 //---------------------------------------------------------------//
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
+
+
+//---------------------------------------------------------------//
+Route::post('/upload', [ArchivoController::class, 'subirArchivo'])->name('upload');
+//--------------------------------------------------------------//
 
 Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forget.password.post');
 Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.reset');
