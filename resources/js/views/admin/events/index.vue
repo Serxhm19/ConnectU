@@ -25,7 +25,7 @@
                 <div v-for="(event, index) in events" :key="index" class="card col-sm-3">
                     <p>{{ event.name }}</p>
                     <p>{{ event.description }}</p>
-                    <p>{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</p>
+                    <p class="align-left">{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</p>
                     <div class="flex justify-content-around">
                         <router-link :to="{ name: 'events.update', params: { id: event.id } }" class="btn btn-warning mr-3">Editar</router-link>
                         <button class="btn btn-danger" @click="confirm(event.id, index)">Cancelar</button>
