@@ -39,12 +39,12 @@ class EventController extends Controller
         $event = Event::find($id);
 
         $request->validate([
-            'category_id' => 'sometimes', 
-            'name' => 'sometimes', 
-            'description' => 'sometimes', 
-            'start_date' => 'sometimes|date', 
-            'end_date' => 'sometimes|date|after_or_equal:start_date', 
-            ]);
+            'category_id' => 'sometimes',
+            'name' => 'sometimes',
+            'description' => 'sometimes',
+            'start_date' => 'sometimes|date',
+            'end_date' => 'sometimes|date|after_or_equal:start_date',
+        ]);
 
         $dataToUpdate = $request->all();
         $event->update($dataToUpdate);

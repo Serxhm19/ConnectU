@@ -324,7 +324,6 @@
 }
 
 .login-space .group input[data-type="password"] {
-    text-security: circle;
     -webkit-text-security: circle;
 }
 
