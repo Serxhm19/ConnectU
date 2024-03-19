@@ -14,6 +14,7 @@ class event extends Model
         'name',
         'description',
         'start_date',
-        'end_date'
+        'end_date',
+        'user_id'
     ];
 }
