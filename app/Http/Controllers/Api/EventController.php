@@ -34,6 +34,7 @@ class EventController extends Controller
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
+            'user_id' => 'required',
         ]);
 
         $event = $request->all();

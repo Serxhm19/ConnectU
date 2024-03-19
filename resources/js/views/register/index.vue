@@ -239,8 +239,7 @@
 
 </template>
 <style>
-
-.login-box { 
+.login-box {
     width: 100%;
     margin: auto;
     max-width: 525px;
@@ -442,14 +441,6 @@ import { ref } from "vue";
 const { registerForm, validationErrors, processing, submitRegister, loginForm, submitLogin, registerFormPromoter, submitRegisterPromoter } = useAuth();
 
 
-
-// Declaración de la referencia para almacenar la categoría seleccionada
-const selectedCategory = ref(null);
-
-const selectCategory = (categoryItem) => {
-    registerFormPromoter.category_id = categoryItem.id;
-    selectedCategory = categoryItem;
-}
 
 
 // Carga inicial de las categorías

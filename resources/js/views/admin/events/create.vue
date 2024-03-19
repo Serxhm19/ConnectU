@@ -97,6 +97,7 @@
 
                     </div>
                 </div>
+
                 <div class="form-group mb-2">
                     <div class="flex">
                         <h6 class="mr-1">Descripción</h6>
@@ -124,11 +125,24 @@ import TextEditorComponent from "@/components/TextEditorComponent.vue";
 const stringError = ref();
 const stringSuccess = ref();
 
-function addEvent() {
+// Define una función para eliminar todas las etiquetas HTML del texto
+function stripHtmlTags(html) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+}
 
-    axios.post('/api/events/', event.value)
+function addEvent() {
+    const vuexData = localStorage.getItem("vuex");
+    const vuexArray = JSON.parse(vuexData);
+    const userId = vuexArray.auth.user.id;
+    
+    event.value.description = stripHtmlTags(event.value.description);
+
+    const eventWithUserId = { ...event.value, user_id: Number(userId) };
+
+    axios.post('/api/events/', eventWithUserId)
         .then(response => {
-            stringSuccess.value = "Evento '" + event.name + "' creado correctamente";
+            stringSuccess.value = "Evento '" + event.value.name + "' creado correctamente";
             stringError.value = "";
             console.log(response);
         }).catch(error => {
@@ -159,12 +173,12 @@ const onUploadSuccess = (file, response) => {
 
 function upload() {
 
-axios.post('/upload/', dropzone)
-    .then(response => {
-        console.log(response);
-    }).catch(error => {
-        console.log(error);
-    });
+    axios.post('/upload/', dropzone)
+        .then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        });
 }
 
 </script>
