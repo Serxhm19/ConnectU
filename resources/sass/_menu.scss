@@ -1,25 +1,35 @@
 .layout-sidebar {
-    position: fixed;
-    width: 250px;
-    height: calc(85vh - 9rem);
-    z-index: 999;
-    overflow-y: auto;
+    width: 100%;
+    z-index: 0;
+    //overflow-y: auto;
     user-select: none;
-    top: 12rem;
+    top: 6rem; /* Cambiar top por bottom */
     left: 2rem;
     transition: transform $transitionDuration, left $transitionDuration;
-    background-color: var(--surface-overlay);
+    background-color: #ffffff00;
     border-radius: 20px;
-    padding: 1.5rem 0rem;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02), 0px 0px 2px rgba(0, 0, 0, 0.05), 0px 1px 4px rgba(0, 0, 0, 0.08);
+    padding: 0rem;
+    //box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02), 0px 0px 2px rgba(0, 0, 0, 0.05), 0px 1px 4px rgba(0, 0, 0, 0.08);
+    position: fixed;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.layout-submenu{
+    display: flex;
 }
 
 .layout-menu {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    display: flex;
+    justify-content: center;
+    
     
     .layout-root-menuitem {
+        
         > .layout-menuitem-root-text {
             font-size: 0.857rem;
             text-transform: uppercase;
@@ -144,7 +154,7 @@
 
 .layout-submenu-enter-to,
 .layout-submenu-leave-from {
-    max-height: 1000px;
+    max-height: 50px;
 }
 
 .layout-submenu-leave-active {

@@ -89,7 +89,6 @@ const checkActiveRoute = (item) => {
                 <app-menu-item v-for="(child, i) in item.items" :key="child" :index="i" :item="child" :parentItemKey="itemKey" :root="false"></app-menu-item>
             </ul>
         </Transition>
-        <div v-if="root && item.visible !== false " class="layout-menuitem-root-text"><hr></div>
     </li>
     </div>
 

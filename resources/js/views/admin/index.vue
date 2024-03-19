@@ -1,22 +1,25 @@
 <template>
     <div class="grid">
         <div class="col-12 lg:col-8 xl:col-8">
-            <div class="card mb-0">
-                <div class="list-group">
-                    <div v-for="event in events" :key="event.id" class="list-group-item">
+            <div class="card">
+                <div v-for="event in events" :key="event.id" class="card event-home">
+                    <img class="card-img-top" src="\images\logo.png" alt="Card image cap" style="height: 200px;">
+                    <div class="card-body">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ event.name }}</h5>
                             <p class="mb-1">{{ event.id }}</p>
                         </div>
                         <div class="d-flex w-100 justify-content-between">
                             <p class="mb-1">{{ event.description }}</p>
+                            <span>
+                                {{ getCategoryName(event.category_id) }}
+                            </span>
                         </div>
-                        <span>
-                            {{ getCategoryName(event.category_id) }}
-                        </span>
+                        
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="col-12 lg:col-4 xl:col-4">
@@ -211,7 +214,16 @@
         </div>
     </div>
 </template>
-
+<style>
+    .event-home{
+        padding: 0;
+    }
+    .event-home img{
+        width: 100%;
+        height: 200px;
+        
+    }
+</style>
 <script setup>
     import {ref, onMounted, watch} from "vue";
     import useCategories from "../../composables/categories_event";

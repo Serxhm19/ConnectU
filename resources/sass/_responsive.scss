@@ -33,7 +33,8 @@
 
         &.layout-static {
             .layout-main-container {
-                margin-left: 300px;
+                margin-top: 5rem;
+                margin-left: 2rem;
             }
 
             &.layout-static-inactive {
@@ -43,8 +44,7 @@
                 }
 
                 .layout-main-container {
-                    margin-left: 0;
-                    padding-left: 2rem;
+                    margin-top: -5.5rem;
                 }
             }
         }
