@@ -194,11 +194,6 @@
 
 </template>
 <style>
-html {
-    height: 100%;
-    background-color: #002C6F;
-}
-
 
 h2 {
     font-family: Gotham;
