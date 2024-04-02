@@ -5,8 +5,7 @@
         
         
         <div class="layout-main-container ">
-            
-            
+
             <div class="layout-main">
                 
 
@@ -22,7 +21,7 @@
                 <div class="card">
                     <app-sidebar></app-sidebar>
                 </div>
-                <Breadcrumb :home="home" :model="crumbs" class="mb-2">
+                <Breadcrumb :home="home" :model="crumbs">
                     <template #item="{ item, props }">
                         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                             <a :href="href" v-bind="props.action" class="btn btn-link"   @click="navigate">
@@ -38,7 +37,7 @@
             </div>
             <app-footer></app-footer>
         </div>
-
+        
         <!--app-config></app-config-->
         <div class="layout-mask"></div>
     </div>
@@ -156,11 +155,20 @@ const isOutsideClicked = (event) => {
 </script>
 
 <style lang="scss" scoped>
+.p-breadcrumb {
+    padding: 10px 0 30px 10px;
+    width: 30%;
+    height: 92px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
 .p-breadcrumb .p-breadcrumb-list {
     margin: 0 !important; 
     padding: 0;
     list-style-type: none;
-    display: flex;
+    display: flex; 
     align-items: center;
     flex-wrap: nowrap;
 }

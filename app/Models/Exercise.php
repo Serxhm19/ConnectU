@@ -34,6 +34,8 @@ class Exercise extends Model implements HasMedia
         $this->addMediaCollection('images/exercises')
             ->useFallbackUrl('/images/placeholder.jpg')
             ->useFallbackPath(public_path('/images/placeholder.jpg'));
+
+        
     }
 
     public function registerMediaConversions(Media $media = null): void
@@ -45,4 +47,12 @@ class Exercise extends Model implements HasMedia
                 ->height(env('IMAGE_HEIGHT', 300));
         }
     }
+
+
+
+    
+
+
+
+
 }
