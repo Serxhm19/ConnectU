@@ -97,7 +97,7 @@
                     </div>
                     <div class="col-md-8 card-register">
                         <div class="card">
-                            <h2>Don't have an account?</h2><router-link :to="{ name: 'users.create' }"
+                            <h2>Don't have an account?</h2><router-link :to="{ name: 'auth.register' }"
                                     class="btn btn-link btn-sm float-end">
                                     Register
                                 </router-link>
@@ -113,7 +113,9 @@
 <style>
 html {
     height: 100%;
+    background-color: #002C6F;
 }
+
 
 h2 {
     font-family: Gotham;
@@ -180,23 +182,6 @@ body {
     background-color: rgba(255, 235, 59, 0.24);
     border-color: rgba(255, 235, 59, 0.24);
     color: #e6e6e6;
-}
-
-.form-button:hover,
-.form-button:focus,
-.form-button:active,
-.form-button.active,
-.form-button:active:focus,
-.form-button:active:hover,
-.form-button.active:hover,
-.form-button.active:focus {
-    background-color: rgba(255, 235, 59, 0.473);
-    border-color: rgba(255, 235, 59, 0.473);
-    color: #e6e6e6;
-}
-
-.button-l {
-    width: 100% !important;
 }
 
 /* Margins g(global) - l(left) - r(right) - t(top) - b(bottom) */
@@ -372,6 +357,13 @@ body {
     width: 100%;
     justify-content: center;
     background-color: #002C6F;
+}
+
+.btn.btn-primary.Login:hover {
+    font-family: Gotham;
+    width: 100%;
+    justify-content: center;
+    background-color: #01AFEE;
 }
 
 .card-register {
