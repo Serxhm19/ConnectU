@@ -1,19 +1,30 @@
 <template>
     <div class="grid">
         <div class="col-12 lg:col-8 xl:col-8">
-            <div class="card">
-                <div v-for="event in events" :key="event.id" class="card event-home">
-                    <img class="card-img-top" src="\images\logo.png" alt="Card image cap" style="height: 200px;">
-                    <div class="card-body">
+            <div class="card" style="border-radius: 40px;">
+                <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;">
+                    <div class="card-body" style="padding: 8px 14px;">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ event.name }}</h5>
-                            <p class="mb-1">{{ event.id }}</p>
+                            <p class="mb-1">Sant feliu de guixols, Catalunya.</p>
                         </div>
+                    </div>
+                    <img class="card-img-top" src="\images\logo.png" alt="Card image cap" style="height: 450px; border-radius: 0;">
+                    <div class="card-body">
                         <div class="d-flex w-100 justify-content-between">
-                            <p class="mb-1">{{ event.description }}</p>
-                            <span>
-                                {{ getCategoryName(event.category_id) }}
+                            <h5 class="mb-1">@testEvent</h5>
+                            <p class="mb-1" style="color: grey">{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</p>
+                        </div>
+                        <div class="d-flex justify-content-center" style="margin: 20px 30px;">
+                            <p style="text-align: justify;">
+                                {{  event.description }}
+                            </p>
+                        </div>
+                        <div class="d-flex justify-content-between" style="margin: 20px 30px;">
+                            <span style="color: #00AAC4">
+                                #{{ getCategoryName(event.category_id) }}
                             </span>
+                            <router-link :to="{ name: 'events.update', params: { id: event.id } }" class="btn btn-link mr-3">Ver más...</router-link>
                         </div>
                         
                     </div>
@@ -287,4 +298,11 @@
         // Retornar el nombre de la categoría si se encuentra, de lo contrario, retorna un mensaje de error
         return category ? category.name : 'Uncategorized';
    }
+
+
+   function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        return date.toLocaleDateString('es-ES', options);
+    }
 </script>

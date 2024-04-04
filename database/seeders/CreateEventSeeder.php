@@ -19,7 +19,11 @@ class CreateEventSeeder extends Seeder
             [
                 'category_id' => 1,
                 'name' => 'event 1',
-                'description' => 'description event 1',
+                'description' => 'Lorem ipsum dolor sit amet consectetur, 
+                adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
+                tempor eros quam hac mauris volutpat potenti dictum tempus...Lorem ipsum dolor sit amet consectetur, 
+                adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
+                tempor eros quam hac mauris volutpat potenti dictum tempus...',
                 'user_id' => 1,
                 'start_date' => '2024-01-15',
                 'end_date' => '2024-01-25' 
@@ -27,7 +31,11 @@ class CreateEventSeeder extends Seeder
             [
                 'category_id' => 2,
                 'name' => 'event 2',
-                'description' => 'description event 2',
+                'description' => 'Lorem ipsum dolor sit amet consectetur, 
+                adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
+                tempor eros quam hac mauris volutpat potenti dictum tempus...Lorem ipsum dolor sit amet consectetur, 
+                adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
+                tempor eros quam hac mauris volutpat potenti dictum tempus...',
                 'user_id' => 1,
                 'start_date' => '2024-01-15',
                 'end_date' => '2024-01-25' 
@@ -35,7 +43,11 @@ class CreateEventSeeder extends Seeder
             [
                 'category_id' => 3,
                 'name' => 'event 3',
-                'description' => 'no visto',
+                'description' => 'Lorem ipsum dolor sit amet consectetur, 
+                adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
+                tempor eros quam hac mauris volutpat potenti dictum tempus...Lorem ipsum dolor sit amet consectetur, 
+                adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
+                tempor eros quam hac mauris volutpat potenti dictum tempus...',
                 'user_id' => 2,
                 'start_date' => '2024-01-15',
                 'end_date' => '2024-01-25' 

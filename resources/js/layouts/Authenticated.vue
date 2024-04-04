@@ -15,7 +15,7 @@
 
                 
             </div>
-            
+            <!--
             <div class="layout-sidebar">
                     
                 <div class="card">
@@ -35,6 +35,7 @@
                     </template>
                 </Breadcrumb>
             </div>
+            -->
             <app-footer></app-footer>
         </div>
         

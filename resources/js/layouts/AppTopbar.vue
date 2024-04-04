@@ -1,10 +1,7 @@
 <template>
     <div class="layout-topbar">
-        <router-link to="/" class="layout-topbar-logo">
-            <img src="/images/logo.svg" alt="logo" />
-            <span></span>
-        </router-link>
-
+        <div></div>
+<!--
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
             <i class="pi pi-bars"></i>
         </button>
@@ -12,6 +9,22 @@
         <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
             <i class="pi pi-ellipsis-v"></i>
         </button>
+-->
+        <div class="menu-app">
+                <router-link class="nav-link" to="/login">
+                    {{ $t('login') }}
+                </router-link>
+           
+                <router-link to="/" class="layout-topbar-logo nav-link">
+                    <img src="/images/connectu.svg" alt="logo" />
+                    <span></span>
+                </router-link>
+
+                <router-link class="nav-link" to="/register">
+                    {{ $t('register') }}
+                </router-link>
+        </div>
+
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
 
@@ -37,7 +50,7 @@
 
                 <span class="nav-link dropdown-toggle ms-3 me-2" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    Hola, {{ user.name }}
+                    {{ user.name }}
                 </span>
             </button>
         </div>
