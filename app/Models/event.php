@@ -13,6 +13,7 @@ class event extends Model
         'category_id',
         'name',
         'description',
+        'location',
         'start_date',
         'end_date',
         'user_id'

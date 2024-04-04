@@ -17,6 +17,7 @@ return new class extends Migration
             
             $table->string('name');
             $table->unsignedBigInteger('user_id');
+            $table->string('location');
             $table->string('description', 2000);
             $table->dateTime('start_date');
             $table->dateTime('end_date');

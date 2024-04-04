@@ -269,7 +269,8 @@ body {
     width: 500px;
 }
 
-.card-login {
+.card {
+    border: 1.5px solid #777777;
     width: 500px;
 }
 .forgot {
