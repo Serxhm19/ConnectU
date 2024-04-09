@@ -19,7 +19,8 @@
             <div class="card">
                 <div class="col-12">
                     <div>
-                        <button type="button" class="btn btn-secondary button-edit pi pi-fw pi-user-edit"></button>
+                        <button type="button" class="btn btn-secondary button-edit pi pi-fw pi-user-edit"
+                            @click="displayEditDialog = true"></button>
                     </div>
                     <h3 class="nickname">
                         @{{ user.nickname }}
@@ -41,46 +42,120 @@
         </div>
 
         <div class="col-8">
-            <div class="card row flex justify-content-around flex-row">
-                <div class="card mb-12" style="border: 1px solid black;" v-for="(event, index) in events" :key="index">
-                    <div class="row g-2 col-12">
-                        <div class="col-md-4">
-                            <img src="\images\logo.png" alt="Image" class="img-fluid rounded-start">
+            <div class="card">
+                <DataTable class="p-datatable" :value="events" paginator :rows="10" filterDisplay="row"
+                    :filters="filters">
+                    <template #header>
+                        <div class="flex justify-content-end">
+                            <h2 style="margin-right: auto;">Event Dashboard</h2>
+                            <IconField iconPosition="left">
+                                <InputIcon>
+                                    <i class="pi pi-search"></i>
+                                </InputIcon>
+                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                            </IconField>
                         </div>
-                        <div class="col-md-8">
-                            <div>
-                                <h1 class="card-title">{{ event.name }}</h1>
-                                <p class="card-text">{{ event.description }}</p>
-                                <p class="card-text"><small class="text-body-secondary">{{ formatDate(event.start_date)
-                                        }} - {{ formatDate(event.end_date) }}</small></p>
-                                <div class="d-flex align-items-center">
-                                    <router-link :to="{ name: 'events.update', params: { id: event.id } }"
-                                        class="btn btn-warning mr-3">Editar</router-link>
-                                    <button class="btn btn-danger" @click="confirm(event.id, index)">Cancelar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </template>
+                    <template #empty class="empty">
+                        No events found.
+                    </template>
+                    <template #loading> Loading events data. Please wait. </template>
+                    <Column field="name" header="Name" style="width: 12.5%"></Column>
+                    <Column field="location" header="Location" style="width: 12.5%"></Column>
+                    <Column field="start_date" header="Start Date" style="width: 12.5%">
+                        <template v-slot:body="slotProps">
+                            {{ formatDate(slotProps.data.start_date) }}
+                        </template>
+                    </Column>
+                    <Column field="end_date" header="End Date" style="width: 12.5%">
+                        <template v-slot:body="slotProps">
+                            {{ formatDate(slotProps.data.end_date) }}
+                        </template>
+                    </Column>
+                    <Column field="status" header="Status" style="width: 12.5%">
+                        <template v-slot:body="slotProps">
+                            <span v-if="isEventExpired(slotProps.data.end_date)">
+                                <Tag severity="danger" value="Expired"></Tag>
+                            </span>
+                            <span v-else>
+                                <Tag severity="success" value="Success"></Tag>
+                            </span>
+                        </template>
+                    </Column>
+                    <Column header="Actions" style="width: 25%">
+                        <template v-slot:body="slotProps">
+                            <router-link :to="{ name: 'events.update', params: { id: slotProps.data.id } }">
+                                <Button icon="pi pi-pencil" severity="help" text raised rounded>
+                                    <template #icon>
+                                        <i class="pi pi-pencil"></i>
+                                    </template>
+                                </Button> </router-link>
+                            <Button iconClass="my-custom-icon-class" icon="pi pi-trash" severity="danger" text raised
+                                rounded @click="deleteTask(slotProps.data.id)">
+                                <template #icon>
+                                    <i class="pi pi-trash"></i>
+                                </template>
+                            </Button>
+                        </template>
+                    </Column>
+                </DataTable>
+
             </div>
         </div>
     </div>
+    <div class="card flex justify-content-center">
+        <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }"
+            :modal="true">
+            <template #header>
+                <div class="inline-flex align-items-center justify-content-center gap-2">
+                    <Avatar image='/images/logo.png' shape="circle" />
+                    <span class="font-bold white-space-nowrap">@{{ user.nickname }}</span>
+                </div>
+            </template>
+            <span class="p-text-secondary block mb-5">Update your information.</span>
+            <div class="flex align-items-center gap-3 mb-3">
+                <label for="username" class="font-semibold w-6rem">Username</label>
+                <InputText id="username" class="flex-auto" autocomplete="off" />
+            </div>
+            <div class="flex align-items-center gap-3 mb-2">
+                <label for="email" class="font-semibold w-6rem">Email</label>
+                <InputText id="email" class="flex-auto" autocomplete="off" />
+            </div>
+            <template #footer>
+                <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
+                <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
+            </template>
+        </Dialog>
+    </div>
 </template>
-
 <script setup>
-
-const store = useStore();
-const user = computed(() => store.state.auth.user)
+import Tag from 'primevue/tag';
+import InputText from 'primevue/inputtext'
+import Button from 'primevue/button';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import InputIcon from 'primevue/inputicon';
+import IconField from 'primevue/iconfield';
+import Dialog from 'primevue/dialog';
+import Avatar from 'primevue/avatar';
 import { useStore } from 'vuex';
 import axios from "axios";
-import { ref, inject, onMounted, computed, onBeforeUnmount } from "vue"
-const events = ref([]);
-const swal = inject('$swal');
+import { ref, inject, onMounted, computed } from "vue"
+import { FilterMatchMode } from 'primevue/api';
 
-function stripHtmlTags(html) {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    return doc.body.textContent || "";
-}
+const filters = ref({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
+
+const initFilters = () => {
+    filters.value = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    };
+};
+
+
+
+initFilters();
 
 onMounted(() => {
     // console.log('mi vista')
@@ -90,13 +165,34 @@ onMounted(() => {
 
     axios.get('/api/events/promoter/' + id)
         .then(response => {
-            events.value = response.data;+
+            events.value = response.data;
 
             console.log(events.value);
 
             events.value.forEach(event => {
                 event.description = stripHtmlTags(event.description);
             });
+
+        })
+});
+
+const store = useStore();
+const user = computed(() => store.state.auth.user)
+const events = ref([]);
+const swal = inject('$swal');
+
+onMounted(() => {
+    // console.log('mi vista')
+    const vuexData = localStorage.getItem("vuex");
+    const vuexArray = JSON.parse(vuexData);
+    let id = vuexArray.auth.user.id;
+
+    axios.get('/api/events/promoter/' + id)
+        .then(response => {
+            events.value = response.data;
+
+            console.log(events.value);
+
 
         })
 });
@@ -143,6 +239,33 @@ function formatDate(dateString) {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     return date.toLocaleDateString('es-ES', options);
 }
+
+function isEventExpired(endDate) {
+    const currentDate = new Date();
+    const eventEndDate = new Date(endDate);
+
+    return eventEndDate < currentDate;
+}
+
+
+const displayEditDialog = ref(false);
+const editedUser = ref({
+    // Inicialice editedUser con los datos del usuario actual
+});
+
+const saveEditedUser = () => {
+    // Guarde los datos del usuario editado en la tienda o envíelos al servidor
+    displayEditDialog.value = false;
+};
+
+//function stripHtmlTags(html) {
+//  const doc = new DOMParser().parseFromString(html, 'text/html');
+//return doc.body.textContent || "";
+//}
+
+//events.value.forEach(event => {
+//  event.description = stripHtmlTags(event.description);
+//});
 
 </script>
 <style scoped>
@@ -192,5 +315,60 @@ function formatDate(dateString) {
 
 .card-event {
     display: flex;
+}
+
+.p-datatable {
+    width: 100%;
+    border: 1px solid black;
+    font-family: Gotham;
+
+}
+
+.pi-search:before {
+    margin-right: 10px;
+}
+
+.p-datatable-table {
+    width: 100%;
+    border: 1px solid black;
+    font-family: Gotham;
+}
+
+.p-datatable-table-body {
+    min-height: 100%;
+}
+
+.p-datatable-tbody>tr>td {
+    text-align: left;
+    border: 1px solid #dee2e6;
+    border-width: 0 0 1px 0;
+    padding: 1rem 1rem;
+    width: 1020px;
+}
+
+.titleheader {
+    font-family: Gotham;
+    font-size: 22px;
+
+}
+
+.IconDashboard {
+    padding: auto;
+}
+
+.pi:before {
+    margin-left: 4px;
+    --webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.pi-user-edit:before {
+    margin: auto;
+    --webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.p-button {
+    margin: 10px;
 }
 </style>
