@@ -49,6 +49,7 @@ Route::post('category/update/{id}', [Category_eventController::class, 'update'])
 //--------------------------Event----------------------------------//
 Route::get('events', [EventController::class, 'index']);
 Route::get('events/promoter/{id}', [EventController::class, 'promoterEvents']);
+Route::apiResource('event', PostController::class);
 Route::post('events/', [EventController::class, 'store']);
 Route::put('events/update/{id}', [EventController::class, 'update']);
 Route::delete('events/{id}', [EventController::class, 'destroy']);
@@ -86,8 +87,8 @@ Route::post('message/update/{id}', [MessagesController::class, 'update']);
 //---------------------------------------------------------------//
 
 
-
-
+Route::get('users/show/{id}', [UserController::class, 'showUser']);
+Route::get('users/getUsers', [UserController::class, 'allUsers']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('posts', PostController::class);

@@ -1,23 +1,21 @@
 <template>
-    <div class="grid">
-        <div class="col-12 lg:col-8 xl:col-8">
             <div class="card" style="border-radius: 40px;">
-                <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;">
+                <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;"> 
                     <div class="card-body" style="padding: 8px 14px;">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ event.name }}</h5>
-                            <p class="mb-1">Sant feliu de guixols, Catalunya.</p>
+                            <p class="mb-1">{{ event.location }}</p>
                         </div>
                     </div>
-                    <img class="card-img-top" src="\images\logo.png" alt="Card image cap" style="height: 450px; border-radius: 0;">
+                    <img class="card-img-top" src="\images\logo.png" alt="Card image cap" style="height: 350px; border-radius: 0;">
                     <div class="card-body">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">@testEvent</h5>
+                            <h5 class="mb-1">{{ getUserName(event.user_id) }}</h5>
                             <p class="mb-1" style="color: grey">{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</p>
                         </div>
                         <div class="d-flex justify-content-center" style="margin: 20px 30px;">
                             <p style="text-align: justify;">
-                                {{  event.description }}
+                                {{  sliceDataDescription(event.description) }}
                             </p>
                         </div>
                         <div class="d-flex justify-content-between" style="margin: 20px 30px;">
@@ -30,34 +28,28 @@
                     </div>
                 </div>
             </div>
+<!--
+                        <div class="card-body shadow-sm">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <input v-model="search_global" type="text" placeholder="Search..." class="form-control mb-4">
+                                    <div class="list-group">
 
-        </div>
-
-        <div class="col-12 lg:col-4 xl:col-4">
-            <div class="card-body shadow-sm">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <input v-model="search_global" type="text" placeholder="Search..." class="form-control mb-4">
-                        <div class="list-group">
-
-                            <div v-for="category in categories" :key="category.id" class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">{{ category.name }}</h5>
-                                    <p class="mb-1">{{ category.id }}</p>
-                                    
+                                        <div v-for="category in categories" :key="category.id" class="list-group-item">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">{{ category.name }}</h5>
+                                                <p class="mb-1">{{ category.id }}</p>
+                                            </div>
+                                            <span>
+                                                {{ category.description }}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <span>
-                                    {{ category.description }}
-                                </span>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-        
+-->
+        <!--
         <div class="col-12 xl:col-6">
             <div class="card">
                 <h5>Recent Sales</h5>
@@ -224,6 +216,7 @@
             
         </div>
     </div>
+    -->
 </template>
 <style>
     .event-home{
@@ -247,12 +240,14 @@
     const orderColumn = ref('created_at')
     const orderDirection = ref('desc')
     const {categories, getCategories, deleteCategory} = useCategories()
-    const {events, getEvents, deleteEvent} = useEvents()
+    const {events, users,  getEvents, getUsers, deleteEvent} = useEvents()
     const {can} = useAbility()
 
     onMounted(() => {
         getCategories()
         getEvents()
+        getUsers()
+        console.log(users)
     })
 
     const updateOrdering = (column) => {
@@ -293,16 +288,25 @@
     }, 200))
 
 
-   function getCategoryName(categoryId) {
+    function getCategoryName(categoryId) {
         const category = categories.value.find(cat => cat.id === categoryId);
         // Retornar el nombre de la categoría si se encuentra, de lo contrario, retorna un mensaje de error
         return category ? category.name : 'Uncategorized';
-   }
+    }
 
+    function getUserName(id) {
+        const user = users.value.find(userValue => userValue.id === id);
+        // Retornar el nombre de la categoría si se encuentra, de lo contrario, retorna un mensaje de error
+        return user ? user.name : 'null';
+    }
 
    function formatDate(dateString) {
         const date = new Date(dateString);
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return date.toLocaleDateString('es-ES', options);
+    }
+
+    function sliceDataDescription(text) {
+            return text.substring(0, 300) + "...";
     }
 </script>

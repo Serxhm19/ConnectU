@@ -7,13 +7,39 @@
         <div class="layout-main-container ">
 
             <div class="layout-main">
-                
+                <div class="grid">
+        
+                    
+                    <div class="col-12 lg:col-3 xl:col-3">
+                        <app-chats></app-chats>
+                    </div>
+                    <div class="col-12 lg:col-6 xl:col-6">
+                        <Suspense>
+                        <router-view></router-view>
+                        </Suspense>
+                    </div>
+                    <div class="col-12 lg:col-3 xl:col-3">
+                        <div class="card-body shadow-sm">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <input v-model="search_global" type="text" placeholder="Search..." class="form-control mb-4">
+                                    <div class="list-group">
 
-                <Suspense>
-                <router-view></router-view>
-                </Suspense>
-
-                
+                                        <div v-for="category in categories" :key="category.id" class="list-group-item">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">{{ category.name }}</h5>
+                                                <p class="mb-1">{{ category.id }}</p>
+                                            </div>
+                                            <span>
+                                                {{ category.description }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!--
             <div class="layout-sidebar">
@@ -68,6 +94,7 @@ import { useRoute } from "vue-router";
 import Breadcrumb from 'primevue/breadcrumb';
 
 import AppTopbar from './AppTopbar.vue';
+import AppChats from './AppChats.vue';
 import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 //import AppConfig from './AppConfig.vue';

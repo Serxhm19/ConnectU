@@ -18,7 +18,7 @@ class CreateEventSeeder extends Seeder
         $events = [
             [
                 'category_id' => 1,
-                'name' => 'event 1',
+                'name' => 'Paseo en globo aerostático',
                 'description' => 'Lorem ipsum dolor sit amet consectetur, 
                 adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
                 tempor eros quam hac mauris volutpat potenti dictum tempus...Lorem ipsum dolor sit amet consectetur, 
@@ -31,7 +31,7 @@ class CreateEventSeeder extends Seeder
             ],
             [
                 'category_id' => 2,
-                'name' => 'event 2',
+                'name' => 'Conferencia de Informática',
                 'description' => 'Lorem ipsum dolor sit amet consectetur, 
                 adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
                 tempor eros quam hac mauris volutpat potenti dictum tempus...Lorem ipsum dolor sit amet consectetur, 
@@ -44,7 +44,7 @@ class CreateEventSeeder extends Seeder
             ],
             [
                 'category_id' => 3,
-                'name' => 'event 3',
+                'name' => 'Taller de acupuntura',
                 'description' => 'Lorem ipsum dolor sit amet consectetur, 
                 adipiscing elit tincidunt. Odio vitae placerat ligula viverra ac mus a tellus cubilia, 
                 tempor eros quam hac mauris volutpat potenti dictum tempus...Lorem ipsum dolor sit amet consectetur, 

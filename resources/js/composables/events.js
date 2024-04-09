@@ -3,12 +3,23 @@ import { useRouter } from 'vue-router'
 import axios from 'axios' // Importa axios para realizar solicitudes HTTP
 
 export default function useEvents() {
-    const events = ref([]) // Cambia 'categories' a 'events'
+    const events = ref([])
     const event = ref({
-        // Cambia 'category' a 'event' y ajusta las propiedades según los datos del evento
         title: '',
         description: '',
         date: ''
+    })
+    const users = ref([])
+    const user = ref({
+        name: '',
+        surname: '',
+        nickname: '',
+        email: '',
+        genre: '',
+        password: '',
+        nif: '',
+        description: '',
+        category_id: '',
     })
 
     const router = useRouter()
@@ -37,6 +48,23 @@ export default function useEvents() {
             })
     }
 
+    const getUsers = async (id) => {
+        axios.get('/api/users/getUsers')
+            .then(response => {
+                // Utiliza map para transformar la respuesta y obtener solo el name y id
+                const usersA = response.data.map(user => ({
+                    id: user.id,
+                    name: user.name
+                }));
+                
+                users.value = usersA;
+            })
+            .catch(error => {
+                console.error('Error al obtener usuarios:', error);
+            });
+    }
+    
+
     const storeEvent = async (eventData) => {
         if (isLoading.value) return;
 
@@ -62,8 +90,11 @@ export default function useEvents() {
     return {
         events,
         event,
+        users,
+        user,
         getEvents,
         getEvent,
+        getUsers,
         storeEvent,
         validationErrors,
         isLoading

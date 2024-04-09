@@ -55,6 +55,14 @@ class UserController extends Controller
         return $users;
     }
 
+    public function showUser($id)
+    {
+
+        $user = User::find($id);
+        return response()->json($user);
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *

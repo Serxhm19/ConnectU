@@ -40,6 +40,16 @@
                                     </option>
                                 </select>
                             </div>
+                            
+                            <div class="form-gorup mb-2">
+                                <div class="flex">
+                                    <h6 class="mr-1">Fecha inicio</h6>
+                                    <span class="text-danger">*</span>
+                                </div>
+                                <div class="ml-2">
+                                    <input v-model="event.location" type="text" class="form-control" placeholder="Nombre tarea">
+                                </div>
+                            </div>
 
                             <div class="form-gorup mb-2">
                                 <div class="flex">
@@ -109,8 +119,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary mt-4 mb-4">Crear evento</button>
             </form>
-
-
         </div>
     </div>
 </template>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEventRequest;
+use App\Http\Resources\zz;
 use Illuminate\Http\Request;
 use App\Models\event;
 
@@ -25,23 +27,18 @@ class EventController extends Controller
             return response()->json($events);
     }
 
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = auth()->id();
 
-        $request->validate([
-            'category_id' => 'required',
-            'name' => 'required',
-            'description' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'user_id' => 'required',
-        ]);
+        $event = Event::create($validatedData);
 
-        $event = $request->all();
-        $evento = Event::create($event);
+        if ($request->hasFile('thumbnail')) {
+            $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images');
+        }
 
-        return response()->json(['success' => true, 'data' => $evento]);
-
+        return new EventResource($event);
     }
 
     public function update($id, Request $request)
