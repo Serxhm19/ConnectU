@@ -103,15 +103,9 @@
             </div>
         </div>
     </div>
-    <div class="card flex justify-content-center">
+    <div class="card flex">
         <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }"
             :modal="true">
-            <template #header>
-                <div class="inline-flex align-items-center justify-content-center gap-2">
-                    <Avatar image='/images/logo.png' shape="circle" />
-                    <span class="font-bold white-space-nowrap">@{{ user.nickname }}</span>
-                </div>
-            </template>
             <span class="p-text-secondary block mb-5">Update your information.</span>
             <div class="flex align-items-center gap-3 mb-3">
                 <label for="username" class="font-semibold w-6rem">Username</label>
@@ -370,5 +364,12 @@ const saveEditedUser = () => {
 
 .p-button {
     margin: 10px;
+}
+
+.editprofileimage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 2px solid white;
 }
 </style>
