@@ -152,19 +152,19 @@ export default [
                 meta: { breadCrumb: 'Profile' }
             },
             {
-                name: 'chats',
-                path: 'chats',
-                meta: { breadCrumb: 'Chats'},
+                name: 'chat',
+                path: 'chat',
+                meta: { breadCrumb: 'Chat'},
                 children: [
                     {
-                        name: 'chats.index',
+                        name: 'chat.index',
                         path: '',
                         component: () => import('../views/admin/chat/index.vue'),
-                        meta: { breadCrumb: 'Chats' }
+                        meta: { breadCrumb: 'Chat' }
                     },
                     {
                         name: 'chats.chat',
-                        path: 'chat',
+                        path: '',
                         component: () => import('../views/admin/chat/chat.vue'),
                         meta: { breadCrumb: 'Chat' }
                     },

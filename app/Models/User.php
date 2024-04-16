@@ -55,4 +55,10 @@ class User extends Authenticatable
     {
         $this->notify(new UserResetPasswordNotification($token));
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }
+

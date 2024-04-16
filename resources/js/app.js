@@ -129,6 +129,13 @@ const app = createApp({
 });
 
 
+Echo.private('chat')
+  .listen('MessageSent', (e) => {
+    this.messages.push({
+      message: e.message.message,
+      user: e.user
+    });
+  });
 
 app.use(router)
 app.use(store)

@@ -78,12 +78,12 @@ Route::post('groupuser/update/{id}', [GroupUserController::class, 'update']);
 
 
 //--------------------------Messages-----------------------------//
-Route::get('message', [MessagesController::class, 'index']);
-Route::post('message/', [MessagesController::class, 'store']);
-Route::put('message/update/{id}', [MessagesController::class, 'update']);
-Route::delete('message/{id}', [MessagesController::class, 'destroy']);
-Route::post('message/{id}', [MessagesController::class, 'update']);
-Route::post('message/update/{id}', [MessagesController::class, 'update']);
+Route::post('/send-message', [MessagesController::class, 'sendMessage']);
+Route::get('/messages', [MessagesController::class, 'index']); // Cambiar 'message' a 'messages'
+Route::post('/messages', [MessagesController::class, 'store']); // Cambiar 'message' a 'messages'
+Route::put('/messages/{id}', [MessagesController::class, 'update']); // Cambiar 'message' a 'messages'
+Route::delete('/messages/{id}', [MessagesController::class, 'destroy']); // Cambiar 'message' a 'messages'
+
 //---------------------------------------------------------------//
 
 
