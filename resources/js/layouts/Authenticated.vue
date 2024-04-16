@@ -7,13 +7,9 @@
         <div class="layout-main-container ">
 
             <div class="layout-main">
-                
-        
-                
                     <Suspense>
                         <router-view></router-view>
-                    </Suspense>
-                    
+                    </Suspense> 
             </div>
             <!--
             <div class="layout-sidebar">

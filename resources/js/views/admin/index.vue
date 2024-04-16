@@ -51,7 +51,7 @@
                             <span style="color: #00AAC4">
                                 #{{ getCategoryName(event.category_id) }}
                             </span>
-                            <router-link :to="{ name: 'events.update', params: { id: event.id } }" class="btn btn-link mr-3">Ver más...</router-link>
+                            <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }" class="btn btn-link mr-3">Ver más...</router-link>
                         </div>
                         
                     </div>

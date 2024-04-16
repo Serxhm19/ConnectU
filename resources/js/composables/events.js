@@ -5,9 +5,7 @@ import axios from 'axios' // Importa axios para realizar solicitudes HTTP
 export default function useEvents() {
     const events = ref([])
     const event = ref({
-        title: '',
-        description: '',
-        date: ''
+        id: '',
     })
     const users = ref([])
     const user = ref({
@@ -42,12 +40,22 @@ export default function useEvents() {
     }
 
     const getEvent = async (id) => {
-        axios.get('/api/events/' + id) // Cambia la ruta de la API a la de eventos
+        const apiUrl = `/api/events/show/${id}`;
+
+        axios.get(apiUrl)
+        .then(response => {
+            event.value = response.data;
+        })
+        .catch(error => {
+            console.error('Api error: ', error);
+        });
+    }
+    const getExercise = async (id) => {
+        axios.get('/api/exercises/' + id)
             .then(response => {
-                event.value = response.data.data; // Cambia 'category' a 'event'
+                exercise.value = response.data.data;
             })
     }
-
     const getUsers = async (id) => {
         axios.get('/api/users/getUsers')
             .then(response => {

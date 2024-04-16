@@ -23,6 +23,8 @@
                 <router-link class="nav-link" to="/register">
                     {{ $t('register') }}
                 </router-link>
+
+                <router-link :to="{ name: 'account' }" class="dropdown-item">Perfil</router-link>
         </div>
 
 
@@ -34,7 +36,7 @@
                 <i class="pi pi-user"></i>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
                     <li>
-                        <router-link :to="{ name: 'profile.index' }" class="dropdown-item">Perfil</router-link>
+                        <router-link :to="{ name: 'account' }" class="dropdown-item">Perfil</router-link>
                     </li>
                     <li>
                         <a class="dropdown-item" href="#">Preferencias</a>

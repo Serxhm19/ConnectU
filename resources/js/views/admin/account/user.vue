@@ -1,79 +1,11 @@
 <template>
-    <div class="grid">
-        <div class="col-12">
-            <div class="card"
-                style="background-image: url('/images/logo.png'); background-size: cover; border: 2px solid white;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between pb-2 mb-4">
-                    </div>
-                </div>
-                <div class="d-flex align-items-left">
-                    <img src="\images\logo.png" class="profile-pic" alt="Profile Picture">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-4">
-            <div class="card">
-                <div class="col-12">
-                    <div>
-                        <button type="button" class="btn btn-secondary button-edit pi pi-fw pi-user-edit"
-                            @click="displayEditDialog = true"></button>
-                    </div>
-                    <h3 class="nickname">
-                        @{{ user.nickname }}
-                    </h3>
-                </div>
-                <div>
-                    <div class="col-4">
-                        <h2 class="name">
-                            {{ user.name }} {{ user.surname }}
-                        </h2>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <h1>Hola</h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-8">
-            <div v-if="isPromoter()">
-                <promoterView></promoterView>
-            </div>
-
-            <div v-else>
-                <userWiew></userWiew>
-            </div>
-            
-        </div>
-    </div>
-    <div class="card flex">
-        <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }"
-            :modal="true">
-            <span class="p-text-secondary block mb-5">Update your information.</span>
-            <div class="flex align-items-center gap-3 mb-3">
-                <label for="username" class="font-semibold w-6rem">Username</label>
-                <InputText id="username" class="flex-auto" autocomplete="off" />
-            </div>
-            <div class="flex align-items-center gap-3 mb-2">
-                <label for="email" class="font-semibold w-6rem">Email</label>
-                <InputText id="email" class="flex-auto" autocomplete="off" />
-            </div>
-            <template #footer>
-                <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
-                <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
-            </template>
-        </Dialog>
+    <div>
+        <p>user</p>
     </div>
 </template>
+
 <script setup>
-import promoterView from '../account/promoter.vue';
-import userWiew from '../account/user.vue';
+import promoter from '../account/promoter.vue';
 
 import Tag from 'primevue/tag';
 import InputText from 'primevue/inputtext'
@@ -123,12 +55,7 @@ onMounted(() => {
 });
 
 const store = useStore();
-const user = computed(() => store.state.auth.user);
-
-function isPromoter() {
-    return user.value.NIF;
-}
-
+const user = computed(() => store.state.auth.user)
 const events = ref([]);
 const swal = inject('$swal');
 
@@ -141,6 +68,10 @@ onMounted(() => {
     axios.get('/api/events/promoter/' + id)
         .then(response => {
             events.value = response.data;
+
+            console.log(events.value);
+
+
         })
 });
 

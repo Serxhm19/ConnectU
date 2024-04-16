@@ -1,79 +1,68 @@
 <template>
-    <div class="grid">
-        <div class="col-12">
-            <div class="card"
-                style="background-image: url('/images/logo.png'); background-size: cover; border: 2px solid white;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between pb-2 mb-4">
-                    </div>
-                </div>
-                <div class="d-flex align-items-left">
-                    <img src="\images\logo.png" class="profile-pic" alt="Profile Picture">
-                </div>
+    <div class="card">
+                <DataTable class="p-datatable" :value="events" paginator :rows="10" filterDisplay="row"
+                    :filters="filters">
+                    <template #header>
+                        <div class="flex justify-content-end">
+                            <h2 style="margin-right: auto;">Event Dashboard</h2>
+                            <IconField iconPosition="left">
+                                <InputIcon>
+                                    <i class="pi pi-search"></i>
+                                </InputIcon>
+                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                            </IconField>
+                        </div>
+                    </template>
+                    <template #empty class="empty">
+                        No events found.
+                    </template>
+                    <template #loading> Loading events data. Please wait. </template>
+                    <Column field="name" header="Name" style="width: 12.5%"></Column>
+                    <Column field="location" header="Location" style="width: 12.5%"></Column>
+                    <Column field="start_date" header="Start Date" style="width: 12.5%">
+                        <template v-slot:body="slotProps">
+                            {{ formatDate(slotProps.data.start_date) }}
+                        </template>
+                    </Column>
+                    <Column field="end_date" header="End Date" style="width: 12.5%">
+                        <template v-slot:body="slotProps">
+                            {{ formatDate(slotProps.data.end_date) }}
+                        </template>
+                    </Column>
+                    <Column field="status" header="Status" style="width: 12.5%">
+                        <template v-slot:body="slotProps">
+                            <span v-if="isEventExpired(slotProps.data.end_date)">
+                                <Tag severity="danger" value="Expired"></Tag>
+                            </span>
+                            <span v-else>
+                                <Tag severity="success" value="Success"></Tag>
+                            </span>
+                        </template>
+                    </Column>
+                    <Column header="Actions" style="width: 25%">
+                        <template v-slot:body="slotProps">
+                            <router-link :to="{ name: 'events.update', params: { id: slotProps.data.id } }">
+                                <Button icon="pi pi-pencil" severity="help" text raised rounded>
+                                    <template #icon>
+                                        <i class="pi pi-pencil"></i>
+                                    </template>
+                                </Button> </router-link>
+                            <Button iconClass="my-custom-icon-class" icon="pi pi-trash" severity="danger" text raised
+                                rounded @click="deleteTask(slotProps.data.id)">
+                                <template #icon>
+                                    <i class="pi pi-trash"></i>
+                                </template>
+                            </Button>
+                        </template>
+                    </Column>
+                </DataTable>
+                
             </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="col-4">
-            <div class="card">
-                <div class="col-12">
-                    <div>
-                        <button type="button" class="btn btn-secondary button-edit pi pi-fw pi-user-edit"
-                            @click="displayEditDialog = true"></button>
-                    </div>
-                    <h3 class="nickname">
-                        @{{ user.nickname }}
-                    </h3>
-                </div>
-                <div>
-                    <div class="col-4">
-                        <h2 class="name">
-                            {{ user.name }} {{ user.surname }}
-                        </h2>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <h1>Hola</h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-8">
-            <div v-if="isPromoter()">
-                <promoterView></promoterView>
-            </div>
-
-            <div v-else>
-                <userWiew></userWiew>
-            </div>
-            
-        </div>
-    </div>
-    <div class="card flex">
-        <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }"
-            :modal="true">
-            <span class="p-text-secondary block mb-5">Update your information.</span>
-            <div class="flex align-items-center gap-3 mb-3">
-                <label for="username" class="font-semibold w-6rem">Username</label>
-                <InputText id="username" class="flex-auto" autocomplete="off" />
-            </div>
-            <div class="flex align-items-center gap-3 mb-2">
-                <label for="email" class="font-semibold w-6rem">Email</label>
-                <InputText id="email" class="flex-auto" autocomplete="off" />
-            </div>
-            <template #footer>
-                <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
-                <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
-            </template>
-        </Dialog>
-    </div>
 </template>
+
 <script setup>
-import promoterView from '../account/promoter.vue';
-import userWiew from '../account/user.vue';
+import promoter from '../account/promoter.vue';
+
 
 import Tag from 'primevue/tag';
 import InputText from 'primevue/inputtext'
@@ -123,12 +112,7 @@ onMounted(() => {
 });
 
 const store = useStore();
-const user = computed(() => store.state.auth.user);
-
-function isPromoter() {
-    return user.value.NIF;
-}
-
+const user = computed(() => store.state.auth.user)
 const events = ref([]);
 const swal = inject('$swal');
 
@@ -141,6 +125,10 @@ onMounted(() => {
     axios.get('/api/events/promoter/' + id)
         .then(response => {
             events.value = response.data;
+
+            console.log(events.value);
+
+
         })
 });
 
