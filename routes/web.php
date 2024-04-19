@@ -24,11 +24,6 @@ Route::post('register', [AuthenticatedSessionController::class, 'register']);
 Route::post('registerPromoter', [AuthenticatedSessionController::class, 'registerPromoter']);
 Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
 
-
-Route::get('/chats', [ChatsController::class, 'index']);
-Route::get('/chats', [MessagesController::class, 'index']);
-Route::post('/chats', [MessagesController::class, 'store']);
-
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 

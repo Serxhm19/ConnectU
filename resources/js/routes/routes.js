@@ -84,11 +84,6 @@ export default [
                 component: () => import('../views/posts/index.vue'),
             },
             {
-                path: 'event/:id',
-                name: 'publi-event.event',
-                component: () => import('../views/event/event.vue'),
-            },
-            {
                 path: 'posts/:id',
                 name: 'public-posts.details',
                 component: () => import('../views/posts/details.vue'),
@@ -152,20 +147,20 @@ export default [
                 meta: { breadCrumb: 'Profile' }
             },
             {
-                name: 'chat',
-                path: 'chat',
-                meta: { breadCrumb: 'Chat'},
+                name: 'chats',
+                path: 'chats',
+                meta: { breadCrumb: 'Chats'},
                 children: [
                     {
-                        name: 'chat.index',
+                        name: 'chats.index',
                         path: '',
-                        component: () => import('../views/admin/chat/index.vue'),
-                        meta: { breadCrumb: 'Chat' }
+                        component: () => import('../views/chat/index.vue'),
+                        meta: { breadCrumb: 'Chats' }
                     },
                     {
                         name: 'chats.chat',
-                        path: '',
-                        component: () => import('../views/admin/chat/chat.vue'),
+                        path: 'chat',
+                        component: () => import('../views/chat/chat.vue'),
                         meta: { breadCrumb: 'Chat' }
                     },
                 ]
