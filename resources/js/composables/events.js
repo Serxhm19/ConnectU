@@ -4,6 +4,7 @@ import axios from 'axios' // Importa axios para realizar solicitudes HTTP
 
 export default function useEvents() {
     const events = ref([])
+    const promoterEvents = ref([])
     const event = ref({
         id: '',
     })
@@ -50,11 +51,17 @@ export default function useEvents() {
             console.error('Api error: ', error);
         });
     }
-    const getExercise = async (id) => {
-        axios.get('/api/exercises/' + id)
-            .then(response => {
-                exercise.value = response.data.data;
-            })
+
+    const getEventsPromoter = async (promoter) => {
+        const apiUrl = `/api/events/show/promoter/${promoter}`;
+
+        axios.get(apiUrl)
+        .then(response => {
+            promoterEvents.value = response.data;
+        })
+        .catch(error => {
+            console.error('Api error: ', error);
+        });
     }
     const getUsers = async (id) => {
         axios.get('/api/users/getUsers')
@@ -98,10 +105,12 @@ export default function useEvents() {
     return {
         events,
         event,
+        promoterEvents,
         users,
         user,
         getEvents,
         getEvent,
+        getEventsPromoter,
         getUsers,
         storeEvent,
         validationErrors,
