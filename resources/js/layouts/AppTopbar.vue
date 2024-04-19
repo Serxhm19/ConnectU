@@ -11,7 +11,7 @@
         </button>
 -->
         <div class="menu-app">
-                <router-link class="nav-link" to="/login">
+                <router-link class="nav-link-login" to="/login">
                     {{ $t('login') }}
                 </router-link>
            
@@ -20,7 +20,7 @@
                     <span></span>
                 </router-link>
 
-                <router-link class="nav-link" to="/register">
+                <router-link class="nav-link-register" to="/register">
                     {{ $t('register') }}
                 </router-link>
 
@@ -95,5 +95,21 @@ const topbarMenuClasses = computed(() => {
     border: 0;
     border-radius: 0%;
     padding: 1em;
+}
+
+a.nav-link-login {
+    margin-right: 15px;
+    margin-top: 6px;
+    font-family: Gotham;
+    font-size: 16px;
+    color: black;
+}
+
+a.nav-link-register {
+    margin-left: 15px;
+    margin-top: 6px;
+    font-family: Gotham;
+    font-size: 16px;
+    color: black;
 }
 </style>

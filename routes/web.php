@@ -3,6 +3,9 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatsController ;
+use App\Http\Controllers\Api\MessagesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +24,9 @@ Route::post('register', [AuthenticatedSessionController::class, 'register']);
 Route::post('registerPromoter', [AuthenticatedSessionController::class, 'registerPromoter']);
 Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
 
- 
-
-
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 
 
 Route::view('/{any?}', 'main-view')

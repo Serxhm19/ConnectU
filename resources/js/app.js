@@ -122,13 +122,35 @@ import '../css/theme.css';
 //import "primevue/resources/themes/viva-light/theme.css";
 import "primeicons/primeicons.css";
 
+
 const app = createApp({
-    created() {
-        useAuth().getUser()
-    }
+  el: '#app',
+
+  created() {
+      this.fetchMessages();
+
+      Echo.private('chats')
+          .listen('MessageSent', (e) => {
+              this.messages.push({
+                  message: e.message.message,
+                  user: e.user
+              });
+          });
+  },
+
+  methods: {
+      fetchMessages() {
+          axios.get('/messages').then(response => {
+              this.messages = response.data;
+          });
+      },
+      addMessage(message) {
+          this.messages.push(message);
+
+          axios.post('/messages', message).then(response => {});
+      }
+  }
 });
-
-
 
 app.use(router)
 app.use(store)

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\messages;
+use App\Models\Message;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -37,7 +37,7 @@ class CreateMessageSeeder extends Seeder{
         ];
 
         foreach ($messages as $message) {
-            messages::create($message);
+            Message::create($message);
         }
     }
 }
