@@ -30,8 +30,7 @@
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item" v-for="user in filteredUsers" :key="user.id">{{ user.name }}</li>
-            
-            </ul>
+          </ul>
         </div>
       </div>
 
@@ -42,18 +41,22 @@
           <!-- Card de Mensajes -->
           <div class="card">
             <ul class="list-group list-group-flush chat">
-              <li class="list-group-item left clearfix" v-for="message in messages">
+              <li
+                :class="['list-group-item', { 'clearfix': message.user_id === user.id, 'text-right': message.user_id === user.id, 'bg-light-green': message.user_id === user.id }]"
+                v-for="message in messages" :key="message.id">
                 <div class="chat-body clearfix">
-                  <div class="header">
-                    <strong class="primary-font">
-                      <p>{{ message.id }}</p>
-                    </strong>
-                  </div>
                   <div class="message">
-                    {{ message.message }}
-                  </div>
-                  <div class="date">
-                    {{ message.date }} <!-- Display the date here -->
+                    <div class="header">
+                      <strong class="primary-font">
+                        <p>{{ message.user.name }}</p>
+                      </strong>
+                    </div>
+                    <div class="message">
+                      {{ message.message }}
+                    </div>
+                    <div class="date">
+                      {{ message.date }} <!-- Display the date here -->
+                    </div>
                   </div>
                 </div>
               </li>
@@ -87,6 +90,7 @@ export default {
   },
 
   mounted() {
+    console.log('User:', this.user);
     this.fetchMessages();
     // Llama a fetchMessages() cada 5 segundos
     setInterval(this.fetchMessages, 1000);
@@ -95,9 +99,12 @@ export default {
   computed: {
     user() {
       const store = useStore();
-      return store.state.auth.user;
+      const user = store.state.auth.user;
+      console.log('User:', user);
+      return user;
     }
   },
+
 
   methods: {
     fetchMessages() {
@@ -127,10 +134,9 @@ export default {
           });
       }
     }
-    
-  }
 
-  
+
+  }
 }
 
 </script>
@@ -157,7 +163,6 @@ export default {
 
 .chat-body {
   flex: 1;
-  overflow-y: scroll;
   padding: 10px;
 }
 
@@ -206,5 +211,27 @@ export default {
   font-family: Gotham;
   font-size: 18px;
   margin: 10px;
+}
+
+.message {
+  color: #444;
+  padding: 18px 20px;
+  line-height: 26px;
+  font-size: 16px;
+  border-radius: 7px;
+  display: inline-block;
+  position: relative;
+}
+
+
+/* Añadir un color de fondo verde suave para los mensajes del usuario logueado */
+.bg-light-green {
+  background-color: #00ff80;
+  /* Puedes ajustar el color según tus preferencias */
+}
+
+/* Ajustes para alinear los mensajes del usuario logueado a la derecha */
+.text-right {
+  text-align: right;
 }
 </style>
