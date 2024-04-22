@@ -75,4 +75,15 @@ class EventController extends Controller
 
     }
 
+    public function showByPromoter($promoter)
+    {
+        // Buscar eventos por el campo 'promoter'
+        $events = Event::where('user_id', $promoter)->get();
+        
+        // Devolver la respuesta JSON con los eventos encontrados
+        return response()->json($events);
+
+    }
+    
+
 }

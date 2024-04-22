@@ -54,6 +54,7 @@ Route::post('events/', [EventController::class, 'store']);
 Route::put('events/update/{id}', [EventController::class, 'update']);
 Route::delete('events/{id}', [EventController::class, 'destroy']);
 Route::get('events/show/{id}', [EventController::class, 'show']);
+Route::get('events/show/promoter/{promoter}', [EventController::class, 'showByPromoter']);
 //---------------------------------------------------------------//
 
 
