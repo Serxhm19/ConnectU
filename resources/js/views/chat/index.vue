@@ -41,24 +41,24 @@
           <!-- Card de Mensajes -->
           <div class="card">
             <ul class="list-group list-group-flush chat">
-              <li
-                :class="['list-group-item', { 'clearfix': message.user_id === user.id, 'text-right': message.user_id === user.id, 'bg-light-green': message.user_id === user.id }]"
-                v-for="message in messages" :key="message.id">
+              <li class="list-group-item" v-for="message in messages" :key="message.id">
                 <div class="chat-body clearfix">
-                  <div class="message">
-                    <div class="header">
-                      <strong class="primary-font">
-                        <p>{{ message.user.name }}</p>
-                      </strong>
-                    </div>
-                    <div class="message">
+                  <div class="header">
+                    <img class="profile-pic-icon" src="\images\connectu.svg" alt="">
+                    <strong class="primary-font">
+                      <p>{{ message.user.name }}</p>
+                    </strong>
+                  </div>
+                  <div :class="['message', { 'message-user': message.user_id === user.id }]">
+                    <div class="text">
                       {{ message.message }}
-                    </div>
-                    <div class="date">
-                      {{ message.date }} <!-- Display the date here -->
                     </div>
                   </div>
                 </div>
+                <div class="date">
+                  {{ formatDateToText(message.date) }}
+                </div>
+
               </li>
             </ul>
           </div>
@@ -93,7 +93,8 @@ export default {
     console.log('User:', this.user);
     this.fetchMessages();
     // Llama a fetchMessages() cada 5 segundos
-    setInterval(this.fetchMessages, 1000);
+    setInterval(this.fetchMessages, 3000);
+
   },
 
   computed: {
@@ -104,7 +105,6 @@ export default {
       return user;
     }
   },
-
 
   methods: {
     fetchMessages() {
@@ -132,6 +132,25 @@ export default {
           .catch(error => {
             console.error('Error sending message:', error);
           });
+      }
+    },
+
+    formatDateToText(date) {
+      const messageDate = new Date(date);
+      console.log(messageDate);
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+
+      if (messageDate.toDateString() === today.toDateString()) {
+        // Si el mensaje fue enviado hoy, muestra la hora del mensaje en formato UTC
+        return messageDate.getUTCHours().toString().padStart(2, '0') + ':' + messageDate.getUTCMinutes().toString().padStart(2, '0');
+      } else if (messageDate.toDateString() === yesterday.toDateString()) {
+        return 'Yesterday';
+      } else {
+        // Formatear la fecha en otro formato si no es hoy ni ayer
+        const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        return messageDate.toLocaleDateString(undefined, options);
       }
     }
 
@@ -215,23 +234,52 @@ export default {
 
 .message {
   color: #444;
-  padding: 18px 20px;
-  line-height: 26px;
-  font-size: 16px;
+  /* width: 50%; */
+  max-width: 50%;
   border-radius: 7px;
   display: inline-block;
   position: relative;
+  border: 1px solid #000;
+  padding: 10px;
+  background-color: #b7b7b7;
 }
 
+.text {
+  font-family: Gotham;
+  font-size: 16px;
+  display: flex;
+}
 
-/* Añadir un color de fondo verde suave para los mensajes del usuario logueado */
-.bg-light-green {
-  background-color: #00ff80;
-  /* Puedes ajustar el color según tus preferencias */
+.message-user {
+  margin-left: 95%;
+  max-width: 50%;
+  width: auto;
+  color: #444;
+  border-radius: 7px;
+  position: relative;
+  border: 1px solid #000;
+  padding: 10px;
+  background-color: #c1f6ff;
+  text-align: right;
+  /* display: flex; */
+
+}
+
+.profile-pic-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
 }
 
 /* Ajustes para alinear los mensajes del usuario logueado a la derecha */
 .text-right {
   text-align: right;
+  display: flex;
+  flex-direction: row-reverse;
 }
 </style>
