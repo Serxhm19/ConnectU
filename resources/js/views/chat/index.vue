@@ -30,8 +30,7 @@
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item" v-for="user in filteredUsers" :key="user.id">{{ user.name }}</li>
-            
-            </ul>
+          </ul>
         </div>
       </div>
 
@@ -42,20 +41,24 @@
           <!-- Card de Mensajes -->
           <div class="card">
             <ul class="list-group list-group-flush chat">
-              <li class="list-group-item left clearfix" v-for="message in messages">
+              <li class="list-group-item" v-for="message in messages" :key="message.id">
                 <div class="chat-body clearfix">
                   <div class="header">
+                    <img class="profile-pic-icon" src="\images\connectu.svg" alt="">
                     <strong class="primary-font">
-                      <p>{{ message.id }}</p>
+                      <p>{{ message.user.name }}</p>
                     </strong>
                   </div>
-                  <div class="message">
-                    {{ message.message }}
-                  </div>
-                  <div class="date">
-                    {{ message.date }} <!-- Display the date here -->
+                  <div :class="['message', { 'message-user': message.user_id === user.id }]">
+                    <div class="text">
+                      {{ message.message }}
+                    </div>
                   </div>
                 </div>
+                <div class="date">
+                  {{ formatDateToText(message.date) }}
+                </div>
+
               </li>
             </ul>
           </div>
@@ -87,15 +90,19 @@ export default {
   },
 
   mounted() {
+    console.log('User:', this.user);
     this.fetchMessages();
     // Llama a fetchMessages() cada 5 segundos
-    setInterval(this.fetchMessages, 1000);
+    setInterval(this.fetchMessages, 3000);
+
   },
 
   computed: {
     user() {
       const store = useStore();
-      return store.state.auth.user;
+      const user = store.state.auth.user;
+      console.log('User:', user);
+      return user;
     }
   },
 
@@ -126,11 +133,29 @@ export default {
             console.error('Error sending message:', error);
           });
       }
-    }
-    
-  }
+    },
 
-  
+    formatDateToText(date) {
+      const messageDate = new Date(date);
+      console.log(messageDate);
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+
+      if (messageDate.toDateString() === today.toDateString()) {
+        // Si el mensaje fue enviado hoy, muestra la hora del mensaje en formato UTC
+        return messageDate.getUTCHours().toString().padStart(2, '0') + ':' + messageDate.getUTCMinutes().toString().padStart(2, '0');
+      } else if (messageDate.toDateString() === yesterday.toDateString()) {
+        return 'Yesterday';
+      } else {
+        // Formatear la fecha en otro formato si no es hoy ni ayer
+        const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        return messageDate.toLocaleDateString(undefined, options);
+      }
+    }
+
+
+  }
 }
 
 </script>
@@ -157,7 +182,6 @@ export default {
 
 .chat-body {
   flex: 1;
-  overflow-y: scroll;
   padding: 10px;
 }
 
@@ -206,5 +230,56 @@ export default {
   font-family: Gotham;
   font-size: 18px;
   margin: 10px;
+}
+
+.message {
+  color: #444;
+  /* width: 50%; */
+  max-width: 50%;
+  border-radius: 7px;
+  display: inline-block;
+  position: relative;
+  border: 1px solid #000;
+  padding: 10px;
+  background-color: #b7b7b7;
+}
+
+.text {
+  font-family: Gotham;
+  font-size: 16px;
+  display: flex;
+}
+
+.message-user {
+  margin-left: 95%;
+  max-width: 50%;
+  width: auto;
+  color: #444;
+  border-radius: 7px;
+  position: relative;
+  border: 1px solid #000;
+  padding: 10px;
+  background-color: #c1f6ff;
+  text-align: right;
+  /* display: flex; */
+
+}
+
+.profile-pic-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Ajustes para alinear los mensajes del usuario logueado a la derecha */
+.text-right {
+  text-align: right;
+  display: flex;
+  flex-direction: row-reverse;
 }
 </style>
