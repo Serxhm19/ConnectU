@@ -10,7 +10,7 @@
                             <div class="d-flex justify-content-between mb-1">
                                 <div style="display: flex;">
                                     <img src="\images\logo.png" alt="" style="height: 30px; width: 30px; border-radius: 30px;">
-                                    <h6 class="ml-3 mb-1 mt-1 text-center">{{ sliceData(event.name) }}</h6>
+                                    <h6 class="ml-3 mb-1 mt-1 text-left">{{ sliceData(event.name) }}</h6>
                                 </div>
                             </div>
                             <div class="d-flex w-100 justify-content-center">

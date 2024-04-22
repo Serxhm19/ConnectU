@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios' // Importa axios para realizar solicitudes HTTP
 
 export default function useEvents() {
+    const promoter = ref([])
     const events = ref([])
     const promoterEvents = ref([])
     const event = ref({
@@ -63,21 +64,40 @@ export default function useEvents() {
             console.error('Api error: ', error);
         });
     }
-    const getUsers = async (id) => {
-        axios.get('/api/users/getUsers')
-            .then(response => {
-                // Utiliza map para transformar la respuesta y obtener solo el name y id
-                const usersA = response.data.map(user => ({
-                    id: user.id,
-                    name: user.name
-                }));
-                
-                users.value = usersA;
-            })
-            .catch(error => {
-                console.error('Error al obtener usuarios:', error);
-            });
+
+    const getPromoterEvent = async (id) => {
+        const apiUrl = `/api/users/show/${id}`;
+
+        axios.get(apiUrl)
+        .then(response => {
+            console.log(response.data);
+            promoter.value = response.data;
+        })
+        .catch(error => {
+            console.error('Api error: ', error);
+        });
     }
+
+    const getUsers = async (id) => {
+        try {
+            const response = await axios.get('/api/users/getUsers');
+            
+            // Utiliza el método find para encontrar el usuario con la ID deseada
+            const user = response.data.find(user => user.id === id);
+            console.log(user);
+            // Verifica si se encontró el usuario
+            if (user) {
+                // Si se encontró, asigna el usuario a users.value
+                users.value = user;
+            } else {
+                // Si no se encontró, asigna un array vacío a users.value
+                users.value = [];
+            }
+        } catch (error) {
+            console.error('Error al obtener usuarios:', error);
+        }
+    }
+    
     
 
     const storeEvent = async (eventData) => {
@@ -108,9 +128,11 @@ export default function useEvents() {
         promoterEvents,
         users,
         user,
+        promoter,
         getEvents,
         getEvent,
         getEventsPromoter,
+        getPromoterEvent,
         getUsers,
         storeEvent,
         validationErrors,

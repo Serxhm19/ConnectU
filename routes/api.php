@@ -55,6 +55,8 @@ Route::put('events/update/{id}', [EventController::class, 'update']);
 Route::delete('events/{id}', [EventController::class, 'destroy']);
 Route::get('events/show/{id}', [EventController::class, 'show']);
 Route::get('events/show/promoter/{promoter}', [EventController::class, 'showByPromoter']);
+Route::get('events/search/promoter/', [EventController::class, 'searchPromoter']);
+
 //---------------------------------------------------------------//
 
 
@@ -90,6 +92,7 @@ Route::delete('/messages/{id}', [MessagesController::class, 'destroy']); // Camb
 
 Route::get('users/show/{id}', [UserController::class, 'showUser']);
 Route::get('users/getUsers', [UserController::class, 'allUsers']);
+
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('posts', PostController::class);

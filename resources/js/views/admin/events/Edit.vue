@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-right pb-2 mb-2">
-                <h5 class="card-title">Edición de el evento <b>{{event.name}}</b></h5>
+                <h5 class="card-title">Edición del evento <b>{{event.name}}</b></h5>
             </div>
 
 
@@ -34,7 +34,17 @@
                     <label>Descripción</label><span class="text-danger"> *</span>
                     <textarea class="form-control" rows="3" v-model="event.description" placeholder="Descripción"></textarea>
                 </div>
+                <div class="ml-2">
+                     <select v-model="event.category_id" class="form-control">
+                        <option selected :value="event.category_id">{{ event.category_id }}</option>
+                        <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <h6 class="mt-3">Imagen</h6>
 
+                    <DropZone v-model="event.thumbnail" />
+                </div>
 
                 <div class="form-gorup mb-2">
                     <label>Fecha inicio</label><span class="text-danger">*</span>
@@ -66,6 +76,7 @@ import { useRoute } from "vue-router";
 import * as yup from 'yup';
 import { es } from 'yup-locales';
 import { setLocale } from 'yup';
+import DropZone from "@/components/DropZone.vue";
 
 
 const schema =  yup.object({
@@ -76,7 +87,6 @@ const schema =  yup.object({
 const { validate, errors } = useForm({ validationSchema: schema })
 const route = useRoute()
 
-console.log(route.params.id);
 setLocale(es);
 
 
@@ -89,34 +99,45 @@ const { value: end_date } = useField('end_date', null, { initialValue: '' });
 
 
 const event = reactive({
+    user_id: '',
     name,
     description,
     start_date,
-    end_date
+    end_date,
+    thumbnail: ''
 })
 
 
 const strSuccess = ref();
 const strError = ref();
 
-
+const categories = ref();
 onMounted(() => {
     axios.get('/api/events/show/' + route.params.id)
     .then(response => {
+        event.user_id = response.data.user_id;
         event.name = response.data.name;
         event.description = response.data.description;
         event.start_date = response.data.start_date;
         event.end_date = response.data.end_date;
-    })
+    })  
     .catch(function(error) {
         console.log(error);
     });
+
+    axios.get('/api/category')
+        .then(response => {
+            categories.value = response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 })
 
 
 function saveEvent() {
+    console.log(event);
     validate().then(form => {
-        console.log('validate');
         if (form.valid){
             axios.put('/api/events/update/'+route.params.id, event)
             .then(response => {

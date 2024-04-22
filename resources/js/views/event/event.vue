@@ -25,19 +25,15 @@
                 <div class="col-0 lg:col-0 xl:col-3"></div>
             </div>
             
-            <section class="other-events col-12 grid d-flex justify-content-center">
-
-
-
-                <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index" class="col-3 d-flex justify-content-center">
-                    <div class="card" style="width: 25rem; height: 30rem;">
-                        <!-- Puedes cambiar las propiedades de la tarjeta para que correspondan a los datos del evento -->
+            <section class="other-events col-12 grid d-flex justify-content-evenly mb-6">
+                <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index" class="col-3 d-flex justify-content-center event-slader">
+                    <div class="card" style="width: 25rem;">
                         <img class="card-img-top" src="/images/eventoPrueba.webp" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title title-other-event">{{ evento.name }}</h5>
                             <p class="card-text">{{ sliceData(evento.description, 150) }}</p>
-                            <!-- Puedes agregar más detalles del evento aquí -->
                         </div>
+                        <button class="button-slader btn">Ver evento...</button>
                     </div>
                 </div>
             </section>
@@ -55,7 +51,7 @@ import Carousel from "primevue/carousel";
 import Tag from "primevue/tag";
 import useEvents from "@/composables/events";
 
-const {event, events, promoterEvents, users,  getEvent, getEventsPromoter, getUsers, deleteEvent} = useEvents()
+const {event, events, promoter, promoterEvents, users,  getEvent, getEventsPromoter, getPromoterEvent, getUsers, deleteEvent} = useEvents()
 const route = useRoute()
 
 
@@ -63,49 +59,16 @@ onMounted(async () => {
 
     await getEvent(route.params.id);
     await getEventsPromoter(1);
-    
+   
 })
-const responsiveOptions = ref([
-    {
-        breakpoint: '1400px',
-        numVisible: 2,
-        numScroll: 1
-    },
-    {
-        breakpoint: '1199px',
-        numVisible: 3,
-        numScroll: 1
-    },
-    {
-        breakpoint: '767px',
-        numVisible: 2,
-        numScroll: 1
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1,
-        numScroll: 1
-    }
-]);
 
-const getSeverity = (status) => {
-    switch (status) {
-        case 'INSTOCK':
-            return 'success';
+getUsers(event.value.user_id);
 
-        case 'LOWSTOCK':
-            return 'warning';
-
-        case 'OUTOFSTOCK':
-            return 'danger';
-
-        default:
-            return null;
-    }
-};
 function sliceData(text, numSlice) {
     return text.substring(0, numSlice) + "...";
 }
+
+
 </script>
 
 <style>
@@ -186,7 +149,24 @@ function sliceData(text, numSlice) {
         max-width: 500px;
         text-align: center;
     }
+
     .title-other-event{
         text-align: center;
+        height: 50px;
+    }
+
+    .button-slader{
+        background-color: white;
+        border-radius: 20px;
+        border: 1px solid #0070BB;
+        color: #0070BB;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .button-slader:hover{
+        border-color: #0070BB;
+        color: white;
+        background-color: #0070BB;
     }
 </style>

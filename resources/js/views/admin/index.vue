@@ -1,4 +1,5 @@
 <template>
+    
     <div class="grid">
     <div class="col-12 lg:col-3 xl:col-3">
         <div class="card-body content-chats-view">
@@ -12,7 +13,7 @@
                                 <div class="d-flex justify-content-between mb-1">
                                     <div style="display: flex;">
                                         <img src="\images\logo.png" alt="" style="height: 30px; width: 30px; border-radius: 30px;">
-                                        <h6 class="ml-3 mb-1 mt-1 text-center">{{ sliceData(event.name) }}</h6>
+                                        <h6 class="ml-3 mb-1 mt-1 text-left">{{ sliceData(event.name) }}</h6>
                                     </div>
                                 </div>
                                 <div class="d-flex w-100 justify-content-center">
@@ -28,7 +29,7 @@
         </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-6">
-            <div class="card" style="border-radius: 40px;">
+            <div style="border-radius: 40px;">
                 <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;"> 
                     <div class="card-body" style="padding: 8px 14px;">
                         <div class="d-flex w-100 justify-content-between">
@@ -381,6 +382,6 @@
     }
 
     function sliceData(text) {
-            return text.substring(0, 50) + "...";
+            return text.substring(0, 25) + "...";
     }
 </script>
