@@ -6,6 +6,8 @@ export default function useEvents() {
     const promoter = ref([])
     const events = ref([])
     const promoterEvents = ref([])
+    const countParticipants = ref();
+    const signedUp = ref();
     const event = ref({
         id: '',
     })
@@ -98,8 +100,57 @@ export default function useEvents() {
         }
     }
     
-    
+    const getCountParticipants = async (id) => {
+        const apiUrl = `/api/user_event/count/${id}`;
 
+        axios.get(apiUrl)
+        .then(response => {
+            countParticipants.value = response.data.data;
+        })
+        .catch(error => {
+            console.error('Api error: ', error);
+        });
+    }
+
+    const signedUpUser = async (user_id, event_id) => {
+        const apiUrl = `/api/user_event/userInEvent/${user_id}/${event_id}`;
+
+        axios.get(apiUrl)
+        .then(response => {
+            signedUp.value = response.data.data;
+        })
+        .catch(error => {
+            console.error('Api error: ', error);
+        });
+    }
+
+    const signUser = async (user_id, event_id) => {
+        const apiUrl = '/api/userEvent/';
+    
+        try {
+            const response = await axios.post(apiUrl, {
+                user_id: user_id,
+                event_id: event_id
+            });
+    
+            return response.data.success;
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+    }
+
+    const unsignUser = async (user_id, event_id) => {
+        const apiUrl = `/api/user_event/${user_id}/${event_id}`;
+
+        axios.delete(apiUrl)
+        .then(response => {
+            return response.data.data;
+        })
+        .catch(error => {
+            console.error('Api error: ', error);
+        });
+    }
+    
     const storeEvent = async (eventData) => {
         if (isLoading.value) return;
 
@@ -129,12 +180,18 @@ export default function useEvents() {
         users,
         user,
         promoter,
+        countParticipants,
+        signedUp,
         getEvents,
         getEvent,
         getEventsPromoter,
         getPromoterEvent,
         getUsers,
+        getCountParticipants,
+        signedUpUser,
         storeEvent,
+        signUser,
+        unsignUser,
         validationErrors,
         isLoading
     }

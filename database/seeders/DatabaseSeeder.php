@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CreateMessageSeeder::class);
        
         $this->call(CreateGroupUserSeeder::class);
+        $this->call(CreateUserEventSeeder::class);
 
 //        $this->call(RoleSeeder::class);
         // \App\Models\User::factory(10)->create();

@@ -1,16 +1,28 @@
 <template>
+    {{ user.id }}
     <div class="grid">
         <section class="card event ml-6 mr-6 mt-3 col-12 grid">
-            <div class="event-header d-flex flex-column justify-content-center col-12">
+            <div class="event-header d-flex flex-column col-12">
+                <p v-if="!signedUp" class="add-event">
+                    {{ countParticipants }} Ins 
+                    <button @click="inscribirse" class="btn btn-link add-event-button">Inscribirse</button>
+                </p>
+                <p v-else class="add-event">
+                    {{ countParticipants }} Ins 
+                    <button @click="cancelar" class="btn btn-link add-event-button">Cancelar</button>
+                </p>
+                
                 <div class="name-container">
                     <h1 class="name-event text-left ml-7">{{ event.name }}</h1>
                     <p class="by-text">By TestEvent</p>
+                    
                 </div>
+                
             </div>
             <div class="content-event col-12">
                 <p>{{ event.description }}</p>
                 <img src="/images/eventoPrueba.webp" alt="">
-                <p>{{ event.description }}</p>
+                <p>{{ event.description }}</p>                              
             </div>
             <div class="grid">
                 <div class="col-0 lg:col-0 xl:col-3"></div>
@@ -26,14 +38,14 @@
             </div>
             
             <section class="other-events col-12 grid d-flex justify-content-evenly mb-6">
-                <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index" class="col-3 d-flex justify-content-center event-slader">
+                <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index" class="col-12 lg:col-12 xl:col-3 d-flex justify-content-center event-slader">
                     <div class="card" style="width: 25rem;">
                         <img class="card-img-top" src="/images/eventoPrueba.webp" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title title-other-event">{{ evento.name }}</h5>
                             <p class="card-text">{{ sliceData(evento.description, 150) }}</p>
                         </div>
-                        <button class="button-slader btn">Ver evento...</button>
+                        <router-link :to="{ name: 'publi-event.event', params: { id: evento.id } }" class="button-slader btn">Ver evento...</router-link>
                     </div>
                 </div>
             </section>
@@ -45,30 +57,64 @@
 
 
 <script setup>
-import { onMounted, reactive, watchEffect, ref } from "vue";
+import { onMounted, onUpdated, reactive, watchEffect, ref } from "vue";
 import { useRoute } from "vue-router";
 import Carousel from "primevue/carousel";
 import Tag from "primevue/tag";
 import useEvents from "@/composables/events";
+import { useStore } from 'vuex';
 
-const {event, events, promoter, promoterEvents, users,  getEvent, getEventsPromoter, getPromoterEvent, getUsers, deleteEvent} = useEvents()
+const {event, events, promoter, promoterEvents, users, countParticipants, signedUp,  getEvent, getEventsPromoter, getPromoterEvent, getUsers, getCountParticipants, signedUpUser, signUser, unsignUser, deleteEvent} = useEvents()
 const route = useRoute()
-
+const store = useStore();
+const user = store.state.auth.user;
+let evento_id = '';
 
 onMounted(async () => {
-
-    await getEvent(route.params.id);
+    evento_id = route.params.id;
+    await getEvent(evento_id);
+    await getCountParticipants(evento_id);
     await getEventsPromoter(1);
-   
+    getUsers(event.value.user_id);
+    await signedUpUser(user.id, evento_id);
 })
 
-getUsers(event.value.user_id);
 
-function sliceData(text, numSlice) {
-    return text.substring(0, numSlice) + "...";
+onUpdated(async () => {
+    if (evento_id != route.params.id) {
+        await getEvent(route.params.id);
+        await getEventsPromoter(1);
+        await signedUpUser(user.id, route.params.id);
+        evento_id = route.params.id;
+        
+        window.scrollTo(0, 0);
+    }
+})
+
+async function inscribirse() {
+    try {
+        signUser(user.id, evento_id);
+        signedUp.value = true;
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+
+async function cancelar() {
+    try {
+        unsignUser(user.id, evento_id);
+        signedUp.value  = false;
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
 }
 
 
+function sliceData(text, numSlice) {
+    return text.substring(0, numSlice) + " ...";
+}
+
+signUser
 </script>
 
 <style>
@@ -107,6 +153,9 @@ function sliceData(text, numSlice) {
         z-index: 1;
         margin-bottom: 0;
     }
+    .name-container{
+        margin-top: 50px;
+    }
 
     .by-text{
         color: white;
@@ -115,6 +164,36 @@ function sliceData(text, numSlice) {
         margin-left: 350px;
         font-size: 20px;
     }
+
+    .add-event{
+        z-index: 1;
+        align-self: flex-end;
+        justify-self:flex-start;
+        color: white;
+        background-color: #6CB4EE;
+        margin: 40px;
+        margin-left: 10px;
+        margin-right: 30px;
+        border-radius: 20px;
+        padding-left: 12px;
+    }
+    .add-event-button{
+        z-index: 1;
+        background-color: #002C6F;
+        border-radius: 20px;
+        padding: 7px 15px;
+        color: white;
+        border: 2px solid white;
+        margin: 0;    
+    }
+
+    .add-event-button:hover{
+        background-color: white;
+        color: #002C6F;
+        border: 2px solid #002C6F;
+        
+    }
+
 
     .content-event{
         padding: 30px 70px;
@@ -153,6 +232,10 @@ function sliceData(text, numSlice) {
     .title-other-event{
         text-align: center;
         height: 50px;
+    }
+
+    .event-slader .card{
+        border: 0;  
     }
 
     .button-slader{

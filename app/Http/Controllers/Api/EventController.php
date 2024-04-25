@@ -49,7 +49,7 @@ class EventController extends Controller
     
         if($request->hasFile('thumbnail')) {
             $event->media()->delete();
-            $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images-events');
+            $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images');
         }
 
         return new EventResource($event);

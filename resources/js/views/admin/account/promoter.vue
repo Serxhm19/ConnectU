@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-                <DataTable class="p-datatable" :value="events" paginator :rows="10" filterDisplay="row"
+                <DataTable class="p-datatable w-100" :value="events" paginator :rows="10" filterDisplay="row"
                     :filters="filters">
                     <template #header>
                         <div class="flex justify-content-end">
@@ -17,19 +17,19 @@
                         No events found.
                     </template>
                     <template #loading> Loading events data. Please wait. </template>
-                    <Column field="name" header="Name" style="width: 12.5%"></Column>
-                    <Column field="location" header="Location" style="width: 12.5%"></Column>
-                    <Column field="start_date" header="Start Date" style="width: 12.5%">
+                    <Column field="name" header="Name"></Column>
+                    <Column field="location" header="Location"></Column>
+                    <Column field="start_date" header="Start Date">
                         <template v-slot:body="slotProps">
                             {{ formatDate(slotProps.data.start_date) }}
                         </template>
                     </Column>
-                    <Column field="end_date" header="End Date" style="width: 12.5%">
+                    <Column field="end_date" header="End Date">
                         <template v-slot:body="slotProps">
                             {{ formatDate(slotProps.data.end_date) }}
                         </template>
                     </Column>
-                    <Column field="status" header="Status" style="width: 12.5%">
+                    <Column field="status" header="Status">
                         <template v-slot:body="slotProps">
                             <span v-if="isEventExpired(slotProps.data.end_date)">
                                 <Tag severity="danger" value="Expired"></Tag>
@@ -39,7 +39,7 @@
                             </span>
                         </template>
                     </Column>
-                    <Column header="Actions" style="width: 25%">
+                    <Column header="Actions" >
                         <template v-slot:body="slotProps">
                             <router-link :to="{ name: 'events.update', params: { id: slotProps.data.id } }">
                                 <Button icon="pi pi-pencil" severity="help" text raised rounded>

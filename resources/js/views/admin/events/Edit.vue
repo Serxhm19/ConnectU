@@ -139,7 +139,7 @@ function saveEvent() {
     console.log(event);
     validate().then(form => {
         if (form.valid){
-            axios.put('/api/events/update/'+route.params.id, event)
+            axios.post('/api/events/update/'+route.params.id, event)
             .then(response => {
                 strError.value = ""
                 strSuccess.value = response.data.success

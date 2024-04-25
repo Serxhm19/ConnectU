@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\GroupUserController;
 use App\Http\Controllers\Api\MessagesController;
 use App\Http\Controllers\Api\PromoterController;
+use App\Http\Controllers\Api\User_eventController;
 use App\Http\Controllers\ArchivoController;
 //---------------------------------------------------------------//
 
@@ -51,7 +52,7 @@ Route::get('events', [EventController::class, 'index']);
 Route::get('events/promoter/{id}', [EventController::class, 'promoterEvents']);
 Route::apiResource('event', PostController::class);
 Route::post('events/', [EventController::class, 'store']);
-Route::put('events/update/{id}', [EventController::class, 'update']);
+Route::post('events/update/{id}', [EventController::class, 'update']);
 Route::delete('events/{id}', [EventController::class, 'destroy']);
 Route::get('events/show/{id}', [EventController::class, 'show']);
 Route::get('events/show/promoter/{promoter}', [EventController::class, 'showByPromoter']);
@@ -82,14 +83,21 @@ Route::post('groupuser/update/{id}', [GroupUserController::class, 'update']);
 
 //--------------------------Messages-----------------------------//
 Route::post('/send-message', [MessagesController::class, 'sendMessage']);
-Route::get('/messages', [MessagesController::class, 'index']); // Cambiar 'message' a 'messages'
-Route::post('/messages', [MessagesController::class, 'store']); // Cambiar 'message' a 'messages'
-Route::put('/messages/{id}', [MessagesController::class, 'update']); // Cambiar 'message' a 'messages'
-Route::delete('/messages/{id}', [MessagesController::class, 'destroy']); // Cambiar 'message' a 'messages'
+Route::get('/messages', [MessagesController::class, 'index']);
+Route::post('/messages', [MessagesController::class, 'store']);
+Route::put('/messages/{id}', [MessagesController::class, 'update']);
+Route::delete('/messages/{id}', [MessagesController::class, 'destroy']);
 
 //---------------------------------------------------------------//
 
+//--------------------------UserEvent-----------------------------//
+Route::get('/userEvent', [User_eventController::class, 'index']);
+Route::post('userEvent/', [User_eventController::class, 'store']);
+Route::delete('userEvent/{user_id}/{event_id}', [User_eventController::class, 'destroy']);
+Route::get('/user_event/count/{event_id}', [User_eventController::class, 'countByEventId']);
+Route::get('/user_event/userInEvent/{user_id}/{event_id}', [User_eventController::class, 'userInEvent']);
 
+//---------------------------------------------------------------//
 Route::get('users/show/{id}', [UserController::class, 'showUser']);
 Route::get('users/getUsers', [UserController::class, 'allUsers']);
 
