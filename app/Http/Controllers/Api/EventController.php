@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEventRequest;
-use App\Http\Resources\zz;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreEventRequest;
+use App\Http\Resources\EventResource;
+use App\Http\Resources\zz;
+
 use App\Models\event;
 
 
@@ -20,11 +22,9 @@ class EventController extends Controller
 
     public function promoterEvents($id)
     {
-          // Encuentra todos los eventos relacionados con el promotor identificado por $id
-            $events = Event::where('user_id', $id)->get();
+        $events = Event::where('user_id', $id)->get();
 
-            // Devuelve los eventos como un array JSON
-            return response()->json($events);
+        return response()->json($events);
     }
 
     public function store(StoreEventRequest $request)
@@ -41,8 +41,22 @@ class EventController extends Controller
         return new EventResource($event);
     }
 
-    public function update($id, Request $request)
+    public function update($id, StoreEventRequest $request)
     {
+        $event = Event::find($id);
+
+        $event->update($request->validated());
+    
+        if($request->hasFile('thumbnail')) {
+            $event->media()->delete();
+            $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images-events');
+        }
+
+        return new EventResource($event);
+
+
+
+        /*
         $event = Event::find($id);
 
         $request->validate([
@@ -58,6 +72,7 @@ class EventController extends Controller
         $event->update($dataToUpdate);
 
         return response()->json(['success' => true, 'data' => $event]);
+        */
     }
 
     public function destroy($id)
