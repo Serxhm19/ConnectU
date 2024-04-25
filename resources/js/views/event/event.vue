@@ -1,21 +1,27 @@
 <template>
-    {{ user.id }}
-    <div class="grid">
+    <div v-if="loading" class="grid loading">
+        <section class="card event ml-6 mr-6 mt-3 col-12 grid">
+            <div class="card">
+                <div class="col-5"></div>
+                <div class="col-2"><ProgressSpinner /></div>
+                <div class="col-5"></div>
+            </div>
+            
+        </section>
+    </div>
+    <div v-else class="grid">
         <section class="card event ml-6 mr-6 mt-3 col-12 grid">
             <div class="event-header d-flex flex-column col-12">
-                <p v-if="!signedUp" class="add-event">
+                
+                <p class="add-event">
                     {{ countParticipants }} Ins 
-                    <button @click="inscribirse" class="btn btn-link add-event-button">Inscribirse</button>
-                </p>
-                <p v-else class="add-event">
-                    {{ countParticipants }} Ins 
-                    <button @click="cancelar" class="btn btn-link add-event-button">Cancelar</button>
+                    <button v-if="!signedUp" @click="inscribirse" class="btn btn-link add-event-button">Inscribirse</button>
+                    <button v-else @click="cancelar" class="btn btn-link add-event-button">Cancelar</button>
                 </p>
                 
                 <div class="name-container">
                     <h1 class="name-event text-left ml-7">{{ event.name }}</h1>
                     <p class="by-text">By TestEvent</p>
-                    
                 </div>
                 
             </div>
@@ -60,6 +66,8 @@
 import { onMounted, onUpdated, reactive, watchEffect, ref } from "vue";
 import { useRoute } from "vue-router";
 import Carousel from "primevue/carousel";
+import Skeleton from "primevue/skeleton";
+import ProgressSpinner  from "primevue/progressSpinner";
 import Tag from "primevue/tag";
 import useEvents from "@/composables/events";
 import { useStore } from 'vuex';
@@ -69,32 +77,37 @@ const route = useRoute()
 const store = useStore();
 const user = store.state.auth.user;
 let evento_id = '';
-
+const loading = ref(true);
 onMounted(async () => {
     evento_id = route.params.id;
-    await getEvent(evento_id);
-    await getCountParticipants(evento_id);
-    await getEventsPromoter(1);
-    getUsers(event.value.user_id);
-    await signedUpUser(user.id, evento_id);
+
+    await Promise.all([
+        getEvent(evento_id),
+        getCountParticipants(evento_id),
+        getEventsPromoter(1),
+        getUsers(event.value.user_id),
+        signedUpUser(user.id, evento_id)
+    ]);
+
+    loading.value = false;
 })
 
 
 onUpdated(async () => {
     if (evento_id != route.params.id) {
-        await getEvent(route.params.id);
+        await getEvent(route.params.id);    
         await getEventsPromoter(1);
-        await signedUpUser(user.id, route.params.id);
+        await getCountParticipants(route.params.id);
         evento_id = route.params.id;
-        
+        await signedUpUser(user.id, route.params.id);
         window.scrollTo(0, 0);
     }
 })
 
 async function inscribirse() {
     try {
-        signUser(user.id, evento_id);
-        signedUp.value = true;
+        await signUser(user.id, route.params.id);
+        await getCountParticipants(route.params.id);
     } catch (error) {
         console.error('Error:', error.message);
     }
@@ -102,8 +115,8 @@ async function inscribirse() {
 
 async function cancelar() {
     try {
-        unsignUser(user.id, evento_id);
-        signedUp.value  = false;
+        await unsignUser(user.id, route.params.id);
+        await getCountParticipants(route.params.id);
     } catch (error) {
         console.error('Error:', error.message);
     }
@@ -118,6 +131,11 @@ signUser
 </script>
 
 <style>
+    .loading{
+        margin-top: 240px;
+    }
+    
+
     .event {
         padding: 0;
         border-radius: 20px;

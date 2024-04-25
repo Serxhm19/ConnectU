@@ -133,23 +133,24 @@ export default function useEvents() {
                 event_id: event_id
             });
     
-            return response.data.success;
+            signedUp.value = response.data.success;
         } catch (error) {
             console.error('Api error:', error);
         }
     }
 
     const unsignUser = async (user_id, event_id) => {
-        const apiUrl = `/api/user_event/${user_id}/${event_id}`;
-
+        const apiUrl = `/api/userEvent/${user_id}/${event_id}`;
+    
         axios.delete(apiUrl)
         .then(response => {
-            return response.data.data;
+            signedUp.value = !response.data.data;
         })
         .catch(error => {
             console.error('Api error: ', error);
         });
     }
+    
     
     const storeEvent = async (eventData) => {
         if (isLoading.value) return;
