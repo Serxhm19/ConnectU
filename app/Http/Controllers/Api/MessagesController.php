@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Events\MessageSent;
-
 class MessagesController extends Controller
 {
     public function index()
@@ -67,22 +66,29 @@ class MessagesController extends Controller
 
     public function sendMessage(Request $request)
     {
-        // Validar los datos de la solicitud
-        $request->validate([
-            'message' => 'required|string', // Asegurar que 'message' esté presente y sea una cadena
-        ]);
-
-        // Obtener el usuario autenticado
-        $user = Auth::user();
-
-        // Crear un nuevo mensaje asociado con el usuario autenticado
-        $message = $user->messages()->create([
-            'message' => $request->input('message'),
-            'group_id' => 1, // Establecer group_id en 1 por defecto
-        ]);
-
-        // Retornar una respuesta
-        return ['status' => 'Message Sent!', 'message' => $message];
+        // Verificar si el usuario está autenticado
+        if (auth()->check()) {
+            // Validar los datos de la solicitud
+            $request->validate([
+                'message' => 'required|string', // Asegurar que 'message' esté presente y sea una cadena
+            ]);
+    
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+    
+            // Crear un nuevo mensaje asociado con el usuario autenticado
+            $message = $user->messages()->create([
+                'message' => $request->input('message'),
+                'group_id' => 1, // Establecer group_id en 1 por defecto
+            ]);
+    
+            // Retornar una respuesta
+            return ['status' => 'Message Sent!', 'message' => $message];
+        } else {
+            // Si el usuario no está autenticado, devolver un error
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
+    
 
 }
