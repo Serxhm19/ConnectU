@@ -132,6 +132,7 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-color: white !important;
 }
 
 /* Text Align */
