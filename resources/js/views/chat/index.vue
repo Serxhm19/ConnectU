@@ -4,7 +4,7 @@
     <div>
       <div class="card chat-header">
         <div class="chat-text">
-          Chats
+          {{ selectedEvent ? selectedEvent.eventData.name : 'Chats' }}
         </div>
         <div class="user-profile">
           <div class="profile-pic">
@@ -25,12 +25,26 @@
       <div class="col-lg-4">
         <!-- Card de Usuario -->
         <div class="card events-list">
-          <div class="card-header">
-            <input type="text" v-model="searchTerm" class="form-control" placeholder="Search Events">
+          <div class="My-Events">
+            <div class="card-searcher">
+              <!-- <input type="text" v-model="searchTerm" class="form-control" placeholder="Search Events">  -->
+            </div>
+            <hr>
+            <li class="list-group-item" v-for="event in userEventsFiltered" :key="event.event_id"
+              @click="selectEvent(event.event_id)">
+              <div class="event-name">{{ event.eventData.name }}</div>
+              <div>
+                <img src="\images\eventoPrueba.webp" class="chat-pic" alt="Profile Picture">
+                <!-- Mostrar el último mensaje -->
+                <div v-if="lastMessage">
+                  <p class="last-message">
+                  <p class>{{ lastMessage.user_id === user.id ? 'You:' : lastMessage.user.name + ": " }}</p>{{
+            lastMessage.message }}</p>
+                </div>
+              </div>
+              <hr>
+            </li>
           </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item" v-for="user in filteredUsers" :key="user.id">{{ user.name }}</li>
-          </ul>
         </div>
       </div>
       <!-- Chat Body -->
@@ -62,7 +76,8 @@
           <!-- Chat Footer -->
           <div class="card chat-footer">
             <div class="input">
-              <input type="text" v-model="newMessage" @keyup.enter="sendMessage" class="form-control message-input">
+              <input type="text" v-model="newMessage" @keyup.enter="sendMessage" class="form-control message-input"
+                placeholder="Send your message">
               <button @click="sendMessage" class="btn btn-primary"><i class="pi pi-send"></i></button>
             </div>
           </div>
@@ -80,14 +95,17 @@ export default {
   data() {
     return {
       messages: [],
-      newMessage: ''
+      newMessage: '',
+      userEvents: [],
+      selectedEvent: null,
+      lastMessage: null,
     }
   },
 
   mounted() {
     console.log('User:', this.user);
-    this.fetchMessages();
     setInterval(this.fetchMessages, 3000);
+    this.fetchUserEvents();
 
   },
 
@@ -101,14 +119,17 @@ export default {
 
     reversedMessages() {
       return this.messages.slice().reverse();
+    },
+
+    userEventsFiltered() {
+      return this.userEvents.filter(event => event.user_id === this.user.id);
     }
   },
-
   methods: {
     fetchMessages() {
       axios.get('/api/messages')
         .then(response => {
-          this.messages = response.data.filter(message => message.group_id === 1);
+          this.messages = response.data.filter(message => message.group_id === this.selectedEvent.id);
         })
         .catch(error => {
           console.error('Error fetching messages:', error);
@@ -117,12 +138,14 @@ export default {
 
     sendMessage() {
       if (this.newMessage.trim()) {
-        axios.post('/api/send-message', {
-          message: this.newMessage
+        axios.post(`/api/send-message/${this.selectedEvent.id}`, {
+          message: this.newMessage,
         })
           .then(response => {
             console.log('Message sent successfully:', response.data);
-            this.fetchMessages();
+            if (this.selectedEvent) {
+              this.fetchMessages(this.selectedEvent.id);
+            }
             this.newMessage = '';
           })
           .catch(error => {
@@ -131,6 +154,8 @@ export default {
       }
     },
 
+
+
     formatDateToText(date) {
       const messageDate = new Date(date);
       const today = new Date();
@@ -138,22 +163,40 @@ export default {
       yesterday.setDate(today.getDate() - 1);
 
       if (messageDate.toDateString() === today.toDateString()) {
-        // Si el mensaje fue enviado hoy, muestra la hora del mensaje en formato UTC
         return messageDate.getUTCHours().toString().padStart(2, '0') + ':' + messageDate.getUTCMinutes().toString().padStart(2, '0');
       } else if (messageDate.toDateString() === yesterday.toDateString()) {
         return 'Yesterday';
       } else {
-        // Formatear la fecha en otro formato si no es hoy ni ayer
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
         return messageDate.toLocaleDateString(undefined, options);
       }
     },
 
-    isSameDate(message1, message2) {
-      const date1 = new Date(message1.date);
-      const date2 = new Date(message2.date);
-      return date1.toDateString() === date2.toDateString();
-    }
+    fetchUserEvents() {
+      axios.get(`/api/userEvent`)
+        .then(response => {
+          this.userEvents = response.data;
+          this.userEvents.forEach(event => {
+            axios.get(`/api/events/show/${event.event_id}`)
+              .then(eventResponse => {
+                console.log('Datos del evento:', eventResponse.data);
+                event.eventData = eventResponse.data;
+              })
+              .catch(error => {
+                console.error('Error fetching event data:', error);
+              });
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching user events:', error);
+        });
+    },
+    selectEvent(eventId) {
+      this.selectedEvent = this.userEvents.find(event => event.id === eventId);
+      this.fetchMessages(eventId); // Asegúrate de pasar el eventId aquí
+      console.log('Selected event:', this.selectedEvent);
+    },
+
 
 
   }
@@ -163,7 +206,7 @@ export default {
 
 <style scoped>
 body {
-  background-color: #f4f7f6 ;
+  background-color: #f4f7f6;
   margin-top: 20px;
 }
 
@@ -174,6 +217,7 @@ body {
   color: var(--bs-list-group-color);
   text-decoration: none;
   background-color: var(--bs-list-group-bg);
+  margin: 10px;
   /* border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color); */
 }
 
@@ -222,6 +266,7 @@ body {
   flex: 1;
   padding: 5px;
   margin-right: 10px;
+  width: 1000px;
 }
 
 .chat-text {
@@ -296,7 +341,6 @@ body {
 
 }
 
-/* Ajustes para alinear los mensajes del usuario logueado a la derecha */
 .text-right {
   text-align: right;
   display: flex;
@@ -353,5 +397,54 @@ body {
 .username-header {
   margin-left: 10px;
   margin-bottom: 10px;
+}
+
+.Title {
+  font-family: Gotham;
+  font-size: 26px;
+  color: #0070bb;
+  text-align: center;
+}
+
+.form-control {
+  border-radius: 20px;
+  width: 100%;
+  border: 1px solid #000;
+  height: 35px;
+  font-family: Gotham;
+}
+
+
+.events-list {
+  height: 685px;
+  overscroll-behavior: contain;
+}
+
+hr {
+  border-top: solid #000000;
+  border-width: 1px 0 0 0;
+  margin: 1rem 0;
+}
+
+.col-lg-8 {
+  flex: 0 0 auto;
+  width: 66.66666667%;
+  padding-left: revert-layer;
+}
+
+.chat-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
+}
+
+.event-name {
+  font-family: Gotham;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: #0070bb;
+
 }
 </style>

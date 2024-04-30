@@ -82,7 +82,8 @@ Route::post('groupuser/update/{id}', [GroupUserController::class, 'update']);
 
 
 //--------------------------Messages-----------------------------//
-Route::post('/send-message', [MessagesController::class, 'sendMessage']);
+//Route::post('/send-message', [MessagesController::class, 'sendMessage']);
+Route::post('/send-message/{group_id}', [MessagesController::class, 'sendMessage']);
 Route::get('/messages', [MessagesController::class, 'index']); 
 Route::post('/messages', [MessagesController::class, 'store']); 
 Route::put('/messages/{id}', [MessagesController::class, 'update']); 
