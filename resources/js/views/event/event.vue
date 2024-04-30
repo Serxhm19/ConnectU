@@ -21,7 +21,7 @@
                 
                 <div class="name-container">
                     <h1 class="name-event text-left ml-7">{{ event.name }}</h1>
-                    <p class="by-text">By TestEvent</p>
+                    <p class="by-text">By {{promoter.nickname}}</p>
                 </div>
                 
             </div>
@@ -34,10 +34,9 @@
                 <div class="col-0 lg:col-0 xl:col-3"></div>
                 <div class="content-promoter col-12 lg:col-12 xl:col-6">
                     <img class="promoter-icon" src="/images/connectu.svg" alt="">
-                    <h4 class="name-promoter">TestEventos</h4>
+                    <h4 class="name-promoter">{{promoter.nickname}}</h4>
                     <p class="description-promoter">
-                        Lorem ipsum dolor sit amet consectetur, adipiscing elit tincidunt. 
-                        Odio vitae placerat ligula viverra ac mus a tellus cubilia, tempor eros quam hac mauris volutpat potenti dictum tempus...
+                        {{promoter.description}}
                     </p>
                 </div>
                 <div class="col-0 lg:col-0 xl:col-3"></div>
@@ -72,31 +71,28 @@ import Tag from "primevue/tag";
 import useEvents from "@/composables/events";
 import { useStore } from 'vuex';
 
-const {event, events, promoter, promoterEvents, users, countParticipants, signedUp,  getEvent, getEventsPromoter, getPromoterEvent, getUsers, getCountParticipants, signedUpUser, signUser, unsignUser, deleteEvent} = useEvents()
+const {event, events, promoter, promoterEvents, countParticipants, signedUp,  getEvent, getPromoterEvent, getUsers, getCountParticipants, signedUpUser, signUser, unsignUser, deleteEvent} = useEvents()
 const route = useRoute()
 const store = useStore();
 const user = store.state.auth.user;
 let evento_id = '';
 const loading = ref(true);
 onMounted(async () => {
-    evento_id = route.params.id;
+      evento_id = route.params.id;
 
-    await Promise.all([
-        getEvent(evento_id),
-        getCountParticipants(evento_id),
-        getEventsPromoter(1),
-        getUsers(event.value.user_id),
-        signedUpUser(user.id, evento_id)
-    ]);
 
-    loading.value = false;
-})
+        await getEvent(evento_id);
 
+        await getCountParticipants(evento_id);
+        await getUsers(event.value.user_id);
+        await signedUpUser(user.id, evento_id);
+        
+        loading.value = false;
+    });
 
 onUpdated(async () => {
     if (evento_id != route.params.id) {
         await getEvent(route.params.id);    
-        await getEventsPromoter(1);
         await getCountParticipants(route.params.id);
         evento_id = route.params.id;
         await signedUpUser(user.id, route.params.id);

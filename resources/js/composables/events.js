@@ -49,6 +49,27 @@ export default function useEvents() {
         axios.get(apiUrl)
         .then(response => {
             event.value = response.data;
+
+            const apiUrlPromoter = `/api/users/show/${response.data.user_id}`;
+
+            axios.get(apiUrlPromoter)
+            .then(response => {
+                promoter.value = response.data;
+
+                const apiUrl = `/api/events/show/promoter/${promoter.value.id}`;
+
+                axios.get(apiUrl)
+                .then(response => {
+                    promoterEvents.value = response.data;
+                    
+                })
+                .catch(error => {
+                    console.error('Api error: ', error);
+                });
+            })
+            .catch(error => {
+                console.error('Api error: ', error);
+            });
         })
         .catch(error => {
             console.error('Api error: ', error);
@@ -61,10 +82,13 @@ export default function useEvents() {
         axios.get(apiUrl)
         .then(response => {
             promoterEvents.value = response.data;
+            
         })
         .catch(error => {
             console.error('Api error: ', error);
         });
+
+        
     }
 
     const getPromoterEvent = async (id) => {
@@ -72,8 +96,7 @@ export default function useEvents() {
 
         axios.get(apiUrl)
         .then(response => {
-            console.log(response.data);
-            promoter.value = response.data;
+            promoter.value = response.data.data;
         })
         .catch(error => {
             console.error('Api error: ', error);
@@ -83,9 +106,8 @@ export default function useEvents() {
     const getUsers = async (id) => {
         try {
             const response = await axios.get('/api/users/getUsers');
-            
-            // Utiliza el método find para encontrar el usuario con la ID deseada
-            const user = response.data.find(user => user.id === id);
+
+            let user = response.data;
             console.log(user);
             // Verifica si se encontró el usuario
             if (user) {

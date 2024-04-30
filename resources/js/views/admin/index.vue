@@ -1,6 +1,5 @@
-<template>
-    
-    <div class="grid">
+<template>   
+<div class="grid">
     <div class="col-12 lg:col-3 xl:col-3">
         <div class="card-body content-chats-view">
             <div class="card mb-4">
@@ -59,28 +58,37 @@
                 </div>
             </div>
         </div>
-            <div class="col-12 lg:col-3 xl:col-3">
-                        <div class="card-body shadow-sm">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <input v-model="search_global" type="text" placeholder="Search..." class="form-control mb-4">
-                                    <div class="list-group">
+        <div class="col-12 lg:col-3 xl:col-3">
+            <div class="searchLabel">
+                <IconField iconPosition="left">
+                    <InputIcon class="pi pi-search"> </InputIcon>
+                    <InputText  placeholder="Search" />
+                </IconField>
+            </div>
+            <div class="card filter-location">
+                <div class="title-filter">
+                    <h5>Ubicación del evento</h5>
+                </div>
 
-                                        <div v-for="category in categories" :key="category.id" class="list-group-item">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <h5 class="mb-1">{{ category.name }}</h5>
-                                                <p class="mb-1">{{ category.id }}</p>
-                                            </div>
-                                            <span>
-                                                {{ category.description }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <TreeSelect class="no-list-style" v-model="selectedValue" :options="nodes" placeholder="Select Item" />
+
+
+                
+            </div>
+                <div class="list-group">
+                    <div v-for="category in categories" :key="category.id" class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ category.name }}</h5>
+                                <p class="mb-1">{{ category.id }}</p>
                         </div>
+                        <span>
+                            {{ category.description }}
+                        </span>
                     </div>
                 </div>
+
+        </div>
+    </div>
 <!--
                         <div class="card-body shadow-sm">
                             <div class="card mb-4">
@@ -298,12 +306,82 @@
         height: 200px;
         
     }
+
+
+
+
+    /* FILTER CSS */
+    .title-filter{
+        font-size: 20px;
+    }
+
+    /*SEARCH LABEL CSS */
+    .searchLabel{
+        background-color: white;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+    .searchLabel span{
+        padding: 0 15px;
+        border-right: 1px solid black;
+    }
+    input.p-inputtext{
+        width: 87%;
+        border-radius:  0 20px 20px 0;
+        border: 0;
+    }
+    input.p-inputtext:focus{
+        border: 0;
+    }
+
+
+    /*FILTER LOCATION CSS */
+    .filter-location{
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        height: 150px;
+    }
+    .p-tree-wrapper ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .select-ubi{
+        border-radius: 20px;
+        text-align: center;
+        border: 1px solid black;
+    }
+    
+    .p-treeselect{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70%;
+    }
 </style>
 <script setup>
+    import { NodeService } from '../../composables/sites';
+    
     import {ref, onMounted, watch} from "vue";
     import useCategories from "../../composables/categories_event";
     import useEvents from "../../composables/events";
     import {useAbility} from '@casl/vue'
+    import IconField  from "primevue/iconField";
+    import InputIcon  from "primevue/inputIcon";
+    import InputText  from "primevue/inputText";
+    import TreeSelect  from "primevue/treeselect";
+
+    const nodes = ref(null);
+    const selectedValue = ref(null);
+
+    onMounted(() => {
+        NodeService.getTreeNodes().then((data) => (nodes.value = data));
+    });
+
 
     const search_id = ref('')
     const search_title = ref('')
@@ -368,7 +446,7 @@
     function getUserName(id) {
         const user = users.value.find(userValue => userValue.id === id);
         // Retornar el nombre de la categoría si se encuentra, de lo contrario, retorna un mensaje de error
-        return user ? user.name : 'null';
+        return user ? user.nickname : 'null';
     }
 
     function sliceDataDescription(text) {

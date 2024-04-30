@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('genre');
             $table->string('NIF')->unique()->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->rememberToken();
             $table->timestamps(); 
