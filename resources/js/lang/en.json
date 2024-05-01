@@ -42,5 +42,6 @@
     "nickname": "Nickname",
     "male": "Male",
     "female": "Female",
-    "register_as_promoter": "Register as Promoter"
+    "register_as_promoter": "Register as Promoter",
+    "chats": "Chats"
 }
