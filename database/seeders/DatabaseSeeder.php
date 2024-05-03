@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionTableSeeder::class);
         $this->call(CreateCategoryEventSeeder::class);
         $this->call(CreateAdminUserSeeder::class);
+        $this->call(CreateProvinceSeeder::class);
+        $this->call(CreateCitiesSeeder::class);
         $this->call(CreateEventSeeder::class);
         $this->call(CreateGroupSeeder::class);
 
