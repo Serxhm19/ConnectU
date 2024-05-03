@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <!-- Columna para el logo -->
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-12">
                 <div class="logo-central">
                     <svg width="400" height="400" viewBox="0 0 45 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_38_40)">
@@ -22,20 +22,20 @@
                 </div>
             </div>
             <!-- Columna para el formulario de inicio de sesión -->
-            <div class="col-md-8">
+            <div class="col-md-8 col-sm-12">
                 <div class="login-container text-center animated flipInX">
                     <div class="card card-login">
                         <div class="logo">
                             <svg width="100" height="100" viewBox="0 0 45 46" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_38_40)">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M16.6127 30.1064L22.6412 30.0683V45.9791C22.6412 45.9791 18.6036 45.9336 15.2293 44.4442C11.8549 42.9549 11.1068 42.4076 10.2632 41.8608C9.41962 41.3135 6.9637 39.5772 5.68912 37.8555C4.41453 36.1335 3.47121 35.4404 2.06256 32.2397C0.653879 29.0398 0.896767 29.6657 0.168144 25.3524C-0.560478 21.0387 1.18822 15.0091 3.27692 11.3449C5.36558 7.68077 12.1931 0.608568 22.6412 0C22.6386 7.56747 22.6412 15.7513 22.6412 15.7513H16.6127V7.19845C16.6127 7.19845 5.95114 11.73 6.26202 22.7676C6.5729 33.8052 12.7921 36.3428 16.6127 38.6236"
-                                fill="black" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M26.4639 0.000152588C26.4639 0.000152588 29.7781 0.0630044 32.403 1.1863C32.4003 3.75304 32.403 38.5312 32.403 38.5312C32.403 38.5312 36.0774 37.0992 39.1527 33.4401C39.1527 28.5602 39.1527 4.63674 39.1527 4.63674C39.1527 4.63674 42.0256 6.34644 44.9629 10.4067C44.9637 15.5259 44.9629 35.6953 44.9629 35.6953C44.9629 35.6953 38.7649 45.3106 26.4639 45.9795C26.4635 40.2021 26.4639 0.000152588 26.4639 0.000152588Z"
-                                fill="#01AFEE" />
-                        </g>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M16.6127 30.1064L22.6412 30.0683V45.9791C22.6412 45.9791 18.6036 45.9336 15.2293 44.4442C11.8549 42.9549 11.1068 42.4076 10.2632 41.8608C9.41962 41.3135 6.9637 39.5772 5.68912 37.8555C4.41453 36.1335 3.47121 35.4404 2.06256 32.2397C0.653879 29.0398 0.896767 29.6657 0.168144 25.3524C-0.560478 21.0387 1.18822 15.0091 3.27692 11.3449C5.36558 7.68077 12.1931 0.608568 22.6412 0C22.6386 7.56747 22.6412 15.7513 22.6412 15.7513H16.6127V7.19845C16.6127 7.19845 5.95114 11.73 6.26202 22.7676C6.5729 33.8052 12.7921 36.3428 16.6127 38.6236"
+                                        fill="black" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M26.4639 0.000152588C26.4639 0.000152588 29.7781 0.0630044 32.403 1.1863C32.4003 3.75304 32.403 38.5312 32.403 38.5312C32.403 38.5312 36.0774 37.0992 39.1527 33.4401C39.1527 28.5602 39.1527 4.63674 39.1527 4.63674C39.1527 4.63674 42.0256 6.34644 44.9629 10.4067C44.9637 15.5259 44.9629 35.6953 44.9629 35.6953C44.9629 35.6953 38.7649 45.3106 26.4639 45.9795C26.4635 40.2021 26.4639 0.000152588 26.4639 0.000152588Z"
+                                        fill="#01AFEE" />
+                                </g>
                                 <defs>
                                     <clipPath id="clip0_38_40">
                                         <rect width="45" height="46" fill="white" />
@@ -95,12 +95,12 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-8 card-register">
-                        <div class="card">
-                            <h2>Don't have an account?</h2><router-link :to="{ name: 'auth.register' }"
-                                    class="btn btn-link btn-sm float-end">
-                                    Register
-                                </router-link>
+                    <div class="col-md-12 card-register">
+                        <div class="card Register ">
+                            <h2>Don't have an account?</h2> <router-link :to="{ name: 'auth.register' }"
+                                class="btn btn-link btn-sm float-end">
+                                Register
+                            </router-link>
                         </div>
                     </div>
                 </div>
@@ -110,8 +110,7 @@
     </div>
 
 </template>
-<style scoped>
-
+<style>
 h2 {
     font-family: Gotham;
     font-size: 16px;
@@ -120,6 +119,15 @@ h2 {
 .btn.btn-link.btn-sm.float-end {
     font-family: Gotham;
     font-size: 16px;
+    color: #01afee;
+
+}
+
+.btn.btn-link.btn-sm.float-end:hover {
+    font-family: Gotham;
+    font-size: 16px;
+    color: #0070bb;
+
 }
 
 p {
@@ -128,11 +136,12 @@ p {
 }
 
 body {
-    height: 100%;
-    margin: 0;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-color: white !important;
+    background-color: #ffffff !important;
+    background-repeat: no-repeat !important;
+    font-family: var(--font-family);
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Text Align */
@@ -206,16 +215,6 @@ body {
     border-width: 1px 0;
 }
 
-/* Backgrounds */
-
-.main-bg {
-
-    background: #424242;
-    background: linear-gradient(#424242, #212121);
-}
-
-/* Login & Register Pages*/
-
 .login-container {
     max-width: 500px;
     z-index: 100;
@@ -250,38 +249,76 @@ body {
 
 .logo-central {
     margin-top: 200px;
+    margin-left: 200px;
+}
+
+@media (max-width: 768px) {
+    .logo-central {
+        display: none;
+    }
 }
 
 .btn.btn-primary.Login {
     font-family: Gotham;
     width: 100%;
+    border-color: #01afee;
     justify-content: center;
-    background-color: #002C6F;
+    background-color: #ffffff;
+    color: #01afee;
 }
 
 .btn.btn-primary.Login:hover {
     font-family: Gotham;
     width: 100%;
     justify-content: center;
-    background-color: #0d6efd;
-}
-
-.card-register {
-    width: 500px;
+    color: #ffffff;
+    background-color: #01afee;
 }
 
 .card {
     border: 1.5px solid #777777;
-    width: 500px;
 }
+
 .forgot {
     margin-top: 20px;
     font-family: Gotham;
+    color: #01afee;
+}
+
+.forgot:hover {
+    margin-top: 20px;
+    font-family: Gotham;
+    color: #0070bb;
+}
+
+.card.Register {
+    margin-bottom: 20px;
+    margin-top: -20px;
+    color: #01afee;
+}
+
+.form-check-input:checked {
+    background-color: #01afee;
+    border-color: #000000;
+}
+
+a {
+    text-decoration: none !important;
+    color: #01afee;
+}
+
+a:hover {
+    text-decoration: none !important;
+    color: #0070bb;
+}
+
+.login-container {
+    max-width: 500px;
+    z-index: 100;
+    margin: 0 auto;
+    position: relative;
 }
 </style>
-
-
-
 
 <script setup>
 

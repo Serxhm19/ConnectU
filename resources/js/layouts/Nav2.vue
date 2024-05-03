@@ -1,57 +1,60 @@
 <template>
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </a>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="menu">
-                    <li>
-                        <router-link to="/" class="nav-link menu-a" aria-current="page">
-                            <a href="#0" class="link-wrapper">
-                                <span class="Text">{{ $t('home') }}</span>
-                                <span><i class="pi pi-home Icon" style="font-size: 22px;"></i></span>
-                            </a>
-                        </router-link>
-                    </li>
-                    <li>
-                        <router-link to="/" class="layout-topbar-logo">
-                            <img src="/images/connectu.svg" alt="logo" />
-                            <span></span>
-                        </router-link>
-                    </li>
-                    <li>
-                        <router-link to="/" class="nav-link menu-a" aria-current="page">
-                            <a href="#0" class="link-wrapper">
-                                <span class="Text">{{ $t('chats') }}</span>
-                                <span><i class="pi pi-comments Icon" style="font-size: 22px;"></i></span>
-                            </a>
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
-            <template v-if="user?.name">
-                <div class="Account">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><router-link class="dropdown-item" to="/admin">Admin</router-link></li>
-                            <li><router-link to="/admin/posts" class="dropdown-item">Post</router-link></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a></li>
-                        </ul>
-                    </li>
+    <nav v-if="!$route.meta.hideHeader">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="menu">
+                        <li>
+                            <router-link to="/" class="nav-link menu-a" aria-current="page">
+                                <a href="#0" class="link-wrapper">
+                                    <span class="Text">{{ $t('home') }}</span>
+                                    <span><i class="pi pi-home Icon" style="font-size: 22px;"></i></span>
+                                </a>
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/" class="layout-topbar-logo">
+                                <img src="/images/connectu.svg" alt="logo" />
+                                <span></span>
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/" class="nav-link menu-a" aria-current="page">
+                                <a href="#0" class="link-wrapper">
+                                    <span class="Text">{{ $t('chats') }}</span>
+                                    <span><i class="pi pi-comments Icon" style="font-size: 22px;"></i></span>
+                                </a>
+                            </router-link>
+                        </li>
+                    </ul>
                 </div>
-            </template>
-        </div>
+                <template v-if="user?.name">
+                    <div class="Account">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><router-link class="dropdown-item" to="/admin">Admin</router-link></li>
+                                <li><router-link to="/admin/posts" class="dropdown-item">Post</router-link></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </div>
+                </template>
+            </div>
+        </nav>
+        <!--<p>nav.vue</p>-->
     </nav>
-    <!--<p>nav.vue</p>-->
 </template>
 
 <script setup>

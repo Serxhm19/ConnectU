@@ -14,11 +14,10 @@ html {
 }
 
 body {
-    background: #002C6F !important;
-    background-repeat: no-repeat !important;
+    background: #002C6F;
+    background-repeat: no-repeat ;
     font-family: var(--font-family);
     font-weight: normal;
-    background: var(--surface-ground);
     color: var(--text-color);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

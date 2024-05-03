@@ -49,7 +49,7 @@
             </div>
         </div>
     </nav>
-    <!--<p>nav.vue</p>-->
+    <p>nav.vue</p>
 </template>
 
 <script setup>

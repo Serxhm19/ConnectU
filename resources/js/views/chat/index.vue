@@ -1,20 +1,18 @@
 <template>
   <div class="chat-container">
     <!-- Chat Header -->
-    <div>
-      <div class="card chat-header">
-        <div class="chat-text">
-          {{ selectedEvent ? selectedEvent.eventData.name : 'Chats' }}
+    <div class="card chat-header">
+      <div class="chat-text">
+        {{ selectedEvent ? selectedEvent.eventData.name : 'Chats' }}
+      </div>
+      <div class="user-profile">
+        <div class="profile-pic">
+          <img src="\images\connectu.svg" class="profile-pic" alt="Profile Picture">
         </div>
-        <div class="user-profile">
-          <div class="profile-pic">
-            <img src="\images\logo.png" class="profile-pic" alt="Profile Picture">
-          </div>
-          <div>
-            <h2 class="user-nickname">
-              {{ user.name }} {{ user.surname }}
-            </h2>
-          </div>
+        <div>
+          <h2 class="user-nickname">
+            {{ user.name }} {{ user.surname }}
+          </h2>
         </div>
       </div>
     </div>
@@ -22,38 +20,45 @@
     <!-- Chat Body -->
     <div class="row">
       <!-- Columna Izquierda -->
-      <div class="col-lg-4">
+      <div class="col-lg-4 col-sm-12">
         <!-- Card de Usuario -->
         <div class="card events-list">
           <div class="My-Events">
-            <div class="card-searcher">
-              <!-- <input type="text" v-model="searchTerm" class="form-control" placeholder="Search Events">  -->
-            </div>
-            <hr>
-            <li class="list-group-item" v-for="event in userEventsFiltered" :key="event.event_id"
-              @click="selectEvent(event.event_id)">
-              <div class="event-name">{{ event.eventData.name }}</div>
-              <div>
-                <img src="\images\eventoPrueba.webp" class="chat-pic" alt="Profile Picture">
-                <!-- Mostrar el último mensaje -->
-                <div v-if="lastMessage">
-                  <p class="last-message">
-                  <p class>{{ lastMessage.user_id === user.id ? 'You:' : lastMessage.user.name + ": " }}</p>{{
-            lastMessage.message }}</p>
+            <!-- Input de búsqueda -->
+            <input type="text" v-model="searchQuery" placeholder="Buscar eventos" class="form-control">
+            <ul class="list-group list-group-flush">
+              <!-- Lista de eventos filtrada por el nombre -->
+              <li v-for="event in filteredEvents" :key="event.event_id" @click="selectEvent(event.event_id)"
+                class="list-group-item">
+                <div class="event-name">{{ event.eventData ? event.eventData.name : 'Cargando...' }}</div>
+                <div>
+                  <img src="\images\eventoPrueba.webp" class="chat-pic" alt="Profile Picture">
+                  <!-- Mostrar el último mensaje -->
+                  <div v-if="lastMessage">
+                    <p class="last-message">
+                      <span>{{ lastMessage.user_id === user.id ? 'You:' : lastMessage.user.name + ": " }}</span>
+                      {{ lastMessage.message }}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <hr>
-            </li>
+                <hr>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
+
       <!-- Chat Body -->
-      <div class="col-lg-8">
+      <div class="col-lg-8 col-sm-12">
         <div class="chat">
           <!-- Card de Mensajes -->
           <div class="card chat-body">
             <ul class="list-group list-group-flush chat">
-              <li class="list-group" v-for="message in reversedMessages" :key="message.id">
+              <li v-if="!selectedEvent" class="list-group-item no-event-selected">
+                <img src="/Images/ChatIcon.svg" class="no-event-img" alt="Chat Icon">
+                <p class="no-event-text">Selecciona un evento para empezar a chatear!</p>
+              </li>
+              <li v-else v-for="message in reversedMessages" :key="message.id" class="list-group-item">
                 <div class="chat clearfix">
                   <div class="header">
                     <img v-if="message.user_id !== user.id" class="profile-pic-icon" src="\images\connectu.svg" alt="">
@@ -75,7 +80,7 @@
           </div>
           <!-- Chat Footer -->
           <div class="card chat-footer">
-            <div class="input">
+            <div class="input d-flex">
               <input type="text" v-model="newMessage" @keyup.enter="sendMessage" class="form-control message-input"
                 placeholder="Send your message">
               <button @click="sendMessage" class="btn btn-primary"><i class="pi pi-send"></i></button>
@@ -86,12 +91,15 @@
     </div>
   </div>
 </template>
+
 <script>
 import { useStore } from 'vuex';
 import axios from 'axios';
 import { ref, inject, onMounted, computed } from "vue"
 
 export default {
+
+
   data() {
     return {
       messages: [],
@@ -99,21 +107,23 @@ export default {
       userEvents: [],
       selectedEvent: null,
       lastMessage: null,
+      searchQuery: '',
+
     }
   },
 
+
   mounted() {
-    console.log('User:', this.user);
     setInterval(this.fetchMessages, 3000);
     this.fetchUserEvents();
-
+    document.title = 'ConnectU - Chats';
+    this.filteredEvents();
   },
 
   computed: {
     user() {
       const store = useStore();
       const user = store.state.auth.user;
-      console.log('User:', user);
       return user;
     },
 
@@ -127,6 +137,10 @@ export default {
   },
   methods: {
     fetchMessages() {
+      if (!this.selectedEvent) {
+        return;
+      }
+
       axios.get('/api/messages')
         .then(response => {
           this.messages = response.data.filter(message => message.group_id === this.selectedEvent.id);
@@ -135,6 +149,7 @@ export default {
           console.error('Error fetching messages:', error);
         });
     },
+
 
     sendMessage() {
       if (this.newMessage.trim()) {
@@ -179,7 +194,6 @@ export default {
           this.userEvents.forEach(event => {
             axios.get(`/api/events/show/${event.event_id}`)
               .then(eventResponse => {
-                console.log('Datos del evento:', eventResponse.data);
                 event.eventData = eventResponse.data;
               })
               .catch(error => {
@@ -193,14 +207,31 @@ export default {
     },
     selectEvent(eventId) {
       this.selectedEvent = this.userEvents.find(event => event.id === eventId);
-      this.fetchMessages(eventId); // Asegúrate de pasar el eventId aquí
-      console.log('Selected event:', this.selectedEvent);
+      this.fetchMessages(eventId);
     },
 
-
+    filteredEvents() {
+      if (!this.searchQuery) {
+        // Si no hay valor en searchQuery, mostrar todos los eventos
+        return this.userEvents;
+      } else {
+        // Filtrar los eventos por el nombre
+        const query = this.searchQuery.toLowerCase();
+        return this.userEvents.filter(event => {
+          // Verificar si eventData está definido antes de acceder a sus propiedades
+          return event.eventData && event.eventData.name.toLowerCase().includes(query);
+        });
+      }
+    },
 
   }
+
+
+
+
+
 }
+
 
 </script>
 
@@ -264,9 +295,8 @@ body {
 
 .chat-footer input {
   flex: 1;
-  padding: 5px;
   margin-right: 10px;
-  width: 1000px;
+  width: max-content;
 }
 
 .chat-text {
@@ -292,7 +322,6 @@ body {
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  border: 1px solid #000;
 }
 
 .user-nickname {
@@ -445,6 +474,24 @@ hr {
   font-weight: bold;
   text-align: center;
   color: #0070bb;
-
 }
+
+.no-event-img {
+  width: 400px;
+  height: 400px;
+  margin-left: 275px;
+}
+
+p.no-event-text {
+  font-family: Gotham;
+  font-size: 33px;
+  color: #0070bb;
+  font-weight: bolder;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+}
+
+
 </style>

@@ -14,4 +14,9 @@ const logoUrl = computed(() => {
         <span class="font-medium ml-2">Ejemplo DAW2</span>
     </div>
 </template>
-<style lang="scss" scoped></style>
+<style scoped>
+
+html, body {
+    background-color: #fff !important;
+}
+</style>

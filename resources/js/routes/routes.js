@@ -77,6 +77,9 @@ export default [
                 path: '/',
                 name: 'home',
                 component: () => import('../views/home/index.vue'),
+                meta: {
+                    hideHeader: true,
+                  },
             },
             {
                 path: 'posts',
@@ -109,6 +112,9 @@ export default [
                 name: 'auth.register',
                 component: () => import('../views/register/index.vue'),
                 beforeEnter: guest,
+                meta: {
+                    hideHeader: true,
+                  },
             },
             {
                 path: 'registerPromoter',
@@ -127,6 +133,25 @@ export default [
                 name: 'auth.reset-password',
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
+            },
+            {
+                name: 'chats',
+                path: 'chats',
+                meta: { breadCrumb: 'Chats'},
+                children: [
+                    {
+                        name: 'chats.index',
+                        path: '',
+                        component: () => import('../views/chat/index.vue'),
+                        meta: { breadCrumb: 'Chats' }
+                    },
+                    {
+                        name: 'chats.chat',
+                        path: 'chat',
+                        component: () => import('../views/chat/chat.vue'),
+                        meta: { breadCrumb: 'Chat' }
+                    },
+                ]
             },
         ]
     },
@@ -151,25 +176,7 @@ export default [
                 component: () => import('../views/admin/profile/index.vue'),
                 meta: { breadCrumb: 'Profile' }
             },
-            {
-                name: 'chats',
-                path: 'chats',
-                meta: { breadCrumb: 'Chats'},
-                children: [
-                    {
-                        name: 'chats.index',
-                        path: '',
-                        component: () => import('../views/chat/index.vue'),
-                        meta: { breadCrumb: 'Chats' }
-                    },
-                    {
-                        name: 'chats.chat',
-                        path: 'chat',
-                        component: () => import('../views/chat/chat.vue'),
-                        meta: { breadCrumb: 'Chat' }
-                    },
-                ]
-            },
+            
             {
                 name: 'events',
                 path: 'events',

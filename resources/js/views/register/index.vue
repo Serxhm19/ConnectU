@@ -435,7 +435,7 @@ body {
     font-family: Gotham;
     width: 100%;
     justify-content: center;
-    background-color: #002C6F;
+    background-color: #ffffff;
 }
 
 .btn.btn-primary.Login:hover {
