@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <!-- Columna para el formulario de inicio de sesión -->
             <div class="col-md-12">
@@ -24,7 +24,7 @@
                             </svg>
                         </div>
                         <div>
-                            <p>Descubre eventos emocionantes. Regístrate para participar. ¡Únete a la diversión!</p>
+                            <p>Discover exciting events. Register to participate and join the fun!</p>
                         </div>
                         <hr class="hr">
                         <div class="sign-up-form">
@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                                 <!-- Nickname -->
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <input v-model="registerForm.nickname" id="nickname" type="nickname"
                                         class="form-control" required autocomplete="current-nickname"
                                         placeholder="Nickname">
@@ -76,7 +76,7 @@
                                     </div>
                                 </div>
                                 <!-- Password -->
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <input v-model="registerForm.password" id="password" type="password"
                                         class="form-control" autocomplete="current-password" placeholder="Password">
                                     <!-- Validation Errors -->
@@ -86,7 +86,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <input v-model="registerForm.password_confirmation" id="password_confirmation"
                                         type="password" class="form-control" autocomplete="current-password"
                                         placeholder="Confirm Password">
@@ -116,8 +116,7 @@
                                     </div>
                                     <hr class="hr">
                                     <div>
-                                        <p>¿Eres un promotor de eventos? Por favor, marca esta casilla para completar
-                                            el registro.</p>
+                                        <p>¿Are you an event promoter? Please check this box to complete the registration</p>
                                     </div>
                                     <div class="mb-3">
                                         <!-- Checkbox para indicar si es promotor -->
@@ -125,7 +124,7 @@
                                             <input class="form-check-input" type="checkbox" name="is_Promoter"
                                                 v-model="registerForm.isPromoter" id="is_Promoter">
                                             <label class="form-check-label" for="is_Promoter">
-                                                {{ $t('is_Promoter') }}
+                                                Promoter
                                             </label>
                                         </div>
                                     </div>
@@ -187,41 +186,39 @@
                             </form>
                         </div>
                     </div>
+                    <div class="card-register">
+                    <div class="card Register ">
+                        <h2 class="LogInText">Already registered? </h2> <router-link :to="{ name: 'home' }"
+                            class="btn btn-link btn-sm float-end">
+                            Log In
+                        </router-link>
+                    </div>
                 </div>
+                </div>
+
             </div>
         </div>
     </div>
 
 </template>
 <style>
-
 h2 {
-    font-family: Gotham;
-    font-size: 16px;
-}
-
-.btn.btn-link.btn-sm.float-end {
     font-family: Gotham;
     font-size: 16px;
 }
 
 p {
     font-family: Gotham;
-    font-size: 14px;
 
-}
-
-.hr {
-    border: 1px solid #000;
-    background-color: #000;
-    color: #000;
 }
 
 body {
-    height: 100%;
-    margin: 0;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-color: #ffffff !important;
+    background-repeat: no-repeat !important;
+    font-family: var(--font-family);
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Text Align */
@@ -257,96 +254,6 @@ body {
     border-radius: 3px;
 }
 
-.form-button {
-    background-color: rgba(255, 235, 59, 0.24);
-    border-color: rgba(255, 235, 59, 0.24);
-    color: #e6e6e6;
-}
-
-/* Margins g(global) - l(left) - r(right) - t(top) - b(bottom) */
-
-.margin-g {
-    margin: 15px;
-}
-
-.margin-g-sm {
-    margin: 10px;
-}
-
-.margin-g-md {
-    margin: 20px;
-}
-
-.margin-g-lg {
-    margin: 30px;
-}
-
-.margin-l {
-    margin-left: 15px;
-}
-
-.margin-l-sm {
-    margin-left: 10px;
-}
-
-.margin-l-md {
-    margin-left: 20px;
-}
-
-.margin-l-lg {
-    margin-left: 30px;
-}
-
-.margin-r {
-    margin-right: 15px;
-}
-
-.margin-r-sm {
-    margin-right: 10px;
-}
-
-.margin-r-md {
-    margin-right: 20px;
-}
-
-.margin-r-lg {
-    margin-right: 30px;
-}
-
-.margin-t {
-    margin-top: 15px;
-}
-
-.margin-t-sm {
-    margin-top: 10px;
-}
-
-.margin-t-md {
-    margin-top: 20px;
-}
-
-.margin-t-lg {
-    margin-top: 30px;
-}
-
-.margin-b {
-    margin-bottom: 15px;
-}
-
-.margin-b-sm {
-    margin-bottom: 10px;
-}
-
-.margin-b-md {
-    margin-bottom: 20px;
-}
-
-.margin-b-lg {
-    margin-bottom: 30px;
-}
-
-/* Bootstrap Form Control Extension */
-
 .form-control,
 .border-line {
     background-color: #ffffff;
@@ -370,7 +277,7 @@ body {
 }
 
 .form-control::-webkit-input-placeholder {
-    color: #8e8e8e;
+    color: #BDBDBD;
 }
 
 /* Container */
@@ -385,21 +292,11 @@ body {
     border-width: 1px 0;
 }
 
-/* Backgrounds */
-
-.main-bg {
-
-    background: #424242;
-    background: linear-gradient(#424242, #212121);
-}
-
-/* Login & Register Pages*/
-
 .login-container {
     max-width: 500px;
     z-index: 100;
     margin: 0 auto;
-    padding-top: 100px;
+    padding-top: 30px;
 }
 
 .login.login-container {
@@ -429,33 +326,115 @@ body {
 
 .logo-central {
     margin-top: 200px;
+    margin-left: 200px;
+}
+
+@media (max-width: 768px) {
+    .logo-central {
+        display: none;
+    }
 }
 
 .btn.btn-primary.Login {
     font-family: Gotham;
     width: 100%;
+    border-color: #01afee;
     justify-content: center;
     background-color: #ffffff;
+    color: #01afee;
 }
 
 .btn.btn-primary.Login:hover {
     font-family: Gotham;
     width: 100%;
     justify-content: center;
-    background-color: #01AFEE;
+    color: #ffffff;
+    background-color: #01afee;
 }
 
-.card-register {
-    width: 500px;
+.card {
+    border: 1.5px solid #777777;
 }
 
 .forgot {
     margin-top: 20px;
     font-family: Gotham;
+    color: #01afee;
 }
 
-.form-check.form-check-inline {
-    margin-left: auto;
+.forgot:hover {
+    margin-top: 20px;
+    font-family: Gotham;
+    color: #0070bb;
+}
+
+.card.Register {
+    margin-bottom: 20px;
+    margin-top: -20px;
+    color: #01afee;
+}
+
+.form-check-input:checked {
+    background-color: #01afee;
+    border-color: #000000;
+}
+
+a {
+    text-decoration: none !important;
+    color: #01afee;
+}
+
+a:hover {
+    text-decoration: none !important;
+    color: #0070bb;
+}
+
+.login-container {
+    max-width: 500px;
+    z-index: 100;
+    margin: 0 auto;
+    position: relative;
+}
+
+.hr {
+    border-top: solid #000000;
+    border-width: 1px 0 0 0;
+    margin: 1rem 0;
+}
+
+.card.Register {
+    margin-bottom: 20px;
+    margin-top: -20px;
+    color: #01afee;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.LogInText {
+    margin: 0;
+    font-size: large;
+    font-family: Gotham;
+}
+
+.btn.btn-link.btn-sm.float-end {
+    font-family: Gotham;
+    font-size: 20px;
+    font-weight: bold;
+    color: #01afee;
+}
+
+.btn.btn-link.btn-sm.float-end:hover {
+    font-family: Gotham;
+    font-size: 20px;
+    color: #0070bb;
+    font-weight: bold;
+
+
 }
 </style>
 

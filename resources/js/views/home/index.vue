@@ -97,7 +97,7 @@
                     </div>
                     <div class="col-md-12 card-register">
                         <div class="card Register ">
-                            <h2>Don't have an account?</h2> <router-link :to="{ name: 'auth.register' }"
+                            <h2 class="RegisterText">Don't have an account?</h2> <router-link :to="{ name: 'auth.register' }"
                                 class="btn btn-link btn-sm float-end">
                                 Register
                             </router-link>
@@ -118,15 +118,17 @@ h2 {
 
 .btn.btn-link.btn-sm.float-end {
     font-family: Gotham;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: bold;
     color: #01afee;
-
 }
 
 .btn.btn-link.btn-sm.float-end:hover {
     font-family: Gotham;
-    font-size: 16px;
+    font-size: 20px;
     color: #0070bb;
+    font-weight: bold;
+
 
 }
 
@@ -219,9 +221,17 @@ body {
     max-width: 500px;
     z-index: 100;
     margin: 0 auto;
-    padding-top: 100px;
+    padding-top: 150px;
 }
 
+@media (max-width: 768px) {
+    .login-container {
+    max-width: 500px;
+    z-index: 100;
+    margin: 0 auto;
+    padding-top: 30px;
+}
+}
 .login.login-container {
     width: 300px;
 }
@@ -317,6 +327,25 @@ a:hover {
     z-index: 100;
     margin: 0 auto;
     position: relative;
+}
+
+.card.Register {
+    margin-bottom: 20px;
+    margin-top: -20px;
+    color: #01afee;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.RegisterText {
+    margin: 0;
+    font-size: large;
+    font-family: Gotham;
 }
 </style>
 

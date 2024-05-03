@@ -2,14 +2,14 @@ import Cookies from 'js-cookie'
 import store from "../store";
 
 const AuthenticatedLayout = () => import('../layouts/Authenticated.vue')
-const GuestLayout = ()  => import('../layouts/Guest.vue');
+const GuestLayout = () => import('../layouts/Guest.vue');
 
-const PostsIndex  = ()  => import('../views/admin/posts/Index.vue');
-const PostsCreate  = ()  => import('../views/admin/posts/Create.vue');
-const PostsEdit  = ()  => import('../views/admin/posts/Edit.vue');
-const ExercisesIndex  = ()  => import('../views/admin/exercises/Index.vue');
-const ExercisesCreate  = ()  => import('../views/admin/exercises/Create.vue');
-const ExercisesEdit  = ()  => import('../views/admin/exercises/Edit.vue');
+const PostsIndex = () => import('../views/admin/posts/Index.vue');
+const PostsCreate = () => import('../views/admin/posts/Create.vue');
+const PostsEdit = () => import('../views/admin/posts/Edit.vue');
+const ExercisesIndex = () => import('../views/admin/exercises/Index.vue');
+const ExercisesCreate = () => import('../views/admin/exercises/Create.vue');
+const ExercisesEdit = () => import('../views/admin/exercises/Edit.vue');
 
 /*---------------------------------------------------------------------------------//
 const EventList  = ()  => import('../views/event/index.vue');
@@ -51,7 +51,7 @@ function requireLogin(to, from, next) {
     if (isLogin) {
         next()
     } else {
-        next('/login')
+        next('/')
     }
 }
 
@@ -72,14 +72,14 @@ export default [
         // redirect: { name: 'login' },
         component: GuestLayout,
         children: [
-           
+
             {
                 path: '/',
                 name: 'home',
                 component: () => import('../views/home/index.vue'),
                 meta: {
                     hideHeader: true,
-                  },
+                },
             },
             {
                 path: 'posts',
@@ -91,7 +91,7 @@ export default [
                 name: 'publi-event.event',
                 component: () => import('../views/event/event.vue'),
             },
-            { 
+            {
                 path: 'posts/:id',
                 name: 'public-posts.details',
                 component: () => import('../views/posts/details.vue'),
@@ -102,25 +102,13 @@ export default [
                 component: () => import('../views/category/posts.vue'),
             },
             {
-                path: 'login',
-                name: 'auth.login',
-                component: () => import('../views/login/Login.vue'),
-                beforeEnter: guest,
-            },
-            {
                 path: 'register',
                 name: 'auth.register',
                 component: () => import('../views/register/index.vue'),
                 beforeEnter: guest,
                 meta: {
                     hideHeader: true,
-                  },
-            },
-            {
-                path: 'registerPromoter',
-                name: 'auth.registerPromoter',
-                component: () => import('../views/registerPromoter/registerPromoter.vue'),
-                beforeEnter: guest,
+                },
             },
             {
                 path: 'forgot-password',
@@ -137,22 +125,18 @@ export default [
             {
                 name: 'chats',
                 path: 'chats',
-                meta: { breadCrumb: 'Chats'},
+                meta: { breadCrumb: 'Chats' },
+                beforeEnter: requireLogin,
                 children: [
                     {
                         name: 'chats.index',
                         path: '',
                         component: () => import('../views/chat/index.vue'),
                         meta: { breadCrumb: 'Chats' }
-                    },
-                    {
-                        name: 'chats.chat',
-                        path: 'chat',
-                        component: () => import('../views/chat/chat.vue'),
-                        meta: { breadCrumb: 'Chat' }
-                    },
+                    }
                 ]
-            },
+            }
+
         ]
     },
     {
@@ -176,11 +160,11 @@ export default [
                 component: () => import('../views/admin/profile/index.vue'),
                 meta: { breadCrumb: 'Profile' }
             },
-            
+
             {
                 name: 'events',
                 path: 'events',
-                meta: { breadCrumb: 'events'},
+                meta: { breadCrumb: 'events' },
                 children: [
                     {
                         name: 'events.index',
@@ -235,7 +219,7 @@ export default [
             {
                 name: 'exercises',
                 path: 'exercises',
-                meta: { breadCrumb: 'Exercises'},
+                meta: { breadCrumb: 'Exercises' },
                 children: [
                     {
                         name: 'exercises.index',
@@ -247,8 +231,10 @@ export default [
                         name: 'exercises.create',
                         path: 'create',
                         component: ExercisesCreate,
-                        meta: { breadCrumb: 'Add new exercise' ,
-                        linked: false, }
+                        meta: {
+                            breadCrumb: 'Add new exercise',
+                            linked: false,
+                        }
                     },
                     {
                         name: 'exercises.edit',
@@ -261,11 +247,11 @@ export default [
                     }
                 ]
             },
-        
+
             {
                 name: 'categories',
                 path: 'categories',
-                meta: { breadCrumb: 'Categories'},
+                meta: { breadCrumb: 'Categories' },
                 children: [
                     {
                         name: 'categories.index',
@@ -277,9 +263,9 @@ export default [
                         name: 'categories.create',
                         path: 'create',
                         component: () => import('../views/admin/categories/Create.vue'),
-                        meta: { 
-                            breadCrumb: 'Add new category' ,
-                            linked: false, 
+                        meta: {
+                            breadCrumb: 'Add new category',
+                            linked: false,
                         }
                     },
                     {
@@ -298,7 +284,7 @@ export default [
             {
                 name: 'permissions',
                 path: 'permissions',
-                meta: { breadCrumb: 'Permisos'},
+                meta: { breadCrumb: 'Permisos' },
                 children: [
                     {
                         name: 'permissions.index',
@@ -310,16 +296,16 @@ export default [
                         name: 'permissions.create',
                         path: 'create',
                         component: () => import('../views/admin/permissions/Create.vue'),
-                        meta: { 
+                        meta: {
                             breadCrumb: 'Create Permission',
-                            linked: false,  
+                            linked: false,
                         }
                     },
                     {
                         name: 'permissions.edit',
                         path: 'edit/:id',
                         component: () => import('../views/admin/permissions/Edit.vue'),
-                        meta: { 
+                        meta: {
                             breadCrumb: 'Permission Edit',
                             linked: false,
                         }
