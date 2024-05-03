@@ -91,7 +91,7 @@ export default [
                 name: 'publi-event.event',
                 component: () => import('../views/event/event.vue'),
             },
-            {
+            { 
                 path: 'posts/:id',
                 name: 'public-posts.details',
                 component: () => import('../views/posts/details.vue'),
