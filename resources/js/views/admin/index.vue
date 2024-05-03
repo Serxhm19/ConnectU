@@ -399,7 +399,6 @@
     }
 </style>
 <script setup>
-    import { NodeService } from '../../composables/sites';
     
     import {ref, onMounted, watch} from "vue";
     import useCategories from "../../composables/categories_event";
@@ -415,9 +414,6 @@
     const selectedValue = ref(null);
     const start_date = ref();
     const end_date = ref();
-    onMounted(() => {
-        NodeService.getTreeNodes().then((data) => (nodes.value = data));
-    });
 
 
     const search_id = ref('')
