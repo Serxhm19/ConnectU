@@ -1,8 +1,7 @@
-<template>
-    
-    <div class="grid">
+<template>   
+<div class="grid">
     <div class="col-12 lg:col-3 xl:col-3">
-        <div class="card-body content-chats-view">
+        <div class="card-body content-chats-view gotham">
             <div class="card mb-4">
                 <div class="card-body chats">
                     <h3 class="mb-1 mt-1 text-center">My events</h3>
@@ -28,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 lg:col-6 xl:col-6">
+    <div class="col-12 lg:col-6 xl:col-6 gotham">
             <div style="border-radius: 40px;">
                 <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;"> 
                     <div class="card-body" style="padding: 8px 14px;">
@@ -59,28 +58,66 @@
                 </div>
             </div>
         </div>
-            <div class="col-12 lg:col-3 xl:col-3">
-                        <div class="card-body shadow-sm">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <input v-model="search_global" type="text" placeholder="Search..." class="form-control mb-4">
-                                    <div class="list-group">
-
-                                        <div v-for="category in categories" :key="category.id" class="list-group-item">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <h5 class="mb-1">{{ category.name }}</h5>
-                                                <p class="mb-1">{{ category.id }}</p>
-                                            </div>
-                                            <span>
-                                                {{ category.description }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-12 lg:col-3 xl:col-3 gotham">
+            <div class="fixed filters">
+                <div class="searchLabel">
+                    <IconField iconPosition="left">
+                        <InputIcon class="pi pi-search"> </InputIcon>
+                        <InputText  placeholder="Search" />
+                    </IconField>
                 </div>
+                <div class="card filter-location">
+                    <div class="title-filter">
+                        <h5>Ubicación del evento</h5>
+                    </div>
+
+                    <select class="select-ubi" id="region-selector">
+                        <option value="">Región</option>
+                        <option value="Andalucía">Andalucía</option>
+                        <option value="Aragón">Aragón</option>
+                        <option value="Islas Baleares">Islas Baleares</option>
+                        <option value="Canarias">Canarias</option>
+                        <option value="Cantabria">Cantabria</option>
+                        <option value="Castilla La Mancha">Castilla-La Mancha</option>
+                        <option value="Castilla y León">Castilla y León</option>
+                        <option value="Cataluña">Cataluña</option>
+                        <option value="Comunidad de Madrid">Comunidad de Madrid</option>
+                        <option value="Comunidad Foral de Navarra">Comunidad Foral de Navarra</option>
+                        <option value="Comunidad Valenciana">Comunidad Valenciana</option>
+                        <option value="Extremadura">Extremadura</option>
+                        <option value="Galicia">Galicia</option>
+                        <option value="País Vasco">País Vasco</option>
+                        <option value="Principado de Asturias">Principado de Asturias</option>
+                        <option value="Región de Murcia y La Rioja">Región de Murcia y La Rioja</option>
+                    </select>
+                    <select class="select-ubi" id="city-selector">
+                        <option value="">Ciudad</option>
+                        <option value="Barcelona">Barcelona</option>
+                        <option value="Tarragona">Tarragona</option>
+                        <option value="Lérida">Lérida</option>
+                        <option value="Gerona">Gerona</option>
+                    </select>
+                    <select class="select-ubi" id="town-selector">
+                        <option value="">Municipio</option>
+                        <option value="Badalona">Badalona</option>
+                        <option value="Badia del Vallès">Badia del Vallès</option>
+                        <option value="Barcelona">Barcelona</option>
+                        <option value="Barberà del Vallès">Barberà del Vallès</option>
+                    </select>
+                    
+                </div>
+                <div class="card filter-location">
+                    <div class="title-filter">
+                        <h5>Seleccione fecha</h5>
+                    </div>
+                    <div class="filter-date">
+                        <Calendar v-model="buttondisplay" showIcon :showOnFocus="false" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 <!--
                         <div class="card-body shadow-sm">
                             <div class="card mb-4">
@@ -271,17 +308,19 @@
     </div>
     -->
 </template>
-<style>
+<style scoped>
+    .gotham{
+        font-family: Gotham;
+    }
     .list-group-chat{
         border: 0;
     }
 
     .content-chats-view {
-        position: fixed; /* Para fijar el contenido en la ventana del navegador */
-        top: 8rem; /* Opcional: Fijar el contenido a 20px desde la parte superior */
-        left: 20px; /* Opcional: Fijar el contenido a 20px desde el lado izquierdo */
-        /* También puedes usar bottom o right para fijar desde la parte inferior o derecha */
-        z-index: 997; /* Opcional: Definir un índice z para controlar la superposición */
+        position: fixed;
+        top: 6rem;
+        left: 20px;
+        z-index: 997;
         width: 23%;
     }
 
@@ -298,12 +337,88 @@
         height: 200px;
         
     }
+
+
+
+
+    /* FILTER CSS */
+    .filters{
+        width: 24%;
+    }
+    .title-filter{
+        font-size: 20px;
+    }
+
+    /*SEARCH LABEL CSS */
+    .searchLabel{
+        background-color: white;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+    .searchLabel span{
+        padding: 0 15px;
+        border-right: 1px solid black;
+    }
+    input.p-inputtext{
+        width: 87%;
+        border-radius:  0 20px 20px 0;
+        border: 0;
+    }
+    input.p-inputtext:focus{
+        border: 0;
+    }
+
+
+    /*FILTER LOCATION CSS */
+    .filter-location{
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        height: 150px;
+    }
+    .p-tree-wrapper ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .select-ubi{
+        border-radius: 20px;
+        text-align: center;
+        border: 1px solid black;
+        width: 220px;
+    }
+
+    /* FILTER DATE CSS */
+    .filter-date{
+        display:flex;
+        justify-content: center;
+        width: 100%;
+    }
 </style>
 <script setup>
+    import { NodeService } from '../../composables/sites';
+    
     import {ref, onMounted, watch} from "vue";
     import useCategories from "../../composables/categories_event";
     import useEvents from "../../composables/events";
     import {useAbility} from '@casl/vue'
+    import IconField  from "primevue/iconField";
+    import InputIcon  from "primevue/inputIcon";
+    import InputText  from "primevue/inputText";
+    import Calendar from 'primevue/calendar';
+
+
+    const nodes = ref(null);
+    const selectedValue = ref(null);
+    const start_date = ref();
+    const end_date = ref();
+    onMounted(() => {
+        NodeService.getTreeNodes().then((data) => (nodes.value = data));
+    });
+
 
     const search_id = ref('')
     const search_title = ref('')
@@ -368,7 +483,7 @@
     function getUserName(id) {
         const user = users.value.find(userValue => userValue.id === id);
         // Retornar el nombre de la categoría si se encuentra, de lo contrario, retorna un mensaje de error
-        return user ? user.name : 'null';
+        return user ? user.nickname : 'null';
     }
 
     function sliceDataDescription(text) {

@@ -89,14 +89,17 @@ class CreateAdminUserSeeder extends Seeder
 
         // Crear el usuario administrador
         $promoter = User::create([
-            'name' => 'Sergio',
-            'surname' => 'Jimenez',
-            'nickname' => 'Sergio69',
+            'name' => 'Test',
+            'surname' => 'Event',
+            'nickname' => 'TestEvent',
             'genre' => 'Other',
-            'email' => 'tuSergioMorenito69@gmail.com',
+            'email' => 'TestEvent@gmail.com',
             'password' => bcrypt('12345678'),
             'NIF' => '123456E',
-            'description' => 'Promotor de eventos',
+            'description' => 'Nuestra pasión por la aventura y la emoción se fusiona con nuestra experiencia en 
+            la organización de eventos para crear experiencias únicas en el cielo. Nuestro objetivo es llevar a 
+            los participantes a nuevas alturas y hacer que vivan momentos inolvidables nuestraentras disfrutan del 
+            paisaje desde una perspectiva única.',
             'category_id' => 1
         ]);
         
