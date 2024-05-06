@@ -217,7 +217,7 @@ export default function useAuth() {
                 user.name = ''
                 user.email = ''
                 store.dispatch('auth/logout')
-                router.push({ name: 'auth.login' })
+                router.push({ name: 'home' })
             })
             .catch(error => {
                 // swal({

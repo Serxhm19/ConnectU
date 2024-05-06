@@ -34,5 +34,6 @@
     "register_with": "Registro con",
     "surname": "Apellido",
     "genre": "Genero",
-    "nickname": "Nombre de Usuario"
+    "nickname": "Nombre de Usuario",
+    "is_Promoter": "Eres promotor"
 }

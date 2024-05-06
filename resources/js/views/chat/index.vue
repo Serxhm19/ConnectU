@@ -1,9 +1,13 @@
 <template>
-  <div class="chat-container">
+  <div class="chat-container container-fluid">
     <!-- Chat Header -->
     <div class="card chat-header">
       <div class="chat-text">
-        {{ selectedEvent ? selectedEvent.eventData.name : 'Chats' }}
+        <template v-if="selectedEvent && selectedEvent.id">
+          <router-link :to="{ name: 'publi-event.event', params: { id: selectedEvent.id } }">
+            {{ selectedEvent.eventData.name }}
+          </router-link>
+        </template>
       </div>
       <div class="user-profile">
         <div class="profile-pic">
@@ -21,42 +25,31 @@
     <div class="row">
       <!-- Columna Izquierda -->
       <div class="col-lg-4 col-sm-12">
-        <!-- Card de Usuario -->
         <div class="card events-list">
           <div class="My-Events">
-            <!-- Input de búsqueda -->
-            <input type="text" v-model="searchQuery" placeholder="Buscar eventos" class="form-control">
+            <hr>
             <ul class="list-group list-group-flush">
-              <!-- Lista de eventos filtrada por el nombre -->
-              <li v-for="event in filteredEvents" :key="event.event_id" @click="selectEvent(event.event_id)"
-                class="list-group-item">
-                <div class="event-name">{{ event.eventData ? event.eventData.name : 'Cargando...' }}</div>
-                <div>
+              <li v-for="event in userEventsFiltered" :key="event.event_id" @click="selectEvent(event.event_id)"
+                class="list-group-item EventsButton">
+                <div class="events">
                   <img src="\images\eventoPrueba.webp" class="chat-pic" alt="Profile Picture">
-                  <!-- Mostrar el último mensaje -->
-                  <div v-if="lastMessage">
-                    <p class="last-message">
-                      <span>{{ lastMessage.user_id === user.id ? 'You:' : lastMessage.user.name + ": " }}</span>
-                      {{ lastMessage.message }}
-                    </p>
-                  </div>
+                  <div class="event-name">{{ event.eventData ? event.eventData.name : 'Cargando...' }}</div>
                 </div>
-                <hr>
               </li>
             </ul>
+            <hr>
           </div>
         </div>
       </div>
-
       <!-- Chat Body -->
       <div class="col-lg-8 col-sm-12">
-        <div class="chat">
+        <div class="chat col-sm-12">
           <!-- Card de Mensajes -->
           <div class="card chat-body">
             <ul class="list-group list-group-flush chat">
               <li v-if="!selectedEvent" class="list-group-item no-event-selected">
                 <img src="/Images/ChatIcon.svg" class="no-event-img" alt="Chat Icon">
-                <p class="no-event-text">Selecciona un evento para empezar a chatear!</p>
+                <p class="no-event-text">Select an event to start chatting!</p>
               </li>
               <li v-else v-for="message in reversedMessages" :key="message.id" class="list-group-item">
                 <div class="chat clearfix">
@@ -107,7 +100,6 @@ export default {
       userEvents: [],
       selectedEvent: null,
       lastMessage: null,
-      searchQuery: '',
 
     }
   },
@@ -117,7 +109,6 @@ export default {
     setInterval(this.fetchMessages, 3000);
     this.fetchUserEvents();
     document.title = 'ConnectU - Chats';
-    this.filteredEvents();
   },
 
   computed: {
@@ -195,6 +186,7 @@ export default {
             axios.get(`/api/events/show/${event.event_id}`)
               .then(eventResponse => {
                 event.eventData = eventResponse.data;
+                event.id = event.event_id; // Asignar event_id a id
               })
               .catch(error => {
                 console.error('Error fetching event data:', error);
@@ -205,33 +197,16 @@ export default {
           console.error('Error fetching user events:', error);
         });
     },
+
+
     selectEvent(eventId) {
+      console.log('Selected event ID:', eventId);
       this.selectedEvent = this.userEvents.find(event => event.id === eventId);
+      console.log('Selected event:', this.selectedEvent);
       this.fetchMessages(eventId);
-    },
-
-    filteredEvents() {
-      if (!this.searchQuery) {
-        // Si no hay valor en searchQuery, mostrar todos los eventos
-        return this.userEvents;
-      } else {
-        // Filtrar los eventos por el nombre
-        const query = this.searchQuery.toLowerCase();
-        return this.userEvents.filter(event => {
-          // Verificar si eventData está definido antes de acceder a sus propiedades
-          return event.eventData && event.eventData.name.toLowerCase().includes(query);
-        });
-      }
-    },
-
+    }
   }
-
-
-
-
-
 }
-
 
 </script>
 
@@ -239,6 +214,18 @@ export default {
 body {
   background-color: #f4f7f6;
   margin-top: 20px;
+}
+
+.EventsButton {
+  position: relative;
+  display: block;
+  padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+  color: var(--bs-list-group-color);
+  text-decoration: none;
+  background-color: var(--bs-list-group-bg);
+  margin: 10px;
+  border: none;
+  cursor: pointer;
 }
 
 .list-group-item {
@@ -249,7 +236,14 @@ body {
   text-decoration: none;
   background-color: var(--bs-list-group-bg);
   margin: 10px;
-  /* border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color); */
+  border: none;
+}
+
+.EventsButton:hover {
+  background-color: #f0f0f0;
+  /* Cambia el color de fondo */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Añade una sombra suave */
 }
 
 .card {
@@ -273,7 +267,10 @@ body {
   background-color: rgb(255, 255, 255);
   margin-top: 10px;
   margin-bottom: 10px;
-
+  display: flex;
+  flex-direction: row-reverse;
+  align-content: center;
+  justify-content: space-between;
 }
 
 .chat-text {
@@ -296,7 +293,15 @@ body {
 .chat-footer input {
   flex: 1;
   margin-right: 10px;
-  width: max-content;
+  width: 1000px;
+}
+
+@media (max-width: 768px) {
+  .chat-footer input {
+    flex: 1;
+    margin-right: 10px;
+    width: 200px;
+  }
 }
 
 .chat-text {
@@ -306,6 +311,10 @@ body {
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
+  font-family: Gotham;
+  font-size: 22px;
+  color: #01afee;
+  text-decoration: dashed;
 }
 
 .user-profile {
@@ -315,7 +324,6 @@ body {
   justify-content: flex-start;
   align-content: space-around;
   align-items: center;
-  margin-top: -35px;
 }
 
 .profile-pic {
@@ -365,8 +373,6 @@ body {
   margin-bottom: 10px;
   display: flex;
   flex-direction: row;
-  margin-bottom: 10px;
-  margin-top: 25px;
 
 }
 
@@ -403,6 +409,10 @@ body {
   overflow-y: auto;
   overscroll-behavior: contain;
   border: 1px solid #000;
+  scroll-behavior: smooth;
+  scroll-padding-bottom: 50px;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .input {
@@ -446,13 +456,21 @@ body {
 
 .events-list {
   height: 685px;
+  overflow-y: auto;
   overscroll-behavior: contain;
 }
 
 hr {
-  border-top: solid #000000;
-  border-width: 1px 0 0 0;
-  margin: 1rem 0;
+  margin: none;
+  height: 2px;
+  border: none;
+  background-color: #000;
+}
+
+.hr-events {
+  height: 1px;
+  border: none;
+  background-color: #000;
 }
 
 .col-lg-8 {
@@ -465,14 +483,13 @@ hr {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-
+  margin: 10px
 }
 
 .event-name {
   font-family: Gotham;
   font-size: 18px;
   font-weight: bold;
-  text-align: center;
   color: #0070bb;
 }
 
@@ -480,6 +497,7 @@ hr {
   width: 400px;
   height: 400px;
   margin-left: 275px;
+  margin-bottom: 50px;
 }
 
 p.no-event-text {
@@ -491,7 +509,42 @@ p.no-event-text {
   flex-wrap: nowrap;
   flex-direction: row;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
+.events {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+a {
+  font-family: Gotham;
+  font-size: 20px;
+  font-weight: bold;
+  color: #01afee;
+}
+
+a:hover {
+  font-family: Gotham;
+  font-size: 20px;
+  font-weight: bold;
+  color: #0070bb;
+  text-decoration: dashed;
+}
+
+@media (max-width: 768px) {
+  .chat-container {
+    width: 450px;
+  }
+}
+
+.profile-pic-small img {
+  width: 30px;
+  height: 30px;
+}
 
 </style>

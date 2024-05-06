@@ -43,5 +43,6 @@
     "male": "Male",
     "female": "Female",
     "register_as_promoter": "Register as Promoter",
-    "chats": "Chats"
+    "chats": "Chats",
+    "is_Promoter": "Is Promoter"
 }
