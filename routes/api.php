@@ -12,6 +12,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 //---------------------------------------------------------------//
 use App\Http\Controllers\Api\Category_eventController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\ProvinceController;
 use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\GroupUserController;
 use App\Http\Controllers\Api\MessagesController;
@@ -57,9 +59,16 @@ Route::delete('events/{id}', [EventController::class, 'destroy']);
 Route::get('events/show/{id}', [EventController::class, 'show']);
 Route::get('events/show/promoter/{promoter}', [EventController::class, 'showByPromoter']);
 Route::get('events/search/promoter/', [EventController::class, 'searchPromoter']);
-
 //---------------------------------------------------------------//
 
+//--------------------------Sites----------------------------------//
+Route::get('cities', [CityController::class, 'index']);
+Route::get('cities/show/{id}', [CityController::class, 'show']);
+Route::get('cities/province/${id}', [CityController::class, 'getCitiesByProvince']);
+
+Route::get('provinces', [ProvinceController::class, 'index']);
+Route::get('provinces/show/{id}', [ProvinceController::class, 'show']);
+//---------------------------------------------------------------//
 
 //--------------------------Group----------------------------------//
 Route::get('group', [GroupController::class, 'index']);

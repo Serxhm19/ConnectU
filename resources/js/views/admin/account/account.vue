@@ -75,18 +75,14 @@
 import promoterView from '../account/promoter.vue';
 import userWiew from '../account/user.vue';
 
-import Tag from 'primevue/tag';
-import InputText from 'primevue/inputtext'
+
+import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import InputIcon from 'primevue/inputicon';
-import IconField from 'primevue/iconfield';
+
 import Dialog from 'primevue/dialog';
-import Avatar from 'primevue/avatar';
 import { useStore } from 'vuex';
 import axios from "axios";
-import { ref, inject, onMounted, computed } from "vue"
+import { ref, inject, onMounted, computed } from "vue";
 import { FilterMatchMode } from 'primevue/api';
 
 const filters = ref({

@@ -71,47 +71,22 @@
                         <h5>Ubicación del evento</h5>
                     </div>
 
-                    <select class="select-ubi" id="region-selector">
-                        <option value="">Región</option>
-                        <option value="Andalucía">Andalucía</option>
-                        <option value="Aragón">Aragón</option>
-                        <option value="Islas Baleares">Islas Baleares</option>
-                        <option value="Canarias">Canarias</option>
-                        <option value="Cantabria">Cantabria</option>
-                        <option value="Castilla La Mancha">Castilla-La Mancha</option>
-                        <option value="Castilla y León">Castilla y León</option>
-                        <option value="Cataluña">Cataluña</option>
-                        <option value="Comunidad de Madrid">Comunidad de Madrid</option>
-                        <option value="Comunidad Foral de Navarra">Comunidad Foral de Navarra</option>
-                        <option value="Comunidad Valenciana">Comunidad Valenciana</option>
-                        <option value="Extremadura">Extremadura</option>
-                        <option value="Galicia">Galicia</option>
-                        <option value="País Vasco">País Vasco</option>
-                        <option value="Principado de Asturias">Principado de Asturias</option>
-                        <option value="Región de Murcia y La Rioja">Región de Murcia y La Rioja</option>
+                    <select class="select-ubi" id="province-selector">
+                        <option value="" disabled selected>Provincia</option>
+                        <option v-for="province in provinces" :value="province.id">{{ province.name }}</option>
                     </select>
+
                     <select class="select-ubi" id="city-selector">
-                        <option value="">Ciudad</option>
-                        <option value="Barcelona">Barcelona</option>
-                        <option value="Tarragona">Tarragona</option>
-                        <option value="Lérida">Lérida</option>
-                        <option value="Gerona">Gerona</option>
+                        <option value="" disabled selected>Ciudad</option>
+                        <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
                     </select>
-                    <select class="select-ubi" id="town-selector">
-                        <option value="">Municipio</option>
-                        <option value="Badalona">Badalona</option>
-                        <option value="Badia del Vallès">Badia del Vallès</option>
-                        <option value="Barcelona">Barcelona</option>
-                        <option value="Barberà del Vallès">Barberà del Vallès</option>
-                    </select>
-                    
                 </div>
                 <div class="card filter-location">
                     <div class="title-filter">
                         <h5>Seleccione fecha</h5>
                     </div>
                     <div class="filter-date">
-                        <Calendar v-model="buttondisplay" showIcon :showOnFocus="false" />
+                        
                     </div>
 
                 </div>
@@ -399,15 +374,16 @@
     }
 </style>
 <script setup>
-    
-    import {ref, onMounted, watch} from "vue";
+    import {useAbility} from '@casl/vue';
+    import {ref, reactive, onMounted, watch} from "vue";
+
     import useCategories from "../../composables/categories_event";
     import useEvents from "../../composables/events";
-    import {useAbility} from '@casl/vue'
+    import useSites from "../../composables/sites";
+
     import IconField  from "primevue/iconField";
     import InputIcon  from "primevue/inputIcon";
     import InputText  from "primevue/inputText";
-    import Calendar from 'primevue/calendar';
 
 
     const nodes = ref(null);
@@ -423,13 +399,24 @@
     const orderDirection = ref('desc')
     const {categories, getCategories, deleteCategory} = useCategories()
     const {events, users,  getEvents, getUsers, deleteEvent} = useEvents()
+    const {cities, provinces, getCities, getProvinces, getCitiesByProvince} = useSites()
     const {can} = useAbility()
 
-    onMounted(() => {
-        getCategories()
-        getEvents()
-        getUsers()
-        console.log(users)
+    onMounted(async () => {
+        await getCategories()
+        await getEvents()
+        await getUsers()
+
+        await getCitiesByProvince(1)
+        await getProvinces()
+        const selectProvince = document.getElementById('province-selector');
+        selectProvince.addEventListener('change', async function() {
+            const selectedProvince = selectProvince.value;
+            console.log(selectedProvince);
+            await getCitiesByProvince(selectedProvince);
+        });
+        console.log(cities.value)
+        console.log(provinces.value)
     })
 
     const updateOrdering = (column) => {

@@ -4,14 +4,12 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\City;
+use App\Models\city;
 
 class CityController extends Controller
 {
     public function index()
     {
-        //return "hola";
-
         $city = City::all()->toArray();
 
         return $city;
@@ -20,7 +18,8 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:5',
+            'province_id' => 'required',
+            'name' => 'required',
         ]);
         $city = $request->all();
         $ciudad = City::create($city);
@@ -33,8 +32,8 @@ class CityController extends Controller
         $city = City::find($id);
 
         $request->validate([
-            'name' => 'required|max:5',
-            'description' => 'required',
+            'province_id' => 'required',
+            'name' => 'required',
         ]);
 
         $dataToUpdate = $request->all();
@@ -58,5 +57,16 @@ class CityController extends Controller
         $city = City::find($id);
         return response()->json($city);
 
+    }
+
+    public function getCitiesByProvince($province_id = '')
+    {
+        if ($province_id != null && $province_id != '') {
+            $cities = City::where('province_id', $province_id)->get();
+        }else {
+            $cities = City::all()->toArray();
+        }
+
+        return response()->json($cities);
     }
 }

@@ -1,4 +1,4 @@
-import { ref, inject } from 'vue'
+import { reactive, ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios' // Importa axios para realizar solicitudes HTTP
 
@@ -13,46 +13,40 @@ export default function useEvents() {
 
     const getCities = async () => {
         try {
-            const response = await axios.get('/api/users/getUsers');
+            const response = await axios.get('/api/cities');
 
-            let user = response.data;
-            console.log(user);
-            if (user) {
-                users.value = user;
-            } else {
-                users.value = [];
-            }
+            cities.value = response.data;
         } catch (error) {
             console.error('Error al obtener usuarios:', error);
         }
     }
     
-    const getProvinces = async (id) => {
+    const getProvinces = async () => {
         try {
-            const response = await axios.get('/api/users/getUsers');
+            const response = await axios.get('/api/provinces');
 
-            let user = response.data;
-            console.log(user);
-            if (user) {
-                users.value = user;
-            } else {
-                users.value = [];
-            }
+            provinces.value = response.data;
         } catch (error) {
             console.error('Error al obtener usuarios:', error);
         }
     }
 
+    const getCitiesByProvince = async (id) => {
+        try {
+            const response = await axios.get(`/api/cities/province/${id}`);
 
-
-
-
-
+            cities.value = response.data;
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error al obtener usuarios:', error);
+        }
+    }
 
     return {
         cities,
         provinces,
         getCities,
-        getProvinces
+        getProvinces,
+        getCitiesByProvince,
     }
 }
