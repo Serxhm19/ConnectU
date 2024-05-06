@@ -213,7 +213,7 @@ p {
 }
 
 body {
-    background-color: #ffffff !important;
+    background-color: #ffffff;
     background-repeat: no-repeat !important;
     font-family: var(--font-family);
     font-weight: normal;

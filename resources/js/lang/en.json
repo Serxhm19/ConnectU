@@ -44,5 +44,7 @@
     "female": "Female",
     "register_as_promoter": "Register as Promoter",
     "chats": "Chats",
-    "is_Promoter": "Is Promoter"
+    "is_Promoter": "Is Promoter",
+    "account": "Account",
+    "create_event": "Create Event"
 }

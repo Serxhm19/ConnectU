@@ -1,7 +1,7 @@
 <template>
     <div class="grid">
         <div class="col-12">
-            <div class="card"
+            <div class="card background-image"
                 style="background-image: url('/images/logo.png'); background-size: cover; border: 2px solid white;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between pb-2 mb-4">
@@ -320,5 +320,9 @@ const saveEditedUser = () => {
   height: 100px;
   object-fit: cover;
   border: 2px solid white;
+}
+
+.background-image{
+    margin-top: -55px;
 }
 </style>
