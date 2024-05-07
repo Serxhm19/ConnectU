@@ -44,9 +44,6 @@ class PostController extends Controller
 
                 });
             })
-            ->when(!auth()->user()->hasPermissionTo('post-all'), function ($query) {
-                $query->where('user_id', auth()->id());
-            })
             ->orderBy($orderColumn, $orderDirection)
             ->paginate(50);
         return PostResource::collection($posts);

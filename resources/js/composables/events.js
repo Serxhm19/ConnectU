@@ -29,20 +29,35 @@ export default function useEvents() {
     const isLoading = ref(false)
     const swal = inject('$swal')
 
-    const getEvents = async (
+    const getEvents = async () => {
+        axios.get('/api/events')
+        .then(response => {
+            events.value = response.data;
+        })
+    }
+    const getPosts = async (
         page = 1,
+        search_category = '',
         search_id = '',
         search_title = '',
+        search_content = '',
         search_global = '',
         order_column = 'created_at',
         order_direction = 'desc'
     ) => {
-        axios.get('/api/events') // Cambia la ruta de la API a la de eventos
+        axios.get('/api/posts?page=' + page +
+            '&search_category=' + search_category +
+            '&search_id=' + search_id +
+            '&search_title=' + search_title +
+            '&search_content=' + search_content +
+            '&search_global=' + search_global +
+            '&order_column=' + order_column +
+            '&order_direction=' + order_direction)
             .then(response => {
-                events.value = response.data; // Cambia 'categories' a 'events'
+                console.log(response.data);
+                posts.value = response.data;
             })
     }
-
     const getEvent = async (id) => {
         const apiUrl = `/api/events/show/${id}`;
 

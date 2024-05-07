@@ -50,7 +50,8 @@ Route::post('category/update/{id}', [Category_eventController::class, 'update'])
 
 
 //--------------------------Event----------------------------------//
-Route::get('events', [EventController::class, 'index']);
+Route::get('/events', [EventController::class, 'index']);
+
 Route::get('events/promoter/{id}', [EventController::class, 'promoterEvents']);
 Route::apiResource('event', PostController::class);
 Route::post('events/', [EventController::class, 'store']);
@@ -110,10 +111,10 @@ Route::get('/user_event/userInEvent/{user_id}/{event_id}', [User_eventController
 //---------------------------------------------------------------//
 Route::get('users/show/{id}', [UserController::class, 'showUser']);
 Route::get('users/getUsers', [UserController::class, 'allUsers']);
-
+Route::apiResource('posts', PostController::class);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UserController::class);
-    Route::apiResource('posts', PostController::class);
+    
     //Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
     //Route::apiResource('exercises', ExerciseController::class);

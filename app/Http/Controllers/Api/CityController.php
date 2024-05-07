@@ -59,14 +59,11 @@ class CityController extends Controller
 
     }
 
-    public function getCitiesByProvince($province_id = '')
-    {
-        if ($province_id != null && $province_id != '') {
-            $cities = City::where('province_id', $province_id)->get();
-        }else {
-            $cities = City::all()->toArray();
-        }
+    public function getCitiesByProvince($province_id)
+{   
+    $cities = City::where('province_id', $province_id)->get();
 
-        return response()->json($cities);
-    }
+    return response()->json($cities);
+}
+
 }

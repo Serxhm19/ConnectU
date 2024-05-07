@@ -52,8 +52,8 @@ class ProvinceController extends Controller
     public function show($id)
     {
 
-        $province = Province::find($id);
-        return response()->json($province);
+        $province = Province::find($id)->toArray();
+        return  $province;
 
     }
 

@@ -1,11 +1,11 @@
 import { reactive, ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios' // Importa axios para realizar solicitudes HTTP
+import axios from 'axios'
 
 export default function useEvents() {
     const provinces = ref([])
     const cities = ref([])
-
+    
     const router = useRouter()
     const validationErrors = ref({})
     const isLoading = ref(false)
@@ -32,14 +32,15 @@ export default function useEvents() {
     }
 
     const getCitiesByProvince = async (id) => {
-        try {
-            const response = await axios.get(`/api/cities/province/${id}`);
-
-            cities.value = response.data;
-            console.log(response.data);
-        } catch (error) {
-            console.error('Error al obtener usuarios:', error);
-        }
+        const apiUrl = `/api/cities/province/${id}`;
+        axios.get(apiUrl)
+        .then(response => {
+            cities.value = response;
+            console.log(cities.value);
+        })
+        .catch(error => {
+            console.error('Api error: ', error);
+        });
     }
 
     return {

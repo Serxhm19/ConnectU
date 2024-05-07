@@ -15,9 +15,9 @@ class EventController extends Controller
 {
     public function index()
     {
-        $event = Event::all()->toArray();
+        $events = Event::all()->toArray();
 
-        return $event;
+        return $events;
     }
 
     public function promoterEvents($id)
