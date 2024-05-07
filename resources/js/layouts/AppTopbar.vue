@@ -1,115 +1,256 @@
 <template>
-    <div class="layout-topbar">
-        <div></div>
-<!--
-        <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
-            <i class="pi pi-bars"></i>
-        </button>
-
-        <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
-            <i class="pi pi-ellipsis-v"></i>
-        </button>
--->
-        <div class="menu-app">
-                <router-link class="nav-link-login" to="/login">
-                    {{ $t('login') }}
-                </router-link>
-           
-                <router-link to="/" class="layout-topbar-logo nav-link">
-                    <img src="/images/connectu.svg" alt="logo" />
-                    <span></span>
-                </router-link>
-
-                <router-link class="nav-link-register" to="/register">
-                    {{ $t('register') }}
-                </router-link>
-
-                <router-link :to="{ name: 'account' }" class="dropdown-item">Perfil</router-link>
-        </div>
-
-
-        <div class="layout-topbar-menu" :class="topbarMenuClasses">
-
-            <button class="p-link layout-topbar-button layout-topbar-button-c nav-item dropdown " role="button"
-                data-bs-toggle="dropdown">
-
-                <i class="pi pi-user"></i>
-                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
-                    <li>
-                        <router-link :to="{ name: 'account' }" class="dropdown-item">Perfil</router-link>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Preferencias</a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li>
-                        <a class="dropdown-item" :class="{ 'opacity-25': processing }" :disabled="processing"
-                            href="javascript:void(0)" @click="logout">Cerrar sessión</a>
-                    </li>
-                </ul>
-
-                <span class="nav-link dropdown-toggle ms-3 me-2" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    {{ user.name }}
-                </span>
-            </button>
-        </div>
-        
-    </div>
-    <!--<p>AppTopbar.vue</p>-->
+    <nav v-if="!$route.meta.hideHeader">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="menu">
+                        <li>
+                            <router-link to="/admin/event/create" class="nav-link menu-a" aria-current="page">
+                                <a href="#0" class="link-wrapper">
+                                    <span class="Text">{{ $t('create_event') }}</span>
+                                    <span><i class="pi pi-plus Icon" style="font-size: 22px;"></i></span>
+                                </a>
+                            </router-link>
+                        </li>
+                        <li> <router-link to="/" class="nav-link menu-a" aria-current="page">
+                                <a href="#0" class="link-wrapper">
+                                    <span class="Text">{{ $t('chats') }}</span>
+                                    <span><i class="pi pi-comments Icon" style="font-size: 22px;"></i></span>
+                                </a>
+                            </router-link>
+                        </li>
+                        <li class="logo-wrapper">
+                            <router-link to="/" class="layout-topbar-logo">
+                                <img src="/images/connectu.svg" alt="logo" />
+                                <span></span>
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/" class="nav-link menu-a" aria-current="page">
+                                <a href="#0" class="link-wrapper">
+                                    <span class="Text">{{ $t('account') }}</span>
+                                    <span><i class="pi pi-user Icon" style="font-size: 22px;"></i></span>
+                                </a>
+                            </router-link>
+                        </li>
+                    </ul>
+                </div>
+                <template v-if="user?.name">
+                    <div class="Account">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><router-link class="dropdown-item" to="/admin/account">My Account</router-link></li>
+                                <li><router-link to="/chats" class="dropdown-item">Chats</router-link></li>
+                                <li><router-link to="/admin/events/create" class="dropdown-item">Create
+                                        Event</router-link></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </div>
+                </template>
+            </div>
+        </nav>
+        <!--<p>nav.vue</p>-->
+    </nav>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { useLayout } from '../composables/layout';
-import { useStore } from 'vuex';
+import { useStore } from "vuex";
 import useAuth from "@/composables/auth";
+import { computed } from "vue";
+import LocaleSwitcher from "../components/LocaleSwitcher.vue";
 
-const { onMenuToggle } = useLayout();
 const store = useStore();
-const user = computed(() => store.state.auth.user)
+const user = computed(() => store.getters["auth/user"])
 const { processing, logout } = useAuth();
-
-const topbarMenuActive = ref(false);
-
-const onTopBarMenuButton = () => {
-    topbarMenuActive.value = !topbarMenuActive.value;
-};
-
-const topbarMenuClasses = computed(() => {
-    return {
-        'layout-topbar-menu-mobile-active': topbarMenuActive.value
-    };
-});
-
-
 </script>
 
-<style lang="scss" scoped>
-.layout-topbar-button-c,
-.layout-topbar-button-c:hover {
-    width: auto;
-    background-color: rgb(255, 255, 255, 0);
-    border: 0;
-    border-radius: 0%;
-    padding: 1em;
-}
+<style scoped>
+@media (min-width: 768px) {
+    .navbar-expand-md .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto;
+        align-items: center;
+        justify-content: center;
+    }
 
-a.nav-link-login {
-    margin-right: 15px;
-    margin-top: 6px;
-    font-family: Gotham;
-    font-size: 16px;
-    color: black;
-}
+    .navbar-nav {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
 
-a.nav-link-register {
-    margin-left: 15px;
-    margin-top: 6px;
-    font-family: Gotham;
-    font-size: 16px;
-    color: black;
+    .nav-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-item.dropdown {
+        justify-self: end;
+    }
+
+
+    .nav-item a {
+        font-family: Gotham;
+    }
+
+    .user-logo {
+        width: 25px;
+        height: 25px;
+        margin-right: 10px;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    body {
+        margin: 30px 0;
+        font: 22px sans-serif;
+        background: var(--body-bg-color);
+        color: var(--text-color);
+    }
+
+    hr {
+        border-color: var(--hr-color);
+        margin: 20px 0;
+    }
+
+    .menu {
+        display: flex;
+        justify-content: center;
+    }
+
+    .menu li {
+        margin-right: 70px;
+    }
+
+    .menu-a {
+        position: relative;
+        display: block;
+        overflow: hidden;
+    }
+
+    .menu a span {
+        transition: transform 0.2s ease-out;
+    }
+
+    .menu a span:first-child {
+        display: inline-block;
+        padding: 10px;
+    }
+
+    .menu a span:last-child {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-100%);
+    }
+
+    .menu i {
+        font-size: 30px;
+    }
+
+    .menu a:hover span:first-child {
+        transform: translateY(100%);
+    }
+
+    .menu a:hover span:last-child,
+    .menu[data-animation] a:hover span:last-child {
+        transform: none;
+    }
+
+    .Text {
+        font-size: 16px;
+        font-family: Gotham;
+        color: #0070bb;
+        margin-top: 15px;
+        width: auto;
+    }
+
+    .Icon {
+        color: #0070bb;
+        margin-top: 10px;
+    }
+
+    .layout-topbar-logo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .layout-topbar-logo img {
+        height: 50px;
+        margin-top: 40px;
+    }
+
+    .Account {}
+
+    /* ANIMATIONS
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+    .menu[data-animation="to-top"] a span:last-child {
+        transform: translateY(100%);
+    }
+
+    .menu[data-animation="to-top"] a:hover span:first-child {
+        transform: translateY(-100%);
+    }
+
+    .menu[data-animation="to-right"] a span:last-child {
+        transform: translateX(-100%);
+    }
+
+    .menu[data-animation="to-right"] a:hover span:first-child {
+        transform: translateX(100%);
+    }
+
+    .menu[data-animation="to-left"] a span:last-child {
+        transform: translateX(100%);
+    }
+
+    .menu[data-animation="to-left"] a:hover span:first-child {
+        transform: translateX(-100%);
+    }
+
+    .logo-wrapper {
+        display: flex;
+        justify-content: center;
+        /* Centra el contenido horizontalmente */
+        width: 100%;
+        /* Ajusta el ancho según sea necesario */
+    }
+
+    .logo-wrapper .layout-topbar-logo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .logo-wrapper .layout-topbar-logo img {
+        height: 50px;
+        margin-top: 40px;
+    }
+
 }
 </style>

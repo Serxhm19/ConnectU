@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-                <DataTable class="p-datatable w-100" :value="events" paginator :rows="10" filterDisplay="row"
+                <DataTable class="p-datatable" :value="events" paginator :rows="10" filterDisplay="row"
                     :filters="filters">
                     <template #header>
                         <div class="flex justify-content-end">
@@ -103,10 +103,6 @@ onMounted(() => {
             events.value = response.data;
 
             console.log(events.value);
-
-            events.value.forEach(event => {
-                event.description = stripHtmlTags(event.description);
-            });
 
         })
 });

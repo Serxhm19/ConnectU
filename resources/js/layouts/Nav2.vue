@@ -12,8 +12,8 @@
                         <li>
                             <router-link to="/" class="nav-link menu-a" aria-current="page">
                                 <a href="#0" class="link-wrapper">
-                                    <span class="Text">{{ $t('home') }}</span>
-                                    <span><i class="pi pi-home Icon" style="font-size: 22px;"></i></span>
+                                    <span class="Text">{{ $t('chats') }}</span>
+                                    <span><i class="pi pi-comments Icon" style="font-size: 22px;"></i></span>
                                 </a>
                             </router-link>
                         </li>
@@ -26,8 +26,8 @@
                         <li>
                             <router-link to="/" class="nav-link menu-a" aria-current="page">
                                 <a href="#0" class="link-wrapper">
-                                    <span class="Text">{{ $t('chats') }}</span>
-                                    <span><i class="pi pi-comments Icon" style="font-size: 22px;"></i></span>
+                                    <span class="Text">{{ $t('account') }}</span>
+                                    <span><i class="pi pi-user Icon" style="font-size: 22px;"></i></span>
                                 </a>
                             </router-link>
                         </li>
@@ -41,8 +41,8 @@
                                 <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><router-link class="dropdown-item" to="/admin">Admin</router-link></li>
-                                <li><router-link to="/admin/posts" class="dropdown-item">Post</router-link></li>
+                                <li><router-link class="dropdown-item" to="/Account">My Account</router-link></li>
+                                <li><router-link to="/chats" class="dropdown-item">Chats</router-link></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
