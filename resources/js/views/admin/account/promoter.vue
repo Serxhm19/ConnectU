@@ -65,12 +65,9 @@ import promoter from '../account/promoter.vue';
 
 
 import Tag from 'primevue/tag';
-import InputText from 'primevue/inputtext'
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import InputIcon from 'primevue/inputicon';
-import IconField from 'primevue/iconfield';
 import Dialog from 'primevue/dialog';
 import Avatar from 'primevue/avatar';
 import { useStore } from 'vuex';

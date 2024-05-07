@@ -5,38 +5,40 @@ import { computed } from 'vue';
 const { layoutConfig } = useLayout();
 
 const logoUrl = computed(() => {
-    return `layout/images/${layoutConfig.darkTheme.value? 'logo-white' : 'logo-dark'}.svg`;
+    return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 </script>
 
 <template>
-    <div class="layout-footer">
-        <div>
-            <h2 class="Connect">Connect with us</h2>
-            <ul class="social-links">
-                <li>
-                    <a href="https://www.facebook.com/" target="_blank">
-                        <span class="pi pi-facebook social-icon"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://twitter.com/" target="_blank">
-                        <span class="pi pi-twitter social-icon"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.instagram.com/" target="_blank">
-                        <span class="pi pi-instagram social-icon"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.linkedin.com/company/" target="_blank">
-                        <span class="pi pi-linkedin social-icon"></span>
-                    </a>
-                </li>
-            </ul>
+    <footer v-if="!$route.meta.hideFooter">
+        <div class="layout-footer">
+            <div>
+                <h2 class="Connect">Connect with us</h2>
+                <ul class="social-links">
+                    <li>
+                        <a href="https://www.facebook.com/" target="_blank">
+                            <span class="pi pi-facebook social-icon"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/" target="_blank">
+                            <span class="pi pi-twitter social-icon"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/" target="_blank">
+                            <span class="pi pi-instagram social-icon"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/company/" target="_blank">
+                            <span class="pi pi-linkedin social-icon"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </footer>
 </template>
 
 <style scoped>

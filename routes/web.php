@@ -3,8 +3,9 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChatsController ;
+use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\Api\MessagesController;
+use App\Http\Controllers\Api\UserController;
 
 
 /*
@@ -25,6 +26,8 @@ Route::post('registerPromoter', [AuthenticatedSessionController::class, 'registe
 Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::post('/user/update-profile-image', [UserController::class, 'updateProfileImage']);
 
 
 

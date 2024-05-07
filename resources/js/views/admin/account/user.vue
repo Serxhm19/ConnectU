@@ -1,115 +1,111 @@
 <template>
-    <div>
-        <p>user</p>
+    <div class="col-lg-12">
+        <div class="card events">
+            <div style="border-radius: 40px;">
+                <div class="card">
+                    <h2>Proximos Eventos</h2>
+                    <a>Mira tu lista de los proximos eventos a los que asistiras!</a>
+                </div>
+                <div v-for="event in filteredEvents" :key="event.id" class="card event-home" style="border-radius: 20px;">
+                    <div class="card-body" style="padding: 8px 14px;">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ event.name }}</h5>
+                            <p class="mb-1">{{ event.location }}</p>
+                        </div>
+                    </div>
+                    <img class="card-img-top" src="\images\logo.png" alt="Card image cap"
+                        style="height: 350px; border-radius: 0;">
+                    <div class="card-body">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ getUserName(event.user_id) }}</h5>
+                            <p class="mb-1" style="color: grey">{{ formatDate(event.start_date) }} - {{
+                    formatDate(event.end_date) }}</p>
+                        </div>
+                        <div class="d-flex justify-content-center" style="margin: 20px 30px;">
+                            <p style="text-align: justify;">
+                                {{ sliceDataDescription(event.description) }}
+                            </p>
+                        </div>
+                        <div class="d-flex justify-content-between" style="margin: 20px 30px;">
+                            <span style="color: #00AAC4">
+                                #{{ getCategoryName(event.category_id) }}
+                            </span>
+                            <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }"
+                                class="btn btn-link mr-3">Ver más...</router-link>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-import promoter from '../account/promoter.vue';
+import { useAbility } from '@casl/vue';
+import { ref, onMounted, watch, computed } from "vue";
+import useCategories from "../../../composables/categories_event";
+import useEvents from "../../../composables/events";
+import useSites from "../../../composables/sites";
 
-import Tag from 'primevue/tag';
-import InputText from 'primevue/inputtext'
-import Button from 'primevue/button';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import InputIcon from 'primevue/inputicon';
-import IconField from 'primevue/iconfield';
-import Dialog from 'primevue/dialog';
-import Avatar from 'primevue/avatar';
-import { useStore } from 'vuex';
-import axios from "axios";
-import { ref, inject, onMounted, computed } from "vue"
-import { FilterMatchMode } from 'primevue/api';
+const search_id = ref('');
+const search_title = ref('');
+const search_global = ref('');
+const orderColumn = ref('created_at');
+const orderDirection = ref('desc');
+const { categories, getCategories, deleteCategory } = useCategories();
+const { events, users, getEvents, getUsers, deleteEvent } = useEvents();
+const { cities, provinces, getCities, getProvinces, getCitiesByProvince } = useSites();
+const { can } = useAbility();
 
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+onMounted(async () => {
+    await getCategories();
+    await getEvents();
+    await getUsers();
 });
 
-const initFilters = () => {
-    filters.value = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    };
-};
+const user = ref(null); // Referencia al usuario actual
+const userEvents = ref([]); // Eventos a los que está suscrito el usuario
 
-
-
-initFilters();
-
+// Obtener el usuario actual cuando el componente esté montado
 onMounted(() => {
-    // console.log('mi vista')
-    const vuexData = localStorage.getItem("vuex");
-    const vuexArray = JSON.parse(vuexData);
-    let id = vuexArray.auth.user.id;
-
-    axios.get('/api/events/promoter/' + id)
-        .then(response => {
-            events.value = response.data;
-
-            console.log(events.value);
-
-            events.value.forEach(event => {
-                event.description = stripHtmlTags(event.description);
-            });
-
-        })
+    user.value = users.value.find(user => user.id === 1); // Asigna el usuario actual
+    fetchUserEvents(); // Llama a la función para obtener los eventos del usuario
 });
 
-const store = useStore();
-const user = computed(() => store.state.auth.user)
-const events = ref([]);
-const swal = inject('$swal');
-
-onMounted(() => {
-    // console.log('mi vista')
-    const vuexData = localStorage.getItem("vuex");
-    const vuexArray = JSON.parse(vuexData);
-    let id = vuexArray.auth.user.id;
-
-    axios.get('/api/events/promoter/' + id)
+// Función para obtener los eventos a los que está suscrito el usuario
+const fetchUserEvents = () => {
+    axios.get(`/api/userEvent`)
         .then(response => {
-            events.value = response.data;
-
-            console.log(events.value);
-
-
-        })
-});
-
-function confirm(id, index) {
-    swal.fire({
-        title: '¿Estás seguro?',
-        text: '¿Quieres eliminar esta tarea?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            deleteTask(id, index);
-        }
-    });
-}
-
-const deleteTask = (id, index) => {
-    axios.delete(`/api/events/${id}`)
-        .then(response => {
-            events.value.splice(index, 1);
-
-            swal.fire({
-                title: 'Tarea eliminada',
-                text: 'La tarea se eliminó correctamente',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
-            });
+            userEvents.value = response.data;
         })
         .catch(error => {
-            swal.fire({
-                title: 'Error',
-                text: 'Ocurrió un error al eliminar el evento',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
+            console.error('Error fetching user events:', error);
         });
+}
+
+// Filtrar los eventos para mostrar solo los eventos a los que está suscrito el usuario
+const filteredEvents = computed(() => {
+    return events.value.filter(event => userEvents.value.some(userEvent => userEvent.event_id === event.id));
+});
+
+// Observa los cambios en los filtros de búsqueda y actualiza los eventos
+watch([search_id, search_title, search_global], () => {
+    getCategories(1, search_id.value, search_title.value, search_global.value);
+});
+
+function getCategoryName(categoryId) {
+    const category = categories.value.find(cat => cat.id === categoryId);
+    return category ? category.name : 'Uncategorized';
+}
+
+function getUserName(id) {
+    const user = users.value.find(userValue => userValue.id === id);
+    return user ? user.nickname : 'null';
+}
+
+function sliceDataDescription(text) {
+    return text.substring(0, 300) + "...";
 }
 
 function formatDate(dateString) {
@@ -118,142 +114,43 @@ function formatDate(dateString) {
     return date.toLocaleDateString('es-ES', options);
 }
 
-function isEventExpired(endDate) {
-    const currentDate = new Date();
-    const eventEndDate = new Date(endDate);
-
-    return eventEndDate < currentDate;
+function sliceData(text) {
+    return text.substring(0, 25) + "...";
 }
-
-
-const displayEditDialog = ref(false);
-const editedUser = ref({
-    // Inicialice editedUser con los datos del usuario actual
-});
-
-const saveEditedUser = () => {
-    // Guarde los datos del usuario editado en la tienda o envíelos al servidor
-    displayEditDialog.value = false;
-};
-
-//function stripHtmlTags(html) {
-//  const doc = new DOMParser().parseFromString(html, 'text/html');
-//return doc.body.textContent || "";
-//}
-
-//events.value.forEach(event => {
-//  event.description = stripHtmlTags(event.description);
-//});
-
 </script>
+
 <style scoped>
-.profile-pic {
-    top: 9rem;
-    left: 2.5rem;
-    position: relative;
-    z-index: 3;
-    width: 200px;
+.gotham {
+    font-family: Gotham;
+}
+
+.list-group-chat {
+    border: 0;
+}
+
+.content-chats-view {
+    position: fixed;
+    top: 6rem;
+    left: 20px;
+    z-index: 997;
+    width: 23%;
+}
+
+.chats hr {
+    border: 1px solid black;
+}
+
+.event-home {
+    padding: 0;
+}
+
+.event-home img {
+    width: 100%;
     height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgb(255, 255, 255);
-
 }
 
-.nickname {
-    margin-top: 3rem;
-    color: rgb(0, 0, 0);
-    font-size: 28px;
-    margin-left: 1rem;
-}
-
-.name {
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    margin-top: -1rem;
-    margin-left: 1rem;
-
-}
-
-.email {
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    margin-top: 2px;
-}
-
-.button-edit {
-    top: 1rem;
-    left: 32.5rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-left: -1rem;
-    margin-top: -1rem;
-}
-
-.card-event {
-    display: flex;
-}
-
-.p-datatable {
-    width: 100%;
-    border: 1px solid black;
-    font-family: Gotham;
-
-}
-
-.pi-search:before {
-    margin-right: 10px;
-}
-
-.p-datatable-table {
-    width: 100%;
-    border: 1px solid black;
-    font-family: Gotham;
-}
-
-.p-datatable-table-body {
-    min-height: 100%;
-}
-
-.p-datatable-tbody>tr>td {
-    text-align: left;
-    border: 1px solid #dee2e6;
-    border-width: 0 0 1px 0;
-    padding: 1rem 1rem;
-    width: 1020px;
-}
-
-.titleheader {
-    font-family: Gotham;
-    font-size: 22px;
-
-}
-
-.IconDashboard {
-    padding: auto;
-}
-
-.pi:before {
-    margin-left: 4px;
-    --webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-.pi-user-edit:before {
-    margin: auto;
-    --webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-.p-button {
-    margin: 10px;
-}
-
-.editprofileimage {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border: 2px solid white;
+.events {
+    height: 600px;
+    overflow-y: auto;
 }
 </style>
