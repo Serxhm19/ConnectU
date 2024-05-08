@@ -35,7 +35,7 @@ export default function useEvents() {
         const apiUrl = `/api/cities/province/${id}`;
         axios.get(apiUrl)
         .then(response => {
-            cities.value = response;
+            cities.value = response.data;
             console.log(cities.value);
         })
         .catch(error => {

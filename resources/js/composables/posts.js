@@ -33,7 +33,6 @@ export default function usePosts() {
             '&order_column=' + order_column +
             '&order_direction=' + order_direction)
             .then(response => {
-                console.log(response.data);
                 posts.value = response.data;
             })
     }

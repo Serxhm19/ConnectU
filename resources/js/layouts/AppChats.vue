@@ -56,9 +56,8 @@
 
 .content-chats-view {
     position: fixed; /* Para fijar el contenido en la ventana del navegador */
-    top: 8rem; /* Opcional: Fijar el contenido a 20px desde la parte superior */
-    left: 20px; /* Opcional: Fijar el contenido a 20px desde el lado izquierdo */
-    /* También puedes usar bottom o right para fijar desde la parte inferior o derecha */
+    top: 7.7rem;
+    left: 20px;
     z-index: 997; /* Opcional: Definir un índice z para controlar la superposición */
     width: 23%;
 }

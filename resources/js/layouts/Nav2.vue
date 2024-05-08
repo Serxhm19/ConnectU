@@ -69,6 +69,14 @@ const { processing, logout } = useAuth();
 </script>
 
 <style scoped>
+nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 100%;
+}
 @media (min-width: 768px) {
     .navbar-expand-md .navbar-collapse {
         display: flex !important;

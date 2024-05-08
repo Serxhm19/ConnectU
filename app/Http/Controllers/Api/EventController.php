@@ -15,7 +15,42 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::all()->toArray();
+        $orderColumn = request('order_column', 'created_at');
+        if (!in_array($orderColumn, ['id', 'category_id', 'name', 'description', 'location', 'start_date', 'end_date', 'user_id'])) {
+            $orderColumn = 'created_at';
+        }
+        $orderDirection = request('order_direction', 'desc');
+        if (!in_array($orderDirection, ['asc', 'desc'])) {
+            $orderDirection = 'desc';
+        }
+
+        $events = Event::query()
+            ->when(request('search_category'), function ($query) {
+                $query->where('category_id', request('search_category'));
+            })
+            ->when(request('search_id'), function ($query) {
+                $query->where('id', request('search_id'));
+            })
+            ->when(request('search_name'), function ($query) {
+                $query->where('name', 'like', '%' . request('search_name') . '%');
+            })
+            ->when(request('search_description'), function ($query) {
+                $query->where('description', 'like', '%' . request('search_description') . '%');
+            })
+            ->when(request('search_location'), function ($query) {
+                $query->where('location', 'like', '%' . request('search_location') . '%');
+            })
+            ->when(request('search_start_date'), function ($query) {
+                $query->where('start_date', 'like', '%' . request('search_start_date') . '%');
+            })
+            ->when(request('search_end_date'), function ($query) {
+                $query->where('end_date', 'like', '%' . request('search_end_date') . '%');
+            })
+            ->when(request('search_user_id'), function ($query) {
+                $query->where('user_id', request('search_user_id'));
+            })
+            ->orderBy($orderColumn, $orderDirection)
+            ->paginate(5);
 
         return $events;
     }

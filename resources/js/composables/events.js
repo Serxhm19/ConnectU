@@ -32,7 +32,38 @@ export default function useEvents() {
     const getEvents = async () => {
         axios.get('/api/events')
         .then(response => {
-            events.value = response.data;
+            events.value = response.data.data;
+        })
+    }
+
+    const getEventsFilter = async (
+        page = 1,
+        search_category = '',
+        search_id = '',
+        search_name = '',
+        search_description = '',
+        search_location = '',
+        search_start_date = '',
+        search_end_date = '',
+        search_user_id = '',
+        order_column = 'created_at',
+        order_direction = 'desc',
+    ) => {
+        axios.get('/api/events?page='+ page +
+        '&search_category=' + search_category +
+        '&search_id=' + search_id +
+        '&search_name=' + search_name +
+        '&search_description=' + search_description +
+        '&search_location=' + search_location +
+        '&search_start_date=' + search_start_date +
+        '&search_end_date=' + search_end_date +
+        '&search_user_id=' + search_user_id +
+        '&order_column=' + order_column +
+        '&order_direction=' + order_direction)
+        .then(response => {
+            console.log('events filtered')
+            console.log(response.data.data)
+            events.value = response.data.data;
         })
     }
     const getPosts = async (
@@ -221,6 +252,7 @@ export default function useEvents() {
         countParticipants,
         signedUp,
         getEvents,
+        getEventsFilter,
         getEvent,
         getEventsPromoter,
         getPromoterEvent,
