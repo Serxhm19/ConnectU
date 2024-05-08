@@ -52,24 +52,27 @@
             
         </div>
     </div>
-    <div class="card flex">
-        <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }"
-            :modal="true">
-            <span class="p-text-secondary block mb-5">Update your information.</span>
-            <div class="flex align-items-center gap-3 mb-3">
-                <label for="username" class="font-semibold w-6rem">Username</label>
-                <InputText id="username" class="flex-auto" autocomplete="off" />
-            </div>
-            <div class="flex align-items-center gap-3 mb-2">
-                <label for="email" class="font-semibold w-6rem">Email</label>
-                <InputText id="email" class="flex-auto" autocomplete="off" />
-            </div>
-            <template #footer>
-                <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
-                <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
-            </template>
-        </Dialog>
+<Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }"
+    :modal="true">
+    <span class="p-text-secondary block mb-5">Update your information.</span>
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="username" class="font-semibold w-6rem">Username</label>
+        <InputText id="username" class="flex-auto" autocomplete="off" />
     </div>
+    <div class="flex align-items-center gap-3 mb-2">
+        <label for="email" class="font-semibold w-6rem">Email</label>
+        <InputText id="email" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex align-items-center gap-3 mb-2">
+        <button class="p-button-outlined" @click="openEditProfileImageModal">Edit Profile Image</button>
+        <button class="p-button-outlined" @click="openEditBackgroundImageModal">Edit Background Image</button>
+    </div>
+    <template #footer>
+        <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
+        <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
+    </template>
+</Dialog>
+
 </template>
 <script setup>
 import promoterView from '../account/promoter.vue';
@@ -323,6 +326,6 @@ const saveEditedUser = () => {
 }
 
 .background-image{
-    margin-top: -55px;
+    margin-top: -55px
 }
 </style>

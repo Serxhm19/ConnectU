@@ -29,16 +29,16 @@ class UserController extends Controller
             $orderDirection = 'desc';
         }
         $users = User::
-        when(request('search_id'), function ($query) {
-            $query->where('id', request('search_id'));
-        })
+            when(request('search_id'), function ($query) {
+                $query->where('id', request('search_id'));
+            })
             ->when(request('search_title'), function ($query) {
-                $query->where('name', 'like', '%'.request('search_title').'%');
+                $query->where('name', 'like', '%' . request('search_title') . '%');
             })
             ->when(request('search_global'), function ($query) {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('id', request('search_global'))
-                        ->orWhere('name', 'like', '%'.request('search_global').'%');
+                        ->orWhere('name', 'like', '%' . request('search_global') . '%');
 
                 });
             })
@@ -51,7 +51,7 @@ class UserController extends Controller
     public function allUsers()
     {
         $users = User::all()->toArray();
-        
+
         return $users;
     }
 
@@ -113,7 +113,7 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        if(!empty($request->password)) {
+        if (!empty($request->password)) {
             $user->password = Hash::make($request->password) ?? $user->password;
         }
 
@@ -137,5 +137,27 @@ class UserController extends Controller
         $user->delete();
 
         return response()->noContent();
+    }
+
+    public function updateProfileImage(Request $request)
+    {
+        // Validar la solicitud
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Obtener el usuario actual
+        $user = auth()->user();
+
+        // Guardar la nueva imagen de perfil
+        $imageName = time() . '.' . $request->profile_image->extension();
+        $request->profile_image->move(public_path('images'), $imageName);
+
+        // Actualizar la imagen de perfil del usuario
+        $user->profile_image = $imageName;
+        $user->save();
+
+        // Devolver una respuesta
+        return response()->json(['message' => 'Imagen de perfil actualizada correctamente']);
     }
 }
