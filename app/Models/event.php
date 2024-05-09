@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class event extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
+    
 
     protected $fillable = [
         'category_id',
@@ -26,10 +28,10 @@ class event extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images/events')
-            ->useFallbackUrl('/images/placeholder.jpg')
-            ->useFallbackPath(public_path('/images/placeholder.jpg'));
+            ->useFallbackUrl('/images')
+            ->useFallbackPath(public_path('/images'));
 
-        
+
     }
 
     public function registerMediaConversions(Media $media = null): void
@@ -41,7 +43,5 @@ class event extends Model implements HasMedia
                 ->height(env('IMAGE_HEIGHT', 300));
         }
     }
-
-
 
 }

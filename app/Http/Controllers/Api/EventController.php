@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Resources\EventResource;
-use App\Http\Resources\zz;
 
 use App\Models\event;
 
@@ -42,7 +41,7 @@ class EventController extends Controller
             })
             ->when(request('search_start_date'), function ($query) {
                 $query->where('start_date', '>=', request('search_start_date'));
-            })            
+            })
             ->when(request('search_end_date'), function ($query) {
                 $query->where('end_date', '<=', request('search_end_date'));
             })
@@ -59,7 +58,7 @@ class EventController extends Controller
                         ->orWhere('end_date', 'like', '%' . $searchGlobal . '%');
                 });
             })
-            
+
             ->orderBy($orderColumn, $orderDirection)
             ->paginate(10);
 
@@ -81,8 +80,11 @@ class EventController extends Controller
         $event = Event::create($validatedData);
 
         if ($request->hasFile('thumbnail')) {
-            $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images');
+            $media = $event->addMedia($request->file('thumbnail'))->toMediaCollection();
+            $media->name = 'thumbnail';
         }
+
+        $event->save();
 
         return new EventResource($event);
     }
@@ -92,35 +94,14 @@ class EventController extends Controller
         $event = Event::find($id);
 
         $event->update($request->validated());
-    
-        if($request->hasFile('thumbnail')) {
+
+        if ($request->hasFile('thumbnail')) {
             $event->media()->delete();
-            $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images');
+            $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images/events');
         }
 
         return new EventResource($event);
-
-
-
-        /*
-        $event = Event::find($id);
-
-        $request->validate([
-            'category_id' => 'sometimes',
-            'name' => 'sometimes',
-            'description' => 'sometimes',
-            'location' => 'sometimes',
-            'start_date' => 'sometimes|date',
-            'end_date' => 'sometimes|date|after_or_equal:start_date',
-        ]);
-
-        $dataToUpdate = $request->all();
-        $event->update($dataToUpdate);
-
-        return response()->json(['success' => true, 'data' => $event]);
-        */
     }
-
     public function destroy($id)
     {
         $event = Event::find($id);
@@ -140,11 +121,11 @@ class EventController extends Controller
     {
         // Buscar eventos por el campo 'promoter'
         $events = Event::where('user_id', $promoter)->get();
-        
+
         // Devolver la respuesta JSON con los eventos encontrados
         return response()->json($events);
 
     }
-    
+
 
 }
