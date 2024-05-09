@@ -1,6 +1,5 @@
 <template>   
 <div class="grid">
-    
     <div class="col-12 lg:col-3 xl:col-3">
         <div class="card-body content-chats-view gotham">
             <div class="card mb-4">
@@ -29,7 +28,6 @@
         </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-6 gotham content-events">
-        {{ events.value }}
             <div style="border-radius: 40px;">
                 <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;"> 
                     <div class="card-body" style="padding: 8px 14px;">
@@ -64,10 +62,10 @@
                 <div class="searchLabel">   
                     <IconField iconPosition="left">
                         <InputIcon class="pi pi-search"> </InputIcon>
-                        <InputText  placeholder="Search" />
+                        <InputText  v-model="search_global" placeholder="Search" />
                     </IconField>
                 </div>
-                <div class="card filter-location">
+                <div class="card filters-container">
                     <div class="title-filter">
                         <h5>Ubicación del evento</h5>
                     </div>
@@ -77,16 +75,23 @@
                         <option v-for="province in provinces" :value="province.id">{{ province.name }}</option>
                     </select>
 
-                    <select class="select-ubi" id="city-selector">
+                    <select class="select-ubi" id="city-selector" v-model="search_location">
                         <option value="" selected>Ciudad</option>
                         <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
                     </select>
                 </div>
-                <div class="card filter-location">
+                <div class="card filters-container">
                     <div class="title-filter">
                         <h5>Fecha del evento</h5>
                     </div>
                     <div class="filter-date">
+                        <div class="form-date">
+                            <input v-model="search_start_date" class="form-date__input" type="date" id="start_date_input" name="input-date-start">
+                        </div>
+
+                        <div class="form-date">
+                            <input v-model="search_end_date" class="form-date__input" type="date" id="end_date_input" name="input-date-start">
+                        </div>
                     </div>
                 </div>
 
@@ -106,8 +111,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                
+                </div>   
             </div>
         </div>
     </div>
@@ -125,7 +129,7 @@
 
     .content-chats-view {
         position: fixed;
-        top: 9rem;
+        top: 7.5rem;
         left: 20px;
         z-index: 997;
         width: 23%;
@@ -181,13 +185,13 @@
 
 
     /*FILTER LOCATION CSS */
-    .filter-location{
+    .filters-container{
         padding: 15px;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
-        height: 150px;
+        height: auto;
         margin-bottom: 1rem;
     }
     .p-tree-wrapper ul {
@@ -198,6 +202,7 @@
 
     .select-ubi{
         border-radius: 20px;
+        margin-top: 15px;
         text-align: center;
         border: 1px solid black;
         width: 220px;
@@ -206,10 +211,36 @@
     /* FILTER DATE CSS */
     .filter-date{
         display:flex;
+        flex-direction: column;
         justify-content: center;
-        width: 100%;
+        align-content: center;
+        width: 60%;
     }
-
+    .form-date {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+    }
+    .form-date__input[type='date'] {
+        appearance: none;
+        color: #1D1D1D;
+        text-align: center;
+        font-size: 16px;
+        border:1px solid #838383;
+        background:#ffffff;
+        padding: 4px;
+        display: inline-block;
+        visibility: visible;
+        width: 100%;
+        border-radius: 20px;
+    }
+    .form-date__input[type='date']:focus {
+        color: #0070BB;
+        background-color: #FFFFFF;
+        border-color: #80BDFF;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
     /* FILTER CATEGORIES CSS */
     .buttons-categories div{
         padding: 0;
@@ -250,6 +281,7 @@
     const {events, users,  getEvents, getEventsFilter, getUsers, deleteEvent} = useEvents()
     const {cities, provinces, getCities, getProvinces, getCitiesByProvince} = useSites()
 
+    const search_global = ref('')
     const search_category = ref('')
     const search_id = ref('')
     const search_name = ref('')
@@ -277,14 +309,9 @@
             console.log(cities.value)
         });
 
-        const selectCity = document.getElementById('city-selector');
-        selectCity.addEventListener('change', async function() {
-            search_location.value = selectCity.value;
-        });
-
         const categoryP = document.getElementsByClassName('category-p');
         const categoryArray = Array.from(categoryP);
-        let eventsAux = events.value;
+
         categoryArray.forEach(categoryFilter => {
             categoryFilter.addEventListener('click', async () => {
                 const categoryName = categoryFilter.innerHTML.substring(1);
@@ -293,7 +320,7 @@
                 if (categoryFilter.classList.contains('selected')) {
                     categoryFilter.classList.remove('selected');
 
-                    events.value = eventsAux;
+                    search_category.value = '';
                 }else{
                     categoryArray.forEach(element => {
                         element.classList.remove('selected');
@@ -304,12 +331,10 @@
                 }
             });
         });
-
-        
     })
 
-    watch([search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {
-        getEventsFilter(1, search_category.value, search_id.value, search_name.value, search_description.value, search_location.value, search_start_date.value, search_end_date.value, search_user_id.value, orderColumn.value, orderDirection.value)
+    watch([search_global, search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {
+        getEventsFilter(1, search_global.value, search_category.value, search_id.value, search_name.value, search_description.value, search_location.value, search_start_date.value, search_end_date.value, search_user_id.value, orderColumn.value, orderDirection.value)
         changeNameLocationEvent()
     });
 

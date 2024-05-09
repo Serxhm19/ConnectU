@@ -38,6 +38,7 @@ export default function useEvents() {
 
     const getEventsFilter = async (
         page = 1,
+        search_global = '',
         search_category = '',
         search_id = '',
         search_name = '',
@@ -50,6 +51,7 @@ export default function useEvents() {
         order_direction = 'desc',
     ) => {
         axios.get('/api/events?page='+ page +
+        '&search_global=' + search_global +
         '&search_category=' + search_category +
         '&search_id=' + search_id +
         '&search_name=' + search_name +

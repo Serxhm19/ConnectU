@@ -41,16 +41,27 @@ class EventController extends Controller
                 $query->where('location', 'like', '%' . request('search_location') . '%');
             })
             ->when(request('search_start_date'), function ($query) {
-                $query->where('start_date', 'like', '%' . request('search_start_date') . '%');
-            })
+                $query->where('start_date', '>=', request('search_start_date'));
+            })            
             ->when(request('search_end_date'), function ($query) {
-                $query->where('end_date', 'like', '%' . request('search_end_date') . '%');
+                $query->where('end_date', '<=', request('search_end_date'));
             })
             ->when(request('search_user_id'), function ($query) {
                 $query->where('user_id', request('search_user_id'));
             })
+            ->when(request('search_global'), function ($query) {
+                $searchGlobal = request('search_global');
+                $query->where(function ($q) use ($searchGlobal) {
+                    $q->Where('name', 'like', '%' . $searchGlobal . '%')
+                        ->orWhere('description', 'like', '%' . $searchGlobal . '%')
+                        ->orWhere('location', 'like', '%' . $searchGlobal . '%')
+                        ->orWhere('start_date', 'like', '%' . $searchGlobal . '%')
+                        ->orWhere('end_date', 'like', '%' . $searchGlobal . '%');
+                });
+            })
+            
             ->orderBy($orderColumn, $orderDirection)
-            ->paginate(5);
+            ->paginate(10);
 
         return $events;
     }
