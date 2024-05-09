@@ -36,7 +36,12 @@
             </div>
             <div class="col-12">
                 <div class="card">
-                    <h1>Hola</h1>
+                    <h2>Te podria interesar</h2>
+                    <div v-for="event in Events" :key="event.id" class="event-card">
+                        <h3>{{ event.name }}</h3>
+                        <p>{{ event.location }}</p>
+                        <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }">Ver más</router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -49,37 +54,38 @@
             <div v-else>
                 <userWiew></userWiew>
             </div>
-            
+
         </div>
     </div>
-<Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }"
-    :modal="true">
-    <span class="p-text-secondary block mb-5">Update your information.</span>
-    <div class="flex align-items-center gap-3 mb-3">
-        <label for="username" class="font-semibold w-6rem">Username</label>
-        <InputText id="username" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex align-items-center gap-3 mb-2">
-        <label for="email" class="font-semibold w-6rem">Email</label>
-        <InputText id="email" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex align-items-center gap-3 mb-2">
-        <button class="p-button-outlined" @click="openEditProfileImageModal">Edit Profile Image</button>
-        <button class="p-button-outlined" @click="openEditBackgroundImageModal">Edit Background Image</button>
-    </div>
-    <template #footer>
-        <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
-        <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
-    </template>
-</Dialog>
+    <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }" :modal="true">
+        <span class="p-text-secondary block mb-5">Update your information.</span>
+        <div class="flex align-items-center gap-3 mb-3">
+            <label for="username" class="font-semibold w-6rem">Username</label>
+            <InputText id="username" class="flex-auto" autocomplete="off" />
+        </div>
+        <div class="flex align-items-center gap-3 mb-2">
+            <label for="email" class="font-semibold w-6rem">Email</label>
+            <InputText id="email" class="flex-auto" autocomplete="off" />
+        </div>
+        <div class="flex align-items-center gap-3 mb-2">
+            <button class="p-button-outlined" @click="openEditProfileImageModal">Edit Profile Image</button>
+            <button class="p-button-outlined" @click="openEditBackgroundImageModal">Edit Background Image</button>
+        </div>
+        <template #footer>
+            <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
+            <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
+        </template>
+    </Dialog>
 
 </template>
 <script setup>
 import promoterView from '../account/promoter.vue';
 import userWiew from '../account/user.vue';
 
+import useEvents from "../../../composables/events";
 
-import InputText from 'primevue/inputtext';
+const { events, users, getEvents, getUsers } = useEvents();
+
 import Button from 'primevue/button';
 
 import Dialog from 'primevue/dialog';
@@ -102,7 +108,10 @@ const initFilters = () => {
 
 initFilters();
 
-onMounted(() => {
+onMounted(async () => {
+    await getEvents();
+    await getUsers();
+
     // console.log('mi vista')
     const vuexData = localStorage.getItem("vuex");
     const vuexArray = JSON.parse(vuexData);
@@ -114,11 +123,7 @@ onMounted(() => {
 
             console.log(events.value);
 
-            events.value.forEach(event => {
-                event.description = stripHtmlTags(event.description);
-            });
-
-        })
+        });
 });
 
 const store = useStore();
@@ -128,7 +133,6 @@ function isPromoter() {
     return user.value.NIF;
 }
 
-const events = ref([]);
 const swal = inject('$swal');
 
 onMounted(() => {
@@ -180,38 +184,7 @@ const deleteTask = (id, index) => {
         });
 }
 
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    return date.toLocaleDateString('es-ES', options);
-}
-
-function isEventExpired(endDate) {
-    const currentDate = new Date();
-    const eventEndDate = new Date(endDate);
-
-    return eventEndDate < currentDate;
-}
-
-
 const displayEditDialog = ref(false);
-const editedUser = ref({
-    // Inicialice editedUser con los datos del usuario actual
-});
-
-const saveEditedUser = () => {
-    // Guarde los datos del usuario editado en la tienda o envíelos al servidor
-    displayEditDialog.value = false;
-};
-
-//function stripHtmlTags(html) {
-//  const doc = new DOMParser().parseFromString(html, 'text/html');
-//return doc.body.textContent || "";
-//}
-
-//events.value.forEach(event => {
-//  event.description = stripHtmlTags(event.description);
-//});
 
 </script>
 <style scoped>
@@ -319,13 +292,13 @@ const saveEditedUser = () => {
 }
 
 .editprofileimage {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border: 2px solid white;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid white;
 }
 
-.background-image{
+.background-image {
     margin-top: -55px
 }
 </style>
