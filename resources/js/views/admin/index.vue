@@ -28,7 +28,27 @@
         </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-6 gotham content-events">
-            <div style="border-radius: 40px;">
+            <div v-if="isLoadingEvents">
+                <div v-for="i in 2"class="card pl-0 pr-0 pt-3">
+                    <div class="d-flex justify-content-between">
+                        <Skeleton width="200px" height="20px" borderRadius="10px" class="mb-3 ml-4"></Skeleton>
+                        <Skeleton width="150px" height="20px" borderRadius="10px" class="mb-3 mr-4"></Skeleton>
+                    </div>
+                    <Skeleton width="100%" height="400px" borderRadius="0px" class="mb-4"></Skeleton>
+                    <div class="d-flex justify-content-between mb-5">
+                        <Skeleton width="200px" height="20px" borderRadius="10px" class="ml-4"></Skeleton>
+                        <Skeleton width="150px" height="20px" borderRadius="10px" class="mr-4"></Skeleton>
+                    </div>
+                    <div class="d-flex justify-content-between mb-5">
+                        <Skeleton width="100%" height="100px" borderRadius="10px" class="ml-6 mr-6"></Skeleton>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <Skeleton width="30%" height="15px" borderRadius="10px" class="mb-3 ml-6 mr-6"></Skeleton>
+                        <Skeleton width="20%" height="15px" borderRadius="10px" class="mb-3 ml-6 mr-6"></Skeleton>
+                    </div>
+                </div>   
+            </div>
+            <div v-else style="border-radius: 40px;">
                 <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;"> 
                     <div class="card-body" style="padding: 8px 14px;">
                         <div class="d-flex w-100 justify-content-between">
@@ -56,6 +76,7 @@
                     </div>
                 </div>
             </div>
+            
         </div>
         <div class="col-12 lg:col-3 xl:col-3 gotham">
             <div class="fixed filters">
@@ -135,7 +156,17 @@
         width: 23%;
     }
 
+    @media (max-width: 768px) {
+        .content-chats-view{
+            display: none;
+        }
+        .content-events{
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-top: 80px;
+        }
 
+    }
     .chats hr{
         border: 1px solid black;
     }
@@ -276,9 +307,10 @@
     import IconField  from "primevue/iconField";
     import InputIcon  from "primevue/inputIcon";
     import InputText  from "primevue/inputText";
+    import Skeleton  from "primevue/skeleton";
     
     const {categories, getCategories, deleteCategory} = useCategories()
-    const {events, users,  getEvents, getEventsFilter, getUsers, deleteEvent} = useEvents()
+    const {isLoadingEvents, events, users,  getEvents, getEventsFilter, getUsers, deleteEvent} = useEvents()
     const {cities, provinces, getCities, getProvinces, getCitiesByProvince} = useSites()
 
     const search_global = ref('')
@@ -305,8 +337,7 @@
         selectProvince.addEventListener('change', async function() {
             const selectedProvince = selectProvince.value;
             
-            await getCitiesByProvince(selectedProvince);    
-            console.log(cities.value)
+            await getCitiesByProvince(selectedProvince);
         });
 
         const categoryP = document.getElementsByClassName('category-p');
@@ -334,7 +365,7 @@
     })
 
     watch([search_global, search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {
-        getEventsFilter(1, search_global.value, search_category.value, search_id.value, search_name.value, search_description.value, search_location.value, search_start_date.value, search_end_date.value, search_user_id.value, orderColumn.value, orderDirection.value)
+        filterEvents()
         changeNameLocationEvent()
     });
 
@@ -366,6 +397,10 @@
         const result = array.find(object => object.id === id);
         return result ? result.name : 'Categoría no encontrada';
     };
+
+    async function filterEvents(){
+        await getEventsFilter(1, search_global.value, search_category.value, search_id.value, search_name.value, search_description.value, search_location.value, search_start_date.value, search_end_date.value, search_user_id.value, orderColumn.value, orderDirection.value)
+    }
 
     function changeNameLocationEvent(){
         /*events.forEach(evento => {
