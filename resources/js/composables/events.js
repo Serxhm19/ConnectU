@@ -5,6 +5,7 @@ import axios from 'axios' // Importa axios para realizar solicitudes HTTP
 export default function useEvents() {
     const promoter = ref([])
     const events = ref([])
+    const isLoadingEvents = ref(true);
     const promoterEvents = ref([])
     const countParticipants = ref();
     const signedUp = ref();
@@ -33,6 +34,7 @@ export default function useEvents() {
         axios.get('/api/events')
         .then(response => {
             events.value = response.data.data;
+            isLoadingEvents.value = false;
         })
     }
 
@@ -66,6 +68,7 @@ export default function useEvents() {
             console.log('events filtered')
             console.log(response.data.data)
             events.value = response.data.data;
+            isLoadingEvents.value = false;
         })
     }
     const getPosts = async (
@@ -245,6 +248,7 @@ export default function useEvents() {
     }
 
     return {
+        isLoadingEvents,
         events,
         event,
         promoterEvents,
