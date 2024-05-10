@@ -1,20 +1,17 @@
 <template>
     <div class="grid">
         <div class="col-12">
-            <div class="card background-image">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between pb-2 mb-4">
-                        <img v-if="backgroundImageUrl.value" :src="backgroundImageUrl.value.background_image_url" class="profile-pic"
-                        alt="Profile Picture">                    </div>
-                </div>
+            <div class="card background-image" v-if="backgroundImageUrl.value"
+                :style="{ 'background-image': 'url(' + backgroundImageUrl.value.background_image_url + ')', 'background-size': 'cover', 'border': '2px solid white' }">
+                
                 <div class="d-flex align-items-left">
                     <img v-if="profileImageUrl.value" :src="profileImageUrl.value.profile_image_url" class="profile-pic"
                         alt="Profile Picture">
                 </div>
-
             </div>
         </div>
     </div>
+
 
     <div class="grid">
         <div class="col-4">
@@ -49,7 +46,8 @@
                     <div v-for="event in Events" :key="event.id" class="event-card">
                         <h3>{{ event.name }}</h3>
                         <p>{{ event.location }}</p>
-                        <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }">Ver más</router-link>
+                        <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }">Ver
+                            más</router-link>
                     </div>
                 </div>
             </div>
@@ -373,7 +371,4 @@ const displayEditDialog = ref(false);
     border: 2px solid white;
 }
 
-.background-image {
-    margin-top: -55px
-}
 </style>
