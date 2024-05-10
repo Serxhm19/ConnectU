@@ -101,9 +101,7 @@ onMounted(() => {
 
             console.log(events.value);
 
-            events.value.forEach(event => {
-                event.description = stripHtmlTags(event.description);
-            });
+
 
         })
 });

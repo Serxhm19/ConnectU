@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -72,20 +73,83 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return UserResource
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        $role = Role::find($request->role_id);
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        $user = User::create([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'nickname' => $request->nickname,
+            'email' => $request->email,
+            'genre' => $request->genre,
+            'password' => bcrypt($request->password),
+            'nif' => $request->nif,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+        ]);
 
-        if ($user->save()) {
-            if ($role) {
-                $user->assignRole($role);
-            }
-            return new UserResource($user);
+        if ($request->hasFile('profile_image')) {
+            $user->addMedia($request->file('profile_image'))
+                ->toMediaCollection('profile-image');
         }
+
+        if ($request->hasFile('background_image')) {
+            $user->addMedia($request->file('background_image'))
+                ->toMediaCollection('background-image');
+        }
+
+        return response()->json($user, 201);
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param UpdateUserRequest $request
+     * @param User $user
+     * @return UserResource
+     */
+    public function uploadProfileImage(Request $request)
+    {
+        // Handle the uploaded profile image
+        $user = auth()->user();
+        if ($request->hasFile('profilePic')) {
+            $user->clearMediaCollection('profile-image');
+            $user->addMedia($request->file('profilePic'))
+                ->toMediaCollection('profile-image');
+        }
+        return response()->json(['message' => 'Profile image uploaded successfully']);
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $user->update([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'nickname' => $request->nickname,
+            'email' => $request->email,
+            'genre' => $request->genre,
+            'nif' => $request->nif,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+        ]);
+
+        if ($request->hasFile('profile_image')) {
+            $user->clearMediaCollection('profile-image');
+            $user->addMedia($request->file('profile_image'))
+                ->toMediaCollection('profile-image');
+        }
+
+        if ($request->hasFile('background_image')) {
+            $user->clearMediaCollection('background-image');
+            $user->addMedia($request->file('background_image'))
+                ->toMediaCollection('background-image');
+        }
+
+        return response()->json($user);
+    }
+    public function getProfileImageUrl()
+    {
+        $user = auth()->user();
+        $profileImageUrl = $user->getFirstMediaUrl('profile-image');
+        return response()->json(['profile_image_url' => $profileImageUrl]);
     }
 
     /**
@@ -98,31 +162,6 @@ class UserController extends Controller
     {
         $user->load('roles');
         return new UserResource($user);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateUserRequest $request
-     * @param User $user
-     * @return UserResource
-     */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        $role = Role::find($request->role_id);
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        if (!empty($request->password)) {
-            $user->password = Hash::make($request->password) ?? $user->password;
-        }
-
-        if ($user->save()) {
-            if ($role) {
-                $user->syncRoles($role);
-            }
-            return new UserResource($user);
-        }
     }
 
     /**
@@ -139,25 +178,5 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-    public function updateProfileImage(Request $request)
-    {
-        // Validar la solicitud
-        $request->validate([
-            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
 
-        // Obtener el usuario actual
-        $user = auth()->user();
-
-        // Guardar la nueva imagen de perfil
-        $imageName = time() . '.' . $request->profile_image->extension();
-        $request->profile_image->move(public_path('images'), $imageName);
-
-        // Actualizar la imagen de perfil del usuario
-        $user->profile_image = $imageName;
-        $user->save();
-
-        // Devolver una respuesta
-        return response()->json(['message' => 'Imagen de perfil actualizada correctamente']);
-    }
 }

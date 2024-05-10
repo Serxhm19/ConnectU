@@ -27,7 +27,7 @@ class event extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('images/events')
+        $this->addMediaCollection('images/user/profile')
             ->useFallbackUrl('/images')
             ->useFallbackPath(public_path('/images'));
 
