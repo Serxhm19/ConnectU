@@ -117,6 +117,18 @@ class UserController extends Controller
         }
         return response()->json(['message' => 'Profile image uploaded successfully']);
     }
+    public function uploadBackgroundImage(Request $request)
+    {
+        // Manejar la imagen de fondo cargada
+        $user = auth()->user();
+        if ($request->hasFile('backgroundImage')) {
+            // Borra la colección de medios existente (si la hay) y agrega la nueva imagen de fondo
+            $user->clearMediaCollection('background-image');
+            $user->addMedia($request->file('backgroundImage'))
+                ->toMediaCollection('background-image');
+        }
+        return response()->json(['message' => 'Background image uploaded successfully']);
+    }
 
     public function update(Request $request, User $user)
     {
@@ -150,6 +162,13 @@ class UserController extends Controller
         $user = auth()->user();
         $profileImageUrl = $user->getFirstMediaUrl('profile-image');
         return response()->json(['profile_image_url' => $profileImageUrl]);
+    }
+
+    public function getBackgroundImageUrl()
+    {
+        $user = auth()->user();
+        $backgroundImageUrl = $user->getFirstMediaUrl('background-image');
+        return response()->json(['background_image_url' => $backgroundImageUrl]);
     }
 
     /**

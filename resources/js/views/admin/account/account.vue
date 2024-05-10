@@ -1,15 +1,17 @@
 <template>
     <div class="grid">
         <div class="col-12">
-            <div class="card background-image"
-                style="background-image: url('/images/logo.png'); background-size: cover; border: 2px solid white;">
+            <div class="card background-image">
                 <div class="card-body">
                     <div class="d-flex justify-content-between pb-2 mb-4">
-                    </div>
+                        <img v-if="backgroundImageUrl.value" :src="backgroundImageUrl.value.background_image_url" class="profile-pic"
+                        alt="Profile Picture">                    </div>
                 </div>
                 <div class="d-flex align-items-left">
-                    <img :src="profileImageUrl" class="profile-pic" alt="Profile Picture">
+                    <img v-if="profileImageUrl.value" :src="profileImageUrl.value.profile_image_url" class="profile-pic"
+                        alt="Profile Picture">
                 </div>
+
             </div>
         </div>
     </div>
@@ -69,7 +71,8 @@
         :modal="true">
         <div class="form-group">
             <label for="profile-image-input">Select new profile image</label>
-            <input type="file" class="form-control" id="profilePic" name="profilePic" @change="updateProfileImage($event)">
+            <input type="file" class="form-control" id="profilePic" name="profilePic"
+                @change="updateProfileImage($event)">
         </div>
         <button type="submit" class="btn btn-primary mt-4 mb-4">Actualizar</button>
 
@@ -78,7 +81,7 @@
     <Dialog v-model:visible="openEditBackgroundImageModal" modal header="Edit Background Image"
         :style="{ width: '50rem' }" :modal="true">
         <input type="file" id="background-image-input" @change="updateBackgroundImage">
-        <label for="background-image-input">Select new background image</label>
+        <button type="submit" class="btn btn-primary mt-4 mb-4">Actualizar</button>
     </Dialog>
     <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }" :modal="true">
         <span class="p-text-secondary block mb-5">Update your information.</span>
@@ -100,11 +103,13 @@
 <script setup>
 import promoterView from '../account/promoter.vue';
 import userWiew from '../account/user.vue';
-
 import useEvents from "../../../composables/events";
+import { reactive } from 'vue';
+
+const profileImageUrl = reactive({ profile_image_url: null });
+const backgroundImageUrl = reactive({ background_image_url: null });
 
 const { events, users, getEvents, getUsers } = useEvents();
-const profileImageUrl = ref(null); // Changed to ref
 
 import Button from 'primevue/button';
 
@@ -115,13 +120,8 @@ import { ref, inject, onMounted, computed } from "vue";
 import { FilterMatchMode } from 'primevue/api';
 
 const openEditProfileImageModal = ref(false);
-function openEditProfileImage() {
-    openEditProfileImageModal.value = true;
-}
 const openEditBackgroundImageModal = ref(false);
-function openEditBackgroundImage() {
-    openEditBackgroundImageModal.value = true;
-}
+
 
 function updateProfileImage(event) {
     const thumbnailFile = event.target.files[0];
@@ -133,19 +133,31 @@ function updateProfileImage(event) {
             'Content-Type': 'multipart/form-data'
         }
     })
-    .then(response => {
-        console.log(response.data);
-    })
-    .catch(error => {
-        console.error(error);
-    });
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
-
 function updateBackgroundImage(event) {
     const file = event.target.files[0];
-    // Upload the file to your server or update the background image URL
-    console.log(file);
+    const formData = new FormData();
+    formData.append('backgroundImage', file);
+
+    axios.post('/api/updateBackgroundImage', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
+
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
@@ -169,6 +181,24 @@ onMounted(async () => {
     axios.get('/api/events/promoter/' + id)
         .then(response => {
             events.value = response.data;
+        });
+
+    axios.get('/api/getProfileImageUrl')
+        .then(response => {
+            profileImageUrl.value = response.data;
+            console.log('Profile image URL:', profileImageUrl.value);
+        })
+        .catch(error => {
+            console.error('Error al obtener la URL de la imagen de perfil:', error);
+        });
+
+    axios.get('/api/getBackgroundImageUrl')
+        .then(response => {
+            backgroundImageUrl.value = response.data;
+            console.log('background image URL:', backgroundImageUrl.value);
+        })
+        .catch(error => {
+            console.error('Error al obtener la URL de la imagen de perfil:', error);
         });
 });
 
@@ -347,4 +377,3 @@ const displayEditDialog = ref(false);
     margin-top: -55px
 }
 </style>
-
