@@ -29,6 +29,7 @@ class EventResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'location' => $this->location,
             'category_id' => $this->category_id,
             'user_id' => $this->user_id,
             'original_image' => count($this->getMedia('*')) > 0 ? $this->getMedia('*')[0]->getUrl() : null,

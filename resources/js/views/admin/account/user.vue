@@ -54,26 +54,22 @@ const search_global = ref('');
 const orderColumn = ref('created_at');
 const orderDirection = ref('desc');
 const { categories, getCategories, deleteCategory } = useCategories();
-const { events, users, getEvents, getUsers, deleteEvent } = useEvents();
-const { cities, provinces, getCities, getProvinces, getCitiesByProvince } = useSites();
+const { events, users, getEvents, getUsers } = useEvents();
 const { can } = useAbility();
 
 onMounted(async () => {
-    await getCategories();
     await getEvents();
     await getUsers();
 });
 
-const user = ref(null); // Referencia al usuario actual
-const userEvents = ref([]); // Eventos a los que está suscrito el usuario
+const user = ref(null); 
+const userEvents = ref([]); 
 
-// Obtener el usuario actual cuando el componente esté montado
 onMounted(() => {
-    user.value = users.value.find(user => user.id === 1); // Asigna el usuario actual
-    fetchUserEvents(); // Llama a la función para obtener los eventos del usuario
+    user.value = users.value.find(user => user.id === 1); 
+    fetchUserEvents(); 
 });
 
-// Función para obtener los eventos a los que está suscrito el usuario
 const fetchUserEvents = () => {
     axios.get(`/api/userEvent`)
         .then(response => {
@@ -84,12 +80,10 @@ const fetchUserEvents = () => {
         });
 }
 
-// Filtrar los eventos para mostrar solo los eventos a los que está suscrito el usuario
 const filteredEvents = computed(() => {
     return events.value.filter(event => userEvents.value.some(userEvent => userEvent.event_id === event.id));
 });
 
-// Observa los cambios en los filtros de búsqueda y actualiza los eventos
 watch([search_id, search_title, search_global], () => {
     getCategories(1, search_id.value, search_title.value, search_global.value);
 });

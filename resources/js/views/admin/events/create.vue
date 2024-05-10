@@ -40,14 +40,15 @@
                                     </option>
                                 </select>
                             </div>
-                            
+
                             <div class="form-gorup mb-2">
                                 <div class="flex">
-                                    <h6 class="mr-1">Fecha inicio</h6>
+                                    <h6 class="mr-1">Location</h6>
                                     <span class="text-danger">*</span>
                                 </div>
                                 <div class="ml-2">
-                                    <input v-model="event.location" type="text" class="form-control" placeholder="Nombre tarea">
+                                    <input v-model="event.location" type="text" class="form-control"
+                                        placeholder="Location">
                                 </div>
                             </div>
 
@@ -89,13 +90,9 @@
                                 </h6>
                                 <span class="text-danger">*</span>
                             </div>
-                            <div>
-                                <DropZone class="p-5" ref="myDropzone" id="dropzone" :url="uploadUrl"
-                                    @vdropzone-success="onUploadSuccess">
-                                    <div class="dz-message" data-dz-message>
-                                        Arrastra y suelta los archivos aquí o haz clic para seleccionar archivos
-                                    </div>
-                                </DropZone>
+                            <div class="form-group">
+                                <label for="thumbnail">Thumbnail</label>
+                                <input type="file" class="form-control" id="thumbnail" name="thumbnail">
                             </div>
                             <div class="text-danger mt-1">
                                 <div v-for="message in validationErrors?.thumbnail">
@@ -127,13 +124,14 @@
 import axios from "axios";
 import { ref, inject, onMounted } from "vue"
 const event = ref({});
-import DropZone from "@/components/DropZone.vue";
 import TextEditorComponent from "@/components/TextEditorComponent.vue";
 
 const stringError = ref();
 const stringSuccess = ref();
 
-// Define una función para eliminar todas las etiquetas HTML del texto
+
+const categories = ref([]);
+
 function stripHtmlTags(html) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || "";
@@ -143,25 +141,34 @@ function addEvent() {
     const vuexData = localStorage.getItem("vuex");
     const vuexArray = JSON.parse(vuexData);
     const userId = vuexArray.auth.user.id;
-    
+
     event.value.description = stripHtmlTags(event.value.description);
 
-    const eventWithUserId = { ...event.value, user_id: Number(userId) };
+    const formData = new FormData();
+    formData.append('name', event.value.name);
+    formData.append('category_id', event.value.category_id);
+    formData.append('description', event.value.description);
+    formData.append('location', event.value.location);
+    formData.append('start_date', event.value.start_date);
+    formData.append('end_date', event.value.end_date);
+    formData.append('user_id', userId);
 
-    axios.post('/api/events/', eventWithUserId)
+    // Append the thumbnail file to the FormData object
+    const thumbnailFile = document.getElementById('thumbnail').files[0];
+    formData.append('thumbnail', thumbnailFile);
+
+    axios.post('/api/events/', formData)
         .then(response => {
             stringSuccess.value = "Evento '" + event.value.name + "' creado correctamente";
             stringError.value = "";
             console.log(response);
-        }).catch(error => {
+        })
+        .catch(error => {
             stringSuccess.value = "";
             stringError.value = error.response.data.message;
             console.log(error);
         });
 }
-
-
-const categories = ref();
 
 onMounted(() => {
     axios.get('/api/category')
@@ -173,21 +180,6 @@ onMounted(() => {
             console.log(error);
         });
 });
-
-const uploadUrl = '/upload';
-
-const onUploadSuccess = (file, response) => {
-};
-
-function upload() {
-
-    axios.post('/upload/', dropzone)
-        .then(response => {
-            console.log(response);
-        }).catch(error => {
-            console.log(error);
-        });
-}
 
 </script>
 

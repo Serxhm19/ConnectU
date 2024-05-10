@@ -8,7 +8,7 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-left">
-                    <img src="\images\logo.png" class="profile-pic" alt="Profile Picture">
+                    <img :src="profileImageUrl" class="profile-pic" alt="Profile Picture">
                 </div>
             </div>
         </div>
@@ -21,6 +21,13 @@
                     <div>
                         <button type="button" class="btn btn-secondary button-edit pi pi-fw pi-user-edit"
                             @click="displayEditDialog = true"></button>
+                    </div>
+                    <div class="flex align-items-center gap-3 mb-2">
+                        <button type="button" class="btn btn-secondary" @click="openEditProfileImageModal = true">Edit
+                            Profile Image</button>
+                        <button type="button" class="btn btn-secondary"
+                            @click="openEditBackgroundImageModal = true">Edit Background
+                            Image</button>
                     </div>
                     <h3 class="nickname">
                         @{{ user.nickname }}
@@ -36,7 +43,12 @@
             </div>
             <div class="col-12">
                 <div class="card">
-                    <h1>Hola</h1>
+                    <h2>Te podria interesar</h2>
+                    <div v-for="event in Events" :key="event.id" class="event-card">
+                        <h3>{{ event.name }}</h3>
+                        <p>{{ event.location }}</p>
+                        <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }">Ver más</router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -49,37 +61,51 @@
             <div v-else>
                 <userWiew></userWiew>
             </div>
-            
+
         </div>
     </div>
-<Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }"
-    :modal="true">
-    <span class="p-text-secondary block mb-5">Update your information.</span>
-    <div class="flex align-items-center gap-3 mb-3">
-        <label for="username" class="font-semibold w-6rem">Username</label>
-        <InputText id="username" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex align-items-center gap-3 mb-2">
-        <label for="email" class="font-semibold w-6rem">Email</label>
-        <InputText id="email" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex align-items-center gap-3 mb-2">
-        <button class="p-button-outlined" @click="openEditProfileImageModal">Edit Profile Image</button>
-        <button class="p-button-outlined" @click="openEditBackgroundImageModal">Edit Background Image</button>
-    </div>
-    <template #footer>
-        <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
-        <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
-    </template>
-</Dialog>
+
+    <Dialog v-model:visible="openEditProfileImageModal" header="Edit Profile Image" :style="{ width: '50rem' }"
+        :modal="true">
+        <div class="form-group">
+            <label for="profile-image-input">Select new profile image</label>
+            <input type="file" class="form-control" id="profilePic" name="profilePic" @change="updateProfileImage($event)">
+        </div>
+        <button type="submit" class="btn btn-primary mt-4 mb-4">Actualizar</button>
+
+    </Dialog>
+
+    <Dialog v-model:visible="openEditBackgroundImageModal" modal header="Edit Background Image"
+        :style="{ width: '50rem' }" :modal="true">
+        <input type="file" id="background-image-input" @change="updateBackgroundImage">
+        <label for="background-image-input">Select new background image</label>
+    </Dialog>
+    <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }" :modal="true">
+        <span class="p-text-secondary block mb-5">Update your information.</span>
+        <div class="flex align-items-center gap-3 mb-3">
+            <label for="username" class="font-semibold w-6rem">Username</label>
+            <InputText id="username" class="flex-auto" autocomplete="off" />
+        </div>
+        <div class="flex align-items-center gap-3 mb-2">
+            <label for="email" class="font-semibold w-6rem">Email</label>
+            <InputText id="email" class="flex-auto" autocomplete="off" />
+        </div>
+        <template #footer>
+            <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
+            <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
+        </template>
+    </Dialog>
 
 </template>
 <script setup>
 import promoterView from '../account/promoter.vue';
 import userWiew from '../account/user.vue';
 
+import useEvents from "../../../composables/events";
 
-import InputText from 'primevue/inputtext';
+const { events, users, getEvents, getUsers } = useEvents();
+const profileImageUrl = ref(null); // Changed to ref
+
 import Button from 'primevue/button';
 
 import Dialog from 'primevue/dialog';
@@ -88,6 +114,38 @@ import axios from "axios";
 import { ref, inject, onMounted, computed } from "vue";
 import { FilterMatchMode } from 'primevue/api';
 
+const openEditProfileImageModal = ref(false);
+function openEditProfileImage() {
+    openEditProfileImageModal.value = true;
+}
+const openEditBackgroundImageModal = ref(false);
+function openEditBackgroundImage() {
+    openEditBackgroundImageModal.value = true;
+}
+
+function updateProfileImage(event) {
+    const thumbnailFile = event.target.files[0];
+    const formData = new FormData();
+    formData.append('profilePic', thumbnailFile);
+
+    axios.post('/api/updateProfileImage', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+function updateBackgroundImage(event) {
+    const file = event.target.files[0];
+    // Upload the file to your server or update the background image URL
+    console.log(file);
+}
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
@@ -98,12 +156,12 @@ const initFilters = () => {
     };
 };
 
-
-
 initFilters();
 
-onMounted(() => {
-    // console.log('mi vista')
+onMounted(async () => {
+    await getEvents();
+    await getUsers();
+
     const vuexData = localStorage.getItem("vuex");
     const vuexArray = JSON.parse(vuexData);
     let id = vuexArray.auth.user.id;
@@ -111,14 +169,7 @@ onMounted(() => {
     axios.get('/api/events/promoter/' + id)
         .then(response => {
             events.value = response.data;
-
-            console.log(events.value);
-
-            events.value.forEach(event => {
-                event.description = stripHtmlTags(event.description);
-            });
-
-        })
+        });
 });
 
 const store = useStore();
@@ -128,11 +179,9 @@ function isPromoter() {
     return user.value.NIF;
 }
 
-const events = ref([]);
 const swal = inject('$swal');
 
 onMounted(() => {
-    // console.log('mi vista')
     const vuexData = localStorage.getItem("vuex");
     const vuexArray = JSON.parse(vuexData);
     let id = vuexArray.auth.user.id;
@@ -180,38 +229,7 @@ const deleteTask = (id, index) => {
         });
 }
 
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    return date.toLocaleDateString('es-ES', options);
-}
-
-function isEventExpired(endDate) {
-    const currentDate = new Date();
-    const eventEndDate = new Date(endDate);
-
-    return eventEndDate < currentDate;
-}
-
-
 const displayEditDialog = ref(false);
-const editedUser = ref({
-    // Inicialice editedUser con los datos del usuario actual
-});
-
-const saveEditedUser = () => {
-    // Guarde los datos del usuario editado en la tienda o envíelos al servidor
-    displayEditDialog.value = false;
-};
-
-//function stripHtmlTags(html) {
-//  const doc = new DOMParser().parseFromString(html, 'text/html');
-//return doc.body.textContent || "";
-//}
-
-//events.value.forEach(event => {
-//  event.description = stripHtmlTags(event.description);
-//});
 
 </script>
 <style scoped>
@@ -319,13 +337,14 @@ const saveEditedUser = () => {
 }
 
 .editprofileimage {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border: 2px solid white;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid white;
 }
 
-.background-image{
+.background-image {
     margin-top: -55px
 }
 </style>
+

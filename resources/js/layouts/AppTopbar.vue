@@ -9,15 +9,7 @@
                 </a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="menu">
-                        <li>
-                            <router-link to="/admin/event/create" class="nav-link menu-a" aria-current="page">
-                                <a href="#0" class="link-wrapper">
-                                    <span class="Text">{{ $t('create_event') }}</span>
-                                    <span><i class="pi pi-plus Icon" style="font-size: 22px;"></i></span>
-                                </a>
-                            </router-link>
-                        </li>
-                        <li> <router-link to="/" class="nav-link menu-a" aria-current="page">
+                        <li> <router-link to="/chats" class="nav-link menu-a" aria-current="page">
                                 <a href="#0" class="link-wrapper">
                                     <span class="Text">{{ $t('chats') }}</span>
                                     <span><i class="pi pi-comments Icon" style="font-size: 22px;"></i></span>
@@ -31,35 +23,39 @@
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="/" class="nav-link menu-a" aria-current="page">
+                            <router-link to="/admin/account" class="nav-link menu-a" aria-current="page">
                                 <a href="#0" class="link-wrapper">
                                     <span class="Text">{{ $t('account') }}</span>
                                     <span><i class="pi pi-user Icon" style="font-size: 22px;"></i></span>
                                 </a>
                             </router-link>
                         </li>
+                        <template v-if="user?.name">
+                            <div class="Account">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><router-link class="dropdown-item" to="/admin/account">My
+                                                Account</router-link></li>
+                                        <li><router-link to="/chats" class="dropdown-item">Chats</router-link></li>
+                                        <li><router-link to="/admin/events/create" class="dropdown-item">Create
+                                                Event</router-link></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                @click="logout">Logout</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </div>
+                        </template>
                     </ul>
                 </div>
-                <template v-if="user?.name">
-                    <div class="Account">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><router-link class="dropdown-item" to="/admin/account">My Account</router-link></li>
-                                <li><router-link to="/chats" class="dropdown-item">Chats</router-link></li>
-                                <li><router-link to="/admin/events/create" class="dropdown-item">Create
-                                        Event</router-link></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a></li>
-                            </ul>
-                        </li>
-                    </div>
-                </template>
+
             </div>
         </nav>
         <!--<p>nav.vue</p>-->
@@ -86,12 +82,15 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
     z-index: 1000;
     width: 100%;
 }
+
 @media (min-width: 768px) {
     .navbar-expand-md .navbar-collapse {
         display: flex !important;
         flex-basis: auto;
         align-items: center;
         justify-content: center;
+        margin-left: 150px;
+
     }
 
     .navbar-nav {
@@ -214,7 +213,12 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
         margin-top: 40px;
     }
 
-    .Account {}
+.Account {
+    margin-left: auto; /* Utiliza márgenes automáticos para desplazar a la derecha */
+    margin-top: 25px; /* Mantén el margen superior según sea necesario */
+}
+
+
 
     /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -260,5 +264,82 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
         margin-top: 40px;
     }
 
+
+
+}
+
+@media (max-width: 768px) {
+    .navbar-collapse .navbar-expand-md {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu li {
+        list-style: none;
+        margin-right: 20px;
+        text-decoration: none;
+    }
+
+    .layout-topbar-logo img {
+        height: 2.5rem;
+        margin: auto;
+    }
+
+    .menu a span.Text {
+        display: none;
+    }
+
+    .menu a span.Icon {
+        font-size: 24px;
+    }
+
+    .Account {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    ol,
+    ul,
+    dl {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-link.menu-a span.Text {
+        display: none;
+    }
+
+    .nav-link.menu-a span.Icon {
+        font-size: 24px;
+    }
+
+    .logo-wrapper.layout-topbar-logo img {
+        height: 30px;
+    }
+
+    .logo-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ml-auto {
+        margin-left: auto;
+        /* Estilo para alinear a la derecha */
+    }
+
+
+    .user-logo {
+        display: none;
+        /* Ocultar la imagen de perfil en dispositivos móviles */
+    }
 }
 </style>

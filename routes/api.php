@@ -94,12 +94,14 @@ Route::post('groupuser/update/{id}', [GroupUserController::class, 'update']);
 //--------------------------Messages-----------------------------//
 //Route::post('/send-message', [MessagesController::class, 'sendMessage']);
 Route::post('/send-message/{group_id}', [MessagesController::class, 'sendMessage']);
-Route::get('/messages', [MessagesController::class, 'index']); 
-Route::post('/messages', [MessagesController::class, 'store']); 
-Route::put('/messages/{id}', [MessagesController::class, 'update']); 
-Route::delete('/messages/{id}', [MessagesController::class, 'destroy']); 
+Route::get('/messages', [MessagesController::class, 'index']);
+Route::post('/messages', [MessagesController::class, 'store']);
+Route::put('/messages/{id}', [MessagesController::class, 'update']);
+Route::delete('/messages/{id}', [MessagesController::class, 'destroy']);
 
 //---------------------------------------------------------------//
+Route::post('updateProfileImage', [UserController::class, 'uploadProfileImage']);
+Route::get('/user/profile-image-url', [UserController::class, 'getProfileImageUrl']);
 
 //--------------------------UserEvent-----------------------------//
 Route::get('/userEvent', [User_eventController::class, 'index']);
@@ -114,7 +116,7 @@ Route::get('users/getUsers', [UserController::class, 'allUsers']);
 Route::apiResource('posts', PostController::class);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UserController::class);
-    
+
     //Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
     //Route::apiResource('exercises', ExerciseController::class);

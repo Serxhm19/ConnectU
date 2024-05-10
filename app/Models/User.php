@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasFactory, InteractsWithMedia;
 
@@ -59,6 +61,26 @@ class User extends Authenticatable
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('profile-image')
+            ->useFallbackUrl('/images/default-profile-image.png')
+            ->useFallbackPath(public_path('/images/default-profile-image.png'));
+
+        $this->addMediaCollection('background-image')
+            ->useFallbackUrl('/images/default-background-image.png')
+            ->useFallbackPath(public_path('/images/default-background-image.png'));
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        if (env('RESIZE_IMAGE') === true) {
+            $this->addMediaConversion('resized-image')
+                ->width(env('IMAGE_WIDTH', 300))
+                ->height(env('IMAGE_HEIGHT', 300));
+        }
     }
 }
 
