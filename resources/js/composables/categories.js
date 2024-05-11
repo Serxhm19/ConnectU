@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 export default function useCategories() {
     const categories = ref([])
     const categoryList = ref([])
+    const loadingCategories = ref(true)
     const category = ref({
         name: ''
     })
@@ -29,6 +30,7 @@ export default function useCategories() {
             '&order_direction=' + order_direction)
             .then(response => {
                 categories.value = response.data;
+                loadingCategories.value = false;
             })
     }
 
@@ -124,6 +126,7 @@ export default function useCategories() {
     }
 
     return {
+        loadingCategories,
         categoryList,
         categories,
         category,
@@ -134,6 +137,5 @@ export default function useCategories() {
         updateCategory,
         deleteCategory,
         validationErrors,
-        isLoading
     }
 }

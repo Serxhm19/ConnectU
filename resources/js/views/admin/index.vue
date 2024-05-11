@@ -8,7 +8,7 @@
                         <hr>
                         <div class="list-group">
                             <div class="list-group-item list-group-chat">
-                                <div v-if="isLoadingUserEvents || true" v-for="x in 3">
+                                <div v-if="isLoadingUserEvents" v-for="x in 3">
                                     <div class="flex mb-3">
                                         <Skeleton shape="circle" size="4rem" class="mr-2" borderRadius="50px"></Skeleton>
                                         <div>
@@ -107,13 +107,9 @@
                         <h5>Ubicación del evento</h5>
                     </div>
 
-                    <select class="select-ubi" id="province-selector">
-                        <option value="" selected>Provincia</option>
-                        <option v-for="province in provinces" :value="province.id">{{ province.name }}</option>
-                    </select>
-
                     <select class="select-ubi" id="city-selector" v-model="search_location">
                         <option value="" selected>Ciudad</option>
+                        <AutoComplete v-model="value" :suggestions="items" @complete="search" />
                         <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
                     </select>
                 </div>
@@ -138,7 +134,7 @@
                     <div class="title-filter">
                         <h5>Categorías más buscadas</h5>
                     </div>
-                    <div class="buttons-categories d-flex">
+                    <div v-if="!loadingCategories" class="buttons-categories d-flex">
                         <div>
                             <div v-for="(category, index) in categories.slice(0, 5)" :key="index">
                                 <p class="category-p">#{{ category.name }}</p>
@@ -147,6 +143,13 @@
                         <div>
                             <div v-for="(category, index) in categories.slice(5, 10)" :key="index">
                                 <p class="category-p">#{{ category.name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="buttons-categories">
+                        <div>
+                            <div v-for="x in 5">
+                                <Skeleton width="100%" height="20px" borderRadius="10px" class="mb-4"></Skeleton>
                             </div>
                         </div>
                     </div>
@@ -334,7 +337,8 @@ input.p-inputtext:focus {
 </style>
 <script setup>
 import { useAbility } from '@casl/vue';
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
+import { useStore } from 'vuex';
 
 import useCategories from "../../composables/categories_event";
 import useEvents from "../../composables/events";
@@ -344,10 +348,11 @@ import IconField from "primevue/iconField";
 import InputIcon from "primevue/inputIcon";
 import InputText from "primevue/inputText";
 import Skeleton from "primevue/skeleton";
+import AutoComplete from "primevue/autocomplete";
 
-const { categories, getCategories, deleteCategory } = useCategories()
+const { loadingCategories, categories, getCategories, deleteCategory } = useCategories()
 const { isLoadingEvents, isLoadingUserEvents, events, users, events_user, getEvents, getEventsFilter, getUsers, getEventsUser } = useEvents()
-const { cities, provinces, getCities, getProvinces, getCitiesByProvince } = useSites()
+const { cities, getCities } = useSites()
 
 const search_global = ref('')
 const search_category = ref('')
@@ -361,6 +366,7 @@ const search_user_id = ref('')
 const orderColumn = ref('created_at')
 const orderDirection = ref('desc')
 
+
 onMounted(async () => {
 
     document.title = 'ConnectU - Home';
@@ -368,22 +374,22 @@ onMounted(async () => {
     favicon.rel = 'icon';
     favicon.href = '/images/favicon-32x32.png';
     document.head.appendChild(favicon);
+    
+    const store = useStore();
+    const user = computed(() => store.state.auth.user);
 
-    await getCategories()
     await getCities()
-    await getProvinces()
+    await getCategories()
     await getUsers()
     await getEvents()
-    await getEventsUser(1)
-    console.log('events user: ');
-    console.log(events_user.value)
+    await getEventsUser(user.value.id)
+
     changeNameLocationEvent()
 
     watch([search_global, search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {
         isLoadingEvents.value = true;
         filterEvents()
         changeNameLocationEvent()
-
     });
 
     const categoryP = document.getElementsByClassName('category-p');
