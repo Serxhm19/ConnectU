@@ -365,6 +365,7 @@
     })
 
     watch([search_global, search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {
+        isLoadingEvents.value = true;
         filterEvents()
         changeNameLocationEvent()
     });

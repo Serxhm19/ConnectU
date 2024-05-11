@@ -23,7 +23,7 @@ class EventController extends Controller
             $orderDirection = 'desc';
         }
 
-        $events = Event::query()
+        $events = Event::with('media')
             ->when(request('search_category'), function ($query) {
                 $query->where('category_id', request('search_category'));
             })
@@ -76,18 +76,24 @@ class EventController extends Controller
     {
         $validatedData = $request->validated();
         $validatedData['user_id'] = auth()->id();
-
+    
         $event = Event::create($validatedData);
-
+    
         if ($request->hasFile('thumbnail')) {
             $media = $event->addMedia($request->file('thumbnail'))->toMediaCollection();
             $media->name = 'thumbnail';
         }
-
+    
+        if ($request->hasFile('additional_image')) { 
+            $media = $event->addMediaFromRequest('additional_image')->preservingOriginal()->toMediaCollection('images/events'); 
+            $media->name = 'additional_image';
+        }
+    
         $event->save();
-
+    
         return new EventResource($event);
     }
+    
 
     public function update($id, StoreEventRequest $request)
     {
@@ -98,6 +104,11 @@ class EventController extends Controller
         if ($request->hasFile('thumbnail')) {
             $event->media()->delete();
             $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images/events');
+        }
+
+        if ($request->hasFile('aditional-thumbnail')) {
+            $event->media()->delete();
+            $event->addMediaFromRequest('aditional-thumbnail')->preservingOriginal()->toMediaCollection('images/events');
         }
 
         return new EventResource($event);
@@ -112,17 +123,15 @@ class EventController extends Controller
     }
     public function show($id)
     {
-        $event = Event::find($id);
+        $event = Event::with('media')->find($id);
         return response()->json($event);
 
     }
 
     public function showByPromoter($promoter)
     {
-        // Buscar eventos por el campo 'promoter'
-        $events = Event::where('user_id', $promoter)->get();
-
-        // Devolver la respuesta JSON con los eventos encontrados
+        $events = Event::with('media')->where('user_id', $promoter)->get();
+        
         return response()->json($events);
 
     }

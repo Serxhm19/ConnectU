@@ -1,18 +1,16 @@
 <template>
-    <div v-if="loading" class="grid loading">
-        <section class="card event ml-6 mr-6 mt-3 col-12 grid">
+    
+    <div v-if="loading" class="grid loading d-flex justify-content-center">
+        <section class="card event event-loading ml-6 mr-6 mt-3 col-12 grid">
             <div class="card">
-                <div class="col-5"></div>
-                <div class="col-2"><ProgressSpinner /></div>
-                <div class="col-5"></div>
+                <div class="col-12"><ProgressSpinner /></div>
             </div>
             
         </section>
     </div>
     <div v-else class="grid absolut">
         <section class="card event mt-3 col-12 grid">
-            <div class="event-header d-flex flex-column col-12">
-                
+            <div class="event-header col-12" :style="{ 'background-image': 'url(' + event.media[0].original_url + ')'}">
                 <p class="add-event">
                     {{ countParticipants }} Ins 
                     <button v-if="!signedUp" @click="inscribirse" class="btn btn-link add-event-button">Inscribirse</button>
@@ -20,15 +18,16 @@
                 </p>
                 
                 <div class="name-container">
-                    <h1 class="name-event text-left ml-7">{{ event.name }}</h1>
+                    <h1 class="name-event">{{ event.name }}</h1>
                     <p class="by-text">By {{promoter.nickname}}</p>
                 </div>
                 
             </div>
             <div class="content-event col-12">
+                {{  event }}
                 <p>{{ event.description }}</p>
-                <img src="/images/eventoPrueba.webp" alt="">
-                <p>{{ event.description }}</p>                              
+                <img src="" alt="">
+                <p>{{ event.more_information }}</p>                              
             </div>
             <div class="grid">
                 <div class="col-0 lg:col-0 xl:col-3"></div>
@@ -48,7 +47,7 @@
             </div>
             
             <section class="other-events col-12 mb-6">
-                <div class="d-flex">
+                <div class="d-flex mt-8">
                     <h4 class="title-other ml-0">You may also be interested...</h4>
                     <div class="gradient-blue gradient-slader"></div>
                 </div>
@@ -83,9 +82,10 @@ import Tag from "primevue/tag";
 import useEvents from "@/composables/events";
 import { useStore } from 'vuex';
 
-const {event, events, promoter, promoterEvents, countParticipants, signedUp,  getEvent, getPromoterEvent, getUsers, getCountParticipants, signedUpUser, signUser, unsignUser, deleteEvent} = useEvents()
+const {event, promoter, promoterEvents, countParticipants, signedUp,  getEvent, getUsers, getCountParticipants, signedUpUser, signUser, unsignUser} = useEvents()
 const route = useRoute()
 const store = useStore();
+const aditional_image = ref('');
 const user = store.state.auth.user;
 let evento_id = '';
 const loading = ref(true);
@@ -94,6 +94,7 @@ onMounted(async () => {
 
 
         await getEvent(evento_id);
+
 
         await getCountParticipants(evento_id);
         await getUsers(event.value.user_id);
@@ -105,6 +106,7 @@ onMounted(async () => {
 onUpdated(async () => {
     if (evento_id != route.params.id) {
         await getEvent(route.params.id);    
+
         await getCountParticipants(route.params.id);
         evento_id = route.params.id;
         await signedUpUser(user.id, route.params.id);
@@ -145,7 +147,17 @@ signUser
         justify-content: center;
     }
     .loading{
-        margin-top: 240px;
+        margin-top: 150px;
+        height: 500px;
+        width: 100%;
+    }
+    .event-loading{
+        height: 500px;
+        width: 500px;
+    }
+    .loading .card{
+        height: 500px;
+        width: 500px;
     }
     
 
@@ -157,6 +169,8 @@ signUser
     }
 
     .event-header {
+        display: flex;
+        flex-direction: column;
         background-image: url('/images/eventoPrueba.webp');
         background-repeat: no-repeat;
         background-size: cover;
@@ -187,6 +201,10 @@ signUser
     }
     .name-container{
         margin-top: 50px;
+    }
+    .name-event{
+        margin-left: 7rem;
+        text-align: left;
     }
 
     .by-text{
@@ -326,5 +344,38 @@ signUser
         border-color: #0070BB;
         color: white;
         background-color: #0070BB;
+    }
+
+    @media (max-width: 768px) {
+        .event-header{
+            min-height: 300px;
+            flex-direction: column-reverse;
+        }
+        .event-header::after{
+            max-height: 300px;
+            flex-direction: column-reverse;
+        }
+        .by-text{
+            display: none;
+        }
+        .add-event{
+            align-self: center;
+        }
+        .name-promoter{
+            width: auto;
+            padding: 2px 15px
+        }
+        .name-event{
+            margin: 0;
+            text-align: center;
+        }
+        .title-other{
+            margin-top: 40px;
+            padding-left: 20px;
+            text-align: left;
+        }
+        .gradient-blue{
+            display: none;
+        }
     }
 </style>

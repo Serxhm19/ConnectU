@@ -107,12 +107,12 @@ const { events, users, getEvents, getUsers } = useEvents();
 const profileImageUrl = ref(null); // Changed to ref
 
 import Button from 'primevue/button';
-
+import { FilterMatchMode } from 'primevue/api';
 import Dialog from 'primevue/dialog';
+
 import { useStore } from 'vuex';
 import axios from "axios";
 import { ref, inject, onMounted, computed } from "vue";
-import { FilterMatchMode } from 'primevue/api';
 
 const openEditProfileImageModal = ref(false);
 function openEditProfileImage() {

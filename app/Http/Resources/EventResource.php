@@ -17,11 +17,7 @@ class EventResource extends JsonResource
     {
         $resized_image="";
         try {
-            $resized_image = $this->getMedia('*');//[0]->getUrl('resized-image');
-           // return resized_image;
-            if(count($resized_image) != 0){
-               // $resized_image = $resized_image[0]->getUrl('resized-image');
-            }
+            $resized_image = $this->getMedia('*');
         } catch (Exception $e) {
             $resized_image="";
         }
@@ -29,10 +25,12 @@ class EventResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'more_information' => $this->more_information,
             'location' => $this->location,
             'category_id' => $this->category_id,
             'user_id' => $this->user_id,
             'original_image' => count($this->getMedia('*')) > 0 ? $this->getMedia('*')[0]->getUrl() : null,
+            'aditional_image' => count($this->getMedia('*')) > 1 ? $this->getMedia('*')[1]->getUrl() : null,
             'resized_image' => $resized_image,
             'created_at' => $this->created_at?->toDateString()
         ];

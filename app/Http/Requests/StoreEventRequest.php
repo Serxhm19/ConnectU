@@ -29,6 +29,7 @@ class StoreEventRequest extends FormRequest
             'category_id' => 'required',
             'location' => 'required',
             'description' => 'required',
+            'more_information' => 'required',
             'start_date' => 'required',
             'end_date' => 'required'
         ];

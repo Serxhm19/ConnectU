@@ -100,18 +100,43 @@
                                 </div>
                             </div>
                         </div>
-
-
+                    </div>
+                    <div class="w-50 m-4">
+                        <div class="form-group m-2">
+                            <div class="flex">
+                                <h6 class="mr-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-arrow-down-square" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                                    </svg> Imagen adicional del evento
+                                </h6>
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="aditional-thumbnail">Thumbnail</label>
+                                <input type="file" class="form-control" id="aditional-thumbnail" name="aditional-thumbnail">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group mb-2">
+                <div class="form-group mb-8">
                     <div class="flex">
                         <h6 class="mr-1">Descripción</h6>
                         <span class="text-danger">*</span>
                     </div>
                     <div class="ml-2">
                         <TextEditorComponent v-model="event.description" />
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="flex">
+                        <h6 class="mr-1">Información adicional sobre tu evento</h6>
+                        <span class="text-danger">*</span>
+                    </div>
+                    <div class="ml-2">
+                        <TextEditorComponent v-model="event.more_information" />
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary mt-4 mb-4">Crear evento</button>
@@ -148,26 +173,29 @@ function addEvent() {
     formData.append('name', event.value.name);
     formData.append('category_id', event.value.category_id);
     formData.append('description', event.value.description);
+    formData.append('more_information', event.value.more_information);
     formData.append('location', event.value.location);
     formData.append('start_date', event.value.start_date);
     formData.append('end_date', event.value.end_date);
     formData.append('user_id', userId);
 
-    // Append the thumbnail file to the FormData object
     const thumbnailFile = document.getElementById('thumbnail').files[0];
     formData.append('thumbnail', thumbnailFile);
+
+    const aditionalThumbnail = document.getElementById('aditional-thumbnail').files[1];
+    formData.append('aditional_image', aditionalThumbnail);
 
     axios.post('/api/events/', formData)
         .then(response => {
             stringSuccess.value = "Evento '" + event.value.name + "' creado correctamente";
             stringError.value = "";
-            console.log(response);
         })
         .catch(error => {
             stringSuccess.value = "";
             stringError.value = error.response.data.message;
             console.log(error);
         });
+
 }
 
 onMounted(() => {
