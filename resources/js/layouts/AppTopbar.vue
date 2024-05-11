@@ -17,7 +17,7 @@
                             </router-link>
                         </li>
                         <li class="logo-wrapper">
-                            <router-link to="/" class="layout-topbar-logo">
+                            <router-link to="/admin" class="layout-topbar-logo">
                                 <img src="/images/connectu.svg" alt="logo" />
                                 <span></span>
                             </router-link>

@@ -10,7 +10,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="menu">
                         <li>
-                            <router-link to="/" class="nav-link menu-a" aria-current="page">
+                            <router-link to="/chats" class="nav-link menu-a" aria-current="page">
                                 <a href="#0" class="link-wrapper">
                                     <span class="Text">{{ $t('chats') }}</span>
                                     <span><i class="pi pi-comments Icon" style="font-size: 22px;"></i></span>
@@ -18,13 +18,13 @@
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="/" class="layout-topbar-logo">
+                            <router-link to="/admin" class="layout-topbar-logo">
                                 <img src="/images/connectu.svg" alt="logo" />
                                 <span></span>
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="/" class="nav-link menu-a" aria-current="page">
+                            <router-link to="/admin/account" class="nav-link menu-a" aria-current="page">
                                 <a href="#0" class="link-wrapper">
                                     <span class="Text">{{ $t('account') }}</span>
                                     <span><i class="pi pi-user Icon" style="font-size: 22px;"></i></span>
@@ -41,7 +41,7 @@
                                 <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><router-link class="dropdown-item" to="/Account">My Account</router-link></li>
+                                <li><router-link class="dropdown-item" to="/admin/Account">My Account</router-link></li>
                                 <li><router-link to="/chats" class="dropdown-item">Chats</router-link></li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -77,6 +77,7 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
     z-index: 1000;
     width: 100%;
 }
+
 @media (min-width: 768px) {
     .navbar-expand-md .navbar-collapse {
         display: flex !important;
@@ -99,11 +100,13 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
 
     .nav-item.dropdown {
         justify-self: end;
+        width: 100px;
     }
 
 
     .nav-item a {
         font-family: Gotham;
+        width: auto;
     }
 
     .user-logo {
@@ -203,6 +206,15 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
     .layout-topbar-logo img {
         height: 50px;
         margin-top: 40px;
+    }
+
+    .dropdown-menu.show {
+        display: block;
+        width: 100px;
+    }
+
+    .dropdown-divider {
+        width: fit-content;
     }
 
     .Account {}
