@@ -44,13 +44,15 @@
                 </div>
             </div>
             <div class="col-12">
-                <div class="card">
-                    <h2>Te podria interesar</h2>
-                    <div v-for="event in Events" :key="event.id" class="event-card">
-                        <h3>{{ event.name }}</h3>
-                        <p>{{ event.location }}</p>
-                        <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }">Ver
-                            más</router-link>
+                <div class="col-12">
+                    <div class="card">
+                        <h2>Te podria interesar</h2>
+                        <div v-for="event in randomEvents" :key="event.id" class="event-card">
+                            <h3>{{ event.name }}</h3>
+                            <p>{{ event.location }}</p>
+                            <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }">Ver
+                                más</router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -114,6 +116,9 @@ import { reactive } from 'vue';
 const profileImageUrl = reactive({ profile_image_url: null });
 const backgroundImageUrl = reactive({ background_image_url: null });
 
+
+import useSites from "../../../composables/sites";
+const { cities, getCities } = useSites()
 const { events, users, getEvents, getUsers } = useEvents();
 
 import Button from 'primevue/button';
@@ -124,9 +129,16 @@ import { useStore } from 'vuex';
 import axios from "axios";
 import { ref, inject, onMounted, computed } from "vue";
 
+const randomEvents = ref([]);
+
 const openEditProfileImageModal = ref(false);
 const openEditBackgroundImageModal = ref(false);
 
+
+const getName = (array, id) => {
+    const result = array.find(object => object.id === id);
+    return result ? result.name : 'Categoría no encontrada';
+};
 
 function updateProfileImage(event) {
     const thumbnailFile = event.target.files[0];
@@ -207,6 +219,8 @@ initFilters();
 onMounted(async () => {
     await getEvents();
     await getUsers();
+    generateRandomEvents();
+    await getCities()
 
     const vuexData = localStorage.getItem("vuex");
     const vuexArray = JSON.parse(vuexData);
@@ -215,13 +229,19 @@ onMounted(async () => {
     document.title = 'ConnectU - Account';
     const favicon = document.createElement('link');
     favicon.rel = 'icon';
-    favicon.href = '/images/favicon-32x32.png'; 
+    favicon.href = '/images/favicon-32x32.png';
     document.head.appendChild(favicon);
 
 
     axios.get('/api/events/promoter/' + id)
         .then(response => {
             events.value = response.data;
+
+            events.value.forEach(event => {
+        const cityId = event.location;
+        const cityName = getName(cities.value, cityId);
+        event.location = cityName;
+      });
         });
 
     axios.get('/api/getProfileImageUrl')
@@ -302,6 +322,17 @@ const deleteTask = (id, index) => {
 
 const displayEditDialog = ref(false);
 
+function generateRandomEvents() {
+    const eventCount = events.value.length;
+    const randomIndices = [];
+    while (randomIndices.length < 3) {
+        const randomIndex = Math.floor(Math.random() * eventCount);
+        if (!randomIndices.includes(randomIndex)) {
+            randomIndices.push(randomIndex);
+        }
+    }
+    randomEvents.value = randomIndices.map(index => events.value[index]);
+}
 </script>
 <style scoped>
 .profile-pic {
