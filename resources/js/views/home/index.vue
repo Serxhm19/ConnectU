@@ -97,8 +97,8 @@
                     </div>
                     <div class="col-md-12 card-register">
                         <div class="card Register ">
-                            <h2 class="RegisterText">Don't have an account?</h2> <router-link :to="{ name: 'auth.register' }"
-                                class="btn btn-link btn-sm float-end">
+                            <h2 class="RegisterText">Don't have an account?</h2> <router-link
+                                :to="{ name: 'auth.register' }" class="btn btn-link btn-sm float-end">
                                 Register
                             </router-link>
                         </div>
@@ -111,7 +111,7 @@
 
 </template>
 <style scoped lang="scss">
-@import "../../../sass/login.scss"; 
+@import "../../../sass/login.scss";
 
 .layout-main-container {
     display: flex;
@@ -123,16 +123,14 @@
     margin: 0;
     background: white !important;
 }
-
 </style>
 
 <script setup>
 
 import useAuth from '@/composables/auth'
 import axios from "axios";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 const { registerForm, validationErrors, processing, submitRegister, loginForm, submitLogin, registerFormPromoter, submitRegisterPromoter } = useAuth();
-
 
 
 // Declaración de la referencia para almacenar la categoría seleccionada
@@ -143,6 +141,14 @@ const selectCategory = (categoryItem) => {
     selectedCategory = categoryItem;
 }
 
+onMounted(async () => {
+
+    document.title = 'ConnectU - LogIn';
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.href = '/images/favicon-32x32.png';
+    document.head.appendChild(favicon);
+});
 
 // Carga inicial de las categorías
 const category = ref([]);

@@ -449,6 +449,14 @@ import { ref } from "vue";
 const { registerForm, validationErrors, processing, submitRegister, loginForm, submitLogin, registerFormPromoter, submitRegisterPromoter } = useAuth();
 
 
+onMounted(async () => {
+
+document.title = 'ConnectU - Register';
+const favicon = document.createElement('link');
+favicon.rel = 'icon';
+favicon.href = '/images/favicon-32x32.png';
+document.head.appendChild(favicon);
+});
 
 // Declaración de la referencia para almacenar la categoría seleccionada
 const selectedCategory = ref(null);

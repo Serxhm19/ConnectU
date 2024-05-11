@@ -108,7 +108,12 @@ export default {
   mounted() {
     setInterval(this.fetchMessages, 3000);
     this.fetchUserEvents();
+    
     document.title = 'ConnectU - Chats';
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.href = '/images/favicon-32x32.png'; 
+    document.head.appendChild(favicon);
   },
 
   computed: {

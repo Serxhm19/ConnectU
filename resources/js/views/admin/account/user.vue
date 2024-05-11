@@ -2,10 +2,8 @@
     <div class="col-lg-12">
         <div class="card events">
             <div style="border-radius: 40px;">
-                <div class="card">
-                    <h2>Proximos Eventos</h2>
+                   <h2>Proximos Eventos</h2>
                     <a>Mira tu lista de los proximos eventos a los que asistiras!</a>
-                </div>
                 <div v-for="event in filteredEvents" :key="event.id" class="card event-home" style="border-radius: 20px;">
                     <div class="card-body" style="padding: 8px 14px;">
                         <div class="d-flex w-100 justify-content-between">

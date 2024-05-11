@@ -1,9 +1,9 @@
 <template>
     <div class="grid">
-        <div class="col-12">
+        <div class="col-12 col-sm-12">
             <div class="card background-image" v-if="backgroundImageUrl.value"
                 :style="{ 'background-image': 'url(' + backgroundImageUrl.value.background_image_url + ')', 'background-size': 'cover', 'border': '2px solid white' }">
-                
+
                 <div class="d-flex align-items-left">
                     <img v-if="profileImageUrl.value" :src="profileImageUrl.value.profile_image_url" class="profile-pic"
                         alt="Profile Picture">
@@ -11,31 +11,34 @@
             </div>
         </div>
     </div>
-
-
     <div class="grid">
-        <div class="col-4">
+        <div class="col-4 col-sm-12">
             <div class="card">
                 <div class="col-12">
                     <div>
                         <button type="button" class="btn btn-secondary button-edit pi pi-fw pi-user-edit"
+                            style="font-size: 18px; display: flex; align-items: center;"
                             @click="displayEditDialog = true"></button>
                     </div>
-                    <div class="flex align-items-center gap-3 mb-2">
-                        <button type="button" class="btn btn-secondary" @click="openEditProfileImageModal = true">Edit
-                            Profile Image</button>
-                        <button type="button" class="btn btn-secondary"
-                            @click="openEditBackgroundImageModal = true">Edit Background
-                            Image</button>
+                    <div class="editButtons">
+                        <button class="editButton" @click="openEditProfileImageModal = true">
+                            <i class="pi pi-pencil"></i> Profile Image
+                        </button>
+                        <button class="editButton" @click="openEditBackgroundImageModal = true">
+                            <i class="pi pi-pencil"></i> Background Image
+                        </button>
                     </div>
-                    <h3 class="nickname">
-                        @{{ user.nickname }}
-                    </h3>
                 </div>
                 <div>
                     <div class="col-4">
                         <h2 class="name">
                             {{ user.name }} {{ user.surname }}
+                        </h2>
+                        <h3 class="nickname">
+                            @{{ user.nickname }}
+                        </h3>
+                        <h2 class="email">
+                            {{ user.email }}
                         </h2>
                     </div>
                 </div>
@@ -53,7 +56,7 @@
             </div>
         </div>
 
-        <div class="col-8">
+        <div class="col-8 col-sm-12">
             <div v-if="isPromoter()">
                 <promoterView></promoterView>
             </div>
@@ -73,23 +76,27 @@
                 @change="updateProfileImage($event)">
         </div>
         <button type="submit" class="btn btn-primary mt-4 mb-4">Actualizar</button>
-
     </Dialog>
 
-    <Dialog v-model:visible="openEditBackgroundImageModal" modal header="Edit Background Image"
-        :style="{ width: '50rem' }" :modal="true">
-        <input type="file" id="background-image-input" @change="updateBackgroundImage">
+    <Dialog v-model:visible="openEditBackgroundImageModal" header="Edit Background Image" :style="{ width: '50rem' }"
+        :modal="true">
+        <div class="form-group">
+            <label for="profile-image-input">Select new background image</label>
+            <input type="file" class="form-control" id="backgroundPic" name="backgroundPic"
+                @change="updateBackgroundImage($event)">
+        </div>
         <button type="submit" class="btn btn-primary mt-4 mb-4">Actualizar</button>
     </Dialog>
-    <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }" :modal="true">
+    <Dialog v-model:visible="displayEditDialog" modal header="Edit Profile" :style="{ width: '50rem' }" :modal="true"
+        class="custom-dialog">
         <span class="p-text-secondary block mb-5">Update your information.</span>
         <div class="flex align-items-center gap-3 mb-3">
             <label for="username" class="font-semibold w-6rem">Username</label>
-            <InputText id="username" class="flex-auto" autocomplete="off" />
+            <input id="username" class="flex-auto" autocomplete="off" />
         </div>
         <div class="flex align-items-center gap-3 mb-2">
             <label for="email" class="font-semibold w-6rem">Email</label>
-            <InputText id="email" class="flex-auto" autocomplete="off" />
+            <Input id="email" class="flex-auto" autocomplete="off" />
         </div>
         <template #footer>
             <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
@@ -108,8 +115,6 @@ const profileImageUrl = reactive({ profile_image_url: null });
 const backgroundImageUrl = reactive({ background_image_url: null });
 
 const { events, users, getEvents, getUsers } = useEvents();
-
-import Button from 'primevue/button';
 
 import Dialog from 'primevue/dialog';
 import { useStore } from 'vuex';
@@ -133,11 +138,26 @@ function updateProfileImage(event) {
     })
         .then(response => {
             console.log(response.data);
+            openEditProfileImageModal.value = false;
+            swal.fire({
+                icon: 'success',
+                title: '¡Actualización exitosa!',
+                text: 'La imagen se ha actualizado correctamente.',
+            }).then(() => {
+                location.reload();
+            });
         })
         .catch(error => {
             console.error(error);
+            swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un error al eliminar el evento',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
         });
 }
+
 function updateBackgroundImage(event) {
     const file = event.target.files[0];
     const formData = new FormData();
@@ -150,9 +170,23 @@ function updateBackgroundImage(event) {
     })
         .then(response => {
             console.log(response.data);
+            openEditBackgroundImageModal.value = false;
+            swal.fire({
+                icon: 'success',
+                title: '¡Actualización exitosa!',
+                text: 'La imagen se ha actualizado correctamente.',
+            }).then(() => {
+                location.reload();
+            });
         })
         .catch(error => {
             console.error(error);
+            swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un error al eliminar el evento',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
         });
 }
 
@@ -175,6 +209,13 @@ onMounted(async () => {
     const vuexData = localStorage.getItem("vuex");
     const vuexArray = JSON.parse(vuexData);
     let id = vuexArray.auth.user.id;
+
+    document.title = 'ConnectU - Account';
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.href = '/images/favicon-32x32.png'; 
+    document.head.appendChild(favicon);
+
 
     axios.get('/api/events/promoter/' + id)
         .then(response => {
@@ -275,24 +316,27 @@ const displayEditDialog = ref(false);
 }
 
 .nickname {
-    margin-top: 3rem;
-    color: rgb(0, 0, 0);
-    font-size: 28px;
-    margin-left: 1rem;
+    margin-top: -10px;
+    color: #01afee;
+    font-size: 16px;
+    /* margin-left: -1rem; */
+    font-family: Gotham;
 }
 
 .name {
     color: rgb(0, 0, 0);
-    font-size: 20px;
-    margin-top: -1rem;
-    margin-left: 1rem;
+    font-size: 22px;
+    font-family: Gotham;
 
 }
 
+
+
 .email {
-    color: rgb(0, 0, 0);
+    color: rgb(34, 34, 34);
     font-size: 20px;
     margin-top: 2px;
+    width: 200px;
 }
 
 .button-edit {
@@ -303,6 +347,22 @@ const displayEditDialog = ref(false);
     border-radius: 50%;
     margin-left: -1rem;
     margin-top: -1rem;
+    color: #01afee;
+    border: 1px solid #01afee;
+    background-color: #ffffff;
+}
+
+.button-edit:hover {
+    top: 1rem;
+    left: 32.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: -1rem;
+    margin-top: -1rem;
+    color: #ffffff;
+    border: 1px solid #01afee;
+    background-color: #01afee;
 }
 
 .card-event {
@@ -371,4 +431,52 @@ const displayEditDialog = ref(false);
     border: 2px solid white;
 }
 
+.editButton {
+    font-family: Gotham;
+    font-size: 12px;
+    font-weight: bold;
+    color: #01afee;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #01afee;
+    margin-right: -20px;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.editButton:hover {
+    font-family: Gotham;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #01afee;
+
+}
+
+.editButtons {
+    display: flex;
+    align-content: flex-end;
+    align-items: flex-end;
+    flex-direction: column;
+    margin-top: -40px;
+
+}
+
+.custom-dialog .p-dialog-titlebar-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.p-dialog-header-icons {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: stretch;
+}
+
+@media (max-width: 768px) {}
 </style>

@@ -171,6 +171,13 @@ function addEvent() {
 }
 
 onMounted(() => {
+
+    document.title = 'ConnectU - Create Event';
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.href = '/images/favicon-32x32.png';
+    document.head.appendChild(favicon);
+
     axios.get('/api/category')
         .then(response => {
             categories.value = response.data;

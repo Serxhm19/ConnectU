@@ -3,32 +3,35 @@
         <section class="card event ml-6 mr-6 mt-3 col-12 grid">
             <div class="card">
                 <div class="col-5"></div>
-                <div class="col-2"><ProgressSpinner /></div>
+                <div class="col-2">
+                    <ProgressSpinner />
+                </div>
                 <div class="col-5"></div>
             </div>
-            
+
         </section>
     </div>
     <div v-else class="grid absolut">
         <section class="card event mt-3 col-12 grid">
             <div class="event-header d-flex flex-column col-12">
-                
+
                 <p class="add-event">
-                    {{ countParticipants }} Ins 
-                    <button v-if="!signedUp" @click="inscribirse" class="btn btn-link add-event-button">Inscribirse</button>
+                    {{ countParticipants }} Ins
+                    <button v-if="!signedUp" @click="inscribirse"
+                        class="btn btn-link add-event-button">Inscribirse</button>
                     <button v-else @click="cancelar" class="btn btn-link add-event-button">Cancelar</button>
                 </p>
-                
+
                 <div class="name-container">
                     <h1 class="name-event text-left ml-7">{{ event.name }}</h1>
-                    <p class="by-text">By {{promoter.nickname}}</p>
+                    <p class="by-text">By {{ promoter.nickname }}</p>
                 </div>
-                
+
             </div>
             <div class="content-event col-12">
                 <p>{{ event.description }}</p>
                 <img src="/images/eventoPrueba.webp" alt="">
-                <p>{{ event.description }}</p>                              
+                <p>{{ event.description }}</p>
             </div>
             <div class="grid">
                 <div class="col-0 lg:col-0 xl:col-3"></div>
@@ -36,32 +39,34 @@
                     <img class="promoter-icon" src="/images/connectu.svg" alt="">
                     <div class="container-name-promoter d-flex  justify-content-center align-items-center">
                         <div class="gradient-blue gradient-promoter-right "></div>
-                        <h4 class="name-promoter">{{promoter.nickname}}</h4>
+                        <h4 class="name-promoter">{{ promoter.nickname }}</h4>
                         <div class="gradient-blue gradient-promoter-left"></div>
                     </div>
-                    
+
                     <p class="description-promoter">
-                        {{promoter.description}}
+                        {{ promoter.description }}
                     </p>
                 </div>
                 <div class="col-0 lg:col-0 xl:col-3"></div>
             </div>
-            
+
             <section class="other-events col-12 mb-6">
                 <div class="d-flex">
                     <h4 class="title-other ml-0">You may also be interested...</h4>
                     <div class="gradient-blue gradient-slader"></div>
                 </div>
-                
+
                 <div class="slader-other d-flex justify-content-evenly grid">
-                    <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index" class="col-12 lg:col-12 xl:col-3 d-flex justify-content-center event-slader">
+                    <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index"
+                        class="col-12 lg:col-12 xl:col-3 d-flex justify-content-center event-slader">
                         <div class="card" style="width: 25rem;">
                             <img class="card-img-top" src="/images/eventoPrueba.webp" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title title-other-event">{{ evento.name }}</h5>
                                 <p class="card-text">{{ sliceData(evento.description, 150) }}</p>
                             </div>
-                            <router-link :to="{ name: 'publi-event.event', params: { id: evento.id } }" class="button-slader btn">Ver evento...</router-link>
+                            <router-link :to="{ name: 'publi-event.event', params: { id: evento.id } }"
+                                class="button-slader btn">Ver evento...</router-link>
                         </div>
                     </div>
                 </div>
@@ -69,7 +74,7 @@
         </section>
     </div>
 </template>
-  
+
 
 
 
@@ -78,33 +83,39 @@ import { onMounted, onUpdated, reactive, watchEffect, ref } from "vue";
 import { useRoute } from "vue-router";
 import Carousel from "primevue/carousel";
 import Skeleton from "primevue/skeleton";
-import ProgressSpinner  from "primevue/progressSpinner";
+import ProgressSpinner from "primevue/progressSpinner";
 import Tag from "primevue/tag";
 import useEvents from "@/composables/events";
 import { useStore } from 'vuex';
 
-const {event, events, promoter, promoterEvents, countParticipants, signedUp,  getEvent, getPromoterEvent, getUsers, getCountParticipants, signedUpUser, signUser, unsignUser, deleteEvent} = useEvents()
+const { event, events, promoter, promoterEvents, countParticipants, signedUp, getEvent, getPromoterEvent, getUsers, getCountParticipants, signedUpUser, signUser, unsignUser, deleteEvent } = useEvents()
 const route = useRoute()
 const store = useStore();
 const user = store.state.auth.user;
 let evento_id = '';
 const loading = ref(true);
+
 onMounted(async () => {
-      evento_id = route.params.id;
 
+    document.title = 'ConnectU - Event';
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.href = '/images/favicon-32x32.png'; 
+    document.head.appendChild(favicon);
 
-        await getEvent(evento_id);
+    evento_id = route.params.id;
 
-        await getCountParticipants(evento_id);
-        await getUsers(event.value.user_id);
-        await signedUpUser(user.id, evento_id);
-        
-        loading.value = false;
-    });
+    await getEvent(evento_id);
+    await getCountParticipants(evento_id);
+    await getUsers(event.value.user_id);
+    await signedUpUser(user.id, evento_id);
+
+    loading.value = false;
+});
 
 onUpdated(async () => {
     if (evento_id != route.params.id) {
-        await getEvent(route.params.id);    
+        await getEvent(route.params.id);
         await getCountParticipants(route.params.id);
         evento_id = route.params.id;
         await signedUpUser(user.id, route.params.id);
@@ -139,192 +150,203 @@ signUser
 </script>
 
 <style>
-    .absolut{
-        margin-top: 80px;
-        display: flex;
-        justify-content: center;
-    }
-    .loading{
-        margin-top: 240px;
-    }
-    
+.absolut {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+}
 
-    .event {
-        margin-top: 80px;
-        padding: 0;
-        border-radius: 20px;
-        width: 95%;
-    }
-
-    .event-header {
-        background-image: url('/images/eventoPrueba.webp');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-        min-height: 400px;
-        width: 100%;
-        position: relative;
-        border-radius: 20px 20px 0px 0px;
-        border-bottom: 6px solid #0094FF;
-    }
-
-    .event-header::after {
-        content: "";
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        background-image: linear-gradient(90deg, #303030 0%, rgba(48, 48, 48, 0.735) 42.5%, rgba(48, 48, 48, 0.325957) 80.5%, rgba(48, 48, 48, 0) 100%);
-        border-radius: 20px 20px 0px 0px;
-    }
-
-    .event-header h1 {
-        color: white;
-        position: relative;
-        z-index: 1;
-        margin-bottom: 0;
-    }
-    .name-container{
-        margin-top: 50px;
-    }
-
-    .by-text{
-        color: white;
-        position: relative;
-        z-index: 1;
-        margin-left: 350px;
-        font-size: 20px;
-    }
-
-    .add-event{
-        z-index: 1;
-        align-self: flex-end;
-        justify-self:flex-start;
-        color: white;
-        background-color: #6CB4EE;
-        margin: 40px;
-        margin-left: 10px;
-        margin-right: 30px;
-        border-radius: 20px;
-        padding-left: 12px;
-    }
-    .add-event-button{
-        z-index: 1;
-        background-color: #002C6F;
-        border-radius: 20px;
-        padding: 7px 15px;
-        color: white;
-        border: 2px solid white;
-        margin: 0;    
-    }
-
-    .add-event-button:hover{
-        background-color: white;
-        color: #002C6F;
-        border: 2px solid #002C6F;
-        
-    }
+.loading {
+    margin-top: 240px;
+}
 
 
-    .content-event{
-        padding: 30px 70px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+.event {
+    margin-top: 80px;
+    padding: 0;
+    border-radius: 20px;
+    width: 95%;
+}
 
-    .content-event p{
-        font-size: 17px;
-        color: #3B3B3B;
-        font-family: 'Modern Sans';
-    }
+.event-header {
+    background-image: url('/images/eventoPrueba.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+    width: 100%;
+    position: relative;
+    border-radius: 20px 20px 0px 0px;
+    border-bottom: 6px solid #0094FF;
+}
 
-    .content-event img{
-        max-width: 70%;
+.event-header::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-image: linear-gradient(90deg, #303030 0%, rgba(48, 48, 48, 0.735) 42.5%, rgba(48, 48, 48, 0.325957) 80.5%, rgba(48, 48, 48, 0) 100%);
+    border-radius: 20px 20px 0px 0px;
+}
 
-        max-height: 400px;
-        margin: 30px 0;
-    }
+.event-header h1 {
+    color: white;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0;
+}
 
-    .content-promoter{
-        padding: 0px 70px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    .content-promoter .promoter-icon{
-        width: 120px;
-    }
+.name-container {
+    margin-top: 50px;
+}
 
-    .container-name-promoter{
-        margin: 25px 0;
-        height: 30px;
-    }
+.by-text {
+    color: white;
+    position: relative;
+    z-index: 1;
+    margin-left: 350px;
+    font-size: 20px;
+}
 
-    .name-promoter{
-        margin: 0;
-        background-color: #0070BB;
-        color: white;
-        width: 70%;
-        height: 100%;
-    }
+.add-event {
+    z-index: 1;
+    align-self: flex-end;
+    justify-self: flex-start;
+    color: white;
+    background-color: #6CB4EE;
+    margin: 40px;
+    margin-left: 10px;
+    margin-right: 30px;
+    border-radius: 20px;
+    padding-left: 12px;
+}
 
-    .gradient-blue{
-        background: linear-gradient(to bottom left, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
-    }
-    .gradient-blue.gradient-promoter-right{
-        width: 20px;
-        height: 100%;
-        background: linear-gradient(to bottom right, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
-    }
-    .gradient-blue.gradient-promoter-left{
-        width: 20px;
-        height: 100%;
-    }
-    .description-promoter, .name-promoter{
-        max-width: 500px;
-        text-align: center;
-    }
+.add-event-button {
+    z-index: 1;
+    background-color: #002C6F;
+    border-radius: 20px;
+    padding: 7px 15px;
+    color: white;
+    border: 2px solid white;
+    margin: 0;
+}
+
+.add-event-button:hover {
+    background-color: white;
+    color: #002C6F;
+    border: 2px solid #002C6F;
+
+}
 
 
-    .other-events{
-        padding: 0;
-    }
-    .title-other{
-        background-color: #0070BB;
-        padding: 10px 0;
-        padding-left: 100px;
-        color: #fff;
-        width: 400px;
-        height: 45px;
-    }
-    .gradient-blue.gradient-slader{
-        width: 90px;
-        height: 45px;
-    }
-    .title-other-event{
-        text-align: center;
-        height: 50px;
-    }
+.content-event {
+    padding: 30px 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    .event-slader .card{
-        border: 0;  
-    }
+.content-event p {
+    font-size: 17px;
+    color: #3B3B3B;
+    font-family: 'Modern Sans';
+}
 
-    .button-slader{
-        background-color: white;
-        border-radius: 20px;
-        border: 1px solid #0070BB;
-        color: #0070BB;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
+.content-event img {
+    max-width: 70%;
 
-    .button-slader:hover{
-        border-color: #0070BB;
-        color: white;
-        background-color: #0070BB;
-    }
+    max-height: 400px;
+    margin: 30px 0;
+}
+
+.content-promoter {
+    padding: 0px 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-promoter .promoter-icon {
+    width: 120px;
+}
+
+.container-name-promoter {
+    margin: 25px 0;
+    height: 30px;
+}
+
+.name-promoter {
+    margin: 0;
+    background-color: #0070BB;
+    color: white;
+    width: 70%;
+    height: 100%;
+}
+
+.gradient-blue {
+    background: linear-gradient(to bottom left, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
+}
+
+.gradient-blue.gradient-promoter-right {
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to bottom right, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
+}
+
+.gradient-blue.gradient-promoter-left {
+    width: 20px;
+    height: 100%;
+}
+
+.description-promoter,
+.name-promoter {
+    max-width: 500px;
+    text-align: center;
+}
+
+
+.other-events {
+    padding: 0;
+}
+
+.title-other {
+    background-color: #0070BB;
+    padding: 10px 0;
+    padding-left: 100px;
+    color: #fff;
+    width: 400px;
+    height: 45px;
+}
+
+.gradient-blue.gradient-slader {
+    width: 90px;
+    height: 45px;
+}
+
+.title-other-event {
+    text-align: center;
+    height: 50px;
+}
+
+.event-slader .card {
+    border: 0;
+}
+
+.button-slader {
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #0070BB;
+    color: #0070BB;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.button-slader:hover {
+    border-color: #0070BB;
+    color: white;
+    background-color: #0070BB;
+}
 </style>
