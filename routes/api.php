@@ -101,7 +101,10 @@ Route::delete('/messages/{id}', [MessagesController::class, 'destroy']);
 
 //---------------------------------------------------------------//
 Route::post('updateProfileImage', [UserController::class, 'uploadProfileImage']);
-Route::get('/user/profile-image-url', [UserController::class, 'getProfileImageUrl']);
+Route::post('updateBackgroundImage', [UserController::class, 'uploadBackgroundImage']);
+
+Route::get('/getProfileImageUrl', [UserController::class, 'getProfileImageUrl']);
+Route::get('/getBackgroundImageUrl', [UserController::class, 'getBackgroundImageUrl']);
 
 //--------------------------UserEvent-----------------------------//
 Route::get('/userEvent', [User_eventController::class, 'index']);

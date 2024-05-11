@@ -27,10 +27,11 @@
       <div class="col-lg-4 col-sm-12">
         <div class="card events-list">
           <div class="My-Events">
+            <h2 class="buscarEvento">Buscar Evento</h2>
+            <input type="text" v-model="searchQuery" placeholder="Search events..." class="inputSearch">
             <hr>
             <ul class="list-group list-group-flush">
-              <li v-for="event in userEventsFiltered" :key="event.event_id" @click="selectEvent(event.event_id)"
-                class="list-group-item EventsButton">
+              <li v-for="event in filteredEvents" :key="event.event_id" @click="selectEvent(event.event_id)" class="list-group-item EventsButton">
                 <div class="events">
                   <img src="\images\eventoPrueba.webp" class="chat-pic" alt="Profile Picture">
                   <div class="event-name">{{ event.eventData ? event.eventData.name : 'Cargando...' }}</div>
@@ -100,6 +101,8 @@ export default {
       userEvents: [],
       selectedEvent: null,
       lastMessage: null,
+      searchQuery: '',
+
 
     }
   },
@@ -108,24 +111,41 @@ export default {
   mounted() {
     setInterval(this.fetchMessages, 3000);
     this.fetchUserEvents();
+
     document.title = 'ConnectU - Chats';
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.href = '/images/favicon-32x32.png';
+    document.head.appendChild(favicon);
   },
-
   computed: {
-    user() {
-      const store = useStore();
-      const user = store.state.auth.user;
-      return user;
-    },
-
-    reversedMessages() {
-      return this.messages.slice().reverse();
-    },
-
-    userEventsFiltered() {
-      return this.userEvents.filter(event => event.user_id === this.user.id);
-    }
+  user() {
+    const store = useStore();
+    const user = store.state.auth.user;
+    return user;
   },
+
+  reversedMessages() {
+    return this.messages.slice().reverse();
+  },
+
+  userEventsFiltered() {
+    return this.userEvents.filter(event => event.user_id === this.user.id);
+  },
+
+  filteredEvents() {
+    if (!this.searchQuery.trim()) {
+      return this.userEventsFiltered;
+    } else {
+      return this.userEventsFiltered.filter(event => {
+        return event.eventData.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
+    }
+  }
+},
+
+
+
   methods: {
     fetchMessages() {
       if (!this.selectedEvent) {
@@ -186,7 +206,7 @@ export default {
             axios.get(`/api/events/show/${event.event_id}`)
               .then(eventResponse => {
                 event.eventData = eventResponse.data;
-                event.id = event.event_id; // Asignar event_id a id
+                event.id = event.event_id;
               })
               .catch(error => {
                 console.error('Error fetching event data:', error);
@@ -263,14 +283,14 @@ body {
   height: 500px;
 }
 
-.chat-header {
-  background-color: rgb(255, 255, 255);
-  margin-top: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: row-reverse;
-  align-content: center;
-  justify-content: space-between;
+.chat-header{
+    background-color: rgb(255, 255, 255);
+    margin-top: 90px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-content: center;
+    justify-content: space-between;
 }
 
 .chat-text {
@@ -536,6 +556,12 @@ a:hover {
   text-decoration: dashed;
 }
 
+h2.buscarEvento {
+    font-family: Gotham;
+    font-size: 22px;
+    color: #0070bb;
+}
+
 @media (max-width: 768px) {
   .chat-container {
     width: 450px;
@@ -547,4 +573,12 @@ a:hover {
   height: 30px;
 }
 
+.inputSearch {
+    width: 300px;
+    border-radius: 30px;
+    border: 1px solid black;
+    height: 30px;
+    padding: 10px;
+    font-family: Gotham;
+}
 </style>

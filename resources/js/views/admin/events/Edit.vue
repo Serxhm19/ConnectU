@@ -113,6 +113,13 @@ const strError = ref();
 
 const categories = ref();
 onMounted(() => {
+
+    document.title = 'ConnectU - Edit Event';
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.href = '/images/favicon-32x32.png'; 
+    document.head.appendChild(favicon);
+
     axios.get('/api/events/show/' + route.params.id)
     .then(response => {
         event.user_id = response.data.user_id;

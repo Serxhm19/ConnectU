@@ -34,7 +34,6 @@ const onChangeTheme = (theme, mode) => {
         cloneLinkElement.setAttribute('id', elementId);
         changeThemeSettings(theme, mode === 'dark');
     });
-    linkElement.parentNode.insertBefore(cloneLinkElement, linkElement.nextSibling);
 };
 const decrementScale = () => {
     setScale(layoutConfig.scale.value - 1);
