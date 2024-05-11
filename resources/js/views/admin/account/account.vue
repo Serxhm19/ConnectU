@@ -116,8 +116,6 @@ const backgroundImageUrl = reactive({ background_image_url: null });
 
 const { events, users, getEvents, getUsers } = useEvents();
 
-const profileImageUrl = ref(null); // Changed to ref
-
 import Button from 'primevue/button';
 import { FilterMatchMode } from 'primevue/api';
 import Dialog from 'primevue/dialog';

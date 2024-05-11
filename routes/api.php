@@ -51,7 +51,6 @@ Route::post('category/update/{id}', [Category_eventController::class, 'update'])
 
 //--------------------------Event----------------------------------//
 Route::get('/events', [EventController::class, 'index']);
-
 Route::get('events/promoter/{id}', [EventController::class, 'promoterEvents']);
 Route::apiResource('event', PostController::class);
 Route::post('events/', [EventController::class, 'store']);
@@ -70,6 +69,7 @@ Route::get('cities/province/${id}', [CityController::class, 'getCitiesByProvince
 Route::get('provinces', [ProvinceController::class, 'index']);
 Route::get('provinces/show/{id}', [ProvinceController::class, 'show']);
 //---------------------------------------------------------------//
+
 
 //--------------------------Group----------------------------------//
 Route::get('group', [GroupController::class, 'index']);
@@ -98,8 +98,8 @@ Route::get('/messages', [MessagesController::class, 'index']);
 Route::post('/messages', [MessagesController::class, 'store']);
 Route::put('/messages/{id}', [MessagesController::class, 'update']);
 Route::delete('/messages/{id}', [MessagesController::class, 'destroy']);
-
 //---------------------------------------------------------------//
+
 Route::post('updateProfileImage', [UserController::class, 'uploadProfileImage']);
 Route::post('updateBackgroundImage', [UserController::class, 'uploadBackgroundImage']);
 
@@ -112,8 +112,9 @@ Route::post('userEvent/', [User_eventController::class, 'store']);
 Route::delete('userEvent/{user_id}/{event_id}', [User_eventController::class, 'destroy']);
 Route::get('/user_event/count/{event_id}', [User_eventController::class, 'countByEventId']);
 Route::get('/user_event/userInEvent/{user_id}/{event_id}', [User_eventController::class, 'userInEvent']);
-
+Route::get('/user_event/events_user/{user_id}', [User_eventController::class, 'events_user']);
 //---------------------------------------------------------------//
+
 Route::get('users/show/{id}', [UserController::class, 'showUser']);
 Route::get('users/getUsers', [UserController::class, 'allUsers']);
 Route::apiResource('posts', PostController::class);

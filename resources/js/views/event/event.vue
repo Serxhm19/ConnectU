@@ -11,7 +11,7 @@
     <div v-else class="grid absolut">
         <section class="card event mt-3 col-12 grid">
 
-            <div class="event-header col-12" :style="{ 'background-image': 'url(' + event.media[0].original_url + ')'}">
+            <div class="event-header col-12" >
 
                 <p class="add-event">
                     {{ countParticipants }} Ins
@@ -27,11 +27,10 @@
 
             </div>
             <div class="content-event col-12">
-                {{  event }}
-                <p>{{ event.description }}</p>
-                <img src="" alt="">
-                <p>{{ event.more_information }}</p>                              
 
+                <p>{{ event.description }}</p>
+                <!-- <img v-if="event.media[0]" :src="event.media[0].original_url" alt=""> -->
+                <p>{{ event.more_information }}</p>                              
             </div>
             <div class="grid">
                 <div class="col-0 lg:col-0 xl:col-3"></div>
@@ -81,10 +80,7 @@
 <script setup>
 import { onMounted, onUpdated, reactive, watchEffect, ref } from "vue";
 import { useRoute } from "vue-router";
-import Carousel from "primevue/carousel";
-import Skeleton from "primevue/skeleton";
 import ProgressSpinner from "primevue/progressSpinner";
-import Tag from "primevue/tag";
 import useEvents from "@/composables/events";
 import { useStore } from 'vuex';
 

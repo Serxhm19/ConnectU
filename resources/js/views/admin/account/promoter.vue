@@ -57,9 +57,11 @@
 
 <script setup>
 import Tag from 'primevue/tag';
-import InputText from 'primevue/inputtext'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import InputText from 'primevue/inputtext';
+
+
 
 import { useStore } from 'vuex';
 import axios from "axios";
@@ -95,9 +97,6 @@ onMounted(() => {
             events.value = response.data;
 
             console.log(events.value);
-
-
-
         })
 });
 

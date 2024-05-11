@@ -8,7 +8,18 @@
                         <hr>
                         <div class="list-group">
                             <div class="list-group-item list-group-chat">
-                                <div v-for="event in events" :key="event.id">
+                                <div v-if="isLoadingUserEvents || true" v-for="x in 3">
+                                    <div class="flex mb-3">
+                                        <Skeleton shape="circle" size="4rem" class="mr-2" borderRadius="50px"></Skeleton>
+                                        <div>
+                                            <Skeleton width="10rem" class="mb-2"></Skeleton>
+                                            <Skeleton width="5rem" class="mb-2"></Skeleton>
+                                            <Skeleton height=".5rem"></Skeleton>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <div v-else v-for="event in events_user" :key="event.id">
                                     <div class="d-flex justify-content-between mb-1">
                                         <div style="display: flex;">
                                             <img src="\images\eventoPrueba.webp" alt=""
@@ -27,7 +38,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
         </div>
         <div class="col-12 lg:col-6 xl:col-6 gotham content-events">
             <div v-if="isLoadingEvents">
@@ -335,7 +346,7 @@ import InputText from "primevue/inputText";
 import Skeleton from "primevue/skeleton";
 
 const { categories, getCategories, deleteCategory } = useCategories()
-const { isLoadingEvents, events, users, getEvents, getEventsFilter, getUsers, deleteEvent } = useEvents()
+const { isLoadingEvents, isLoadingUserEvents, events, users, events_user, getEvents, getEventsFilter, getUsers, getEventsUser } = useEvents()
 const { cities, provinces, getCities, getProvinces, getCitiesByProvince } = useSites()
 
 const search_global = ref('')
@@ -363,6 +374,9 @@ onMounted(async () => {
     await getProvinces()
     await getUsers()
     await getEvents()
+    await getEventsUser(1)
+    console.log('events user: ');
+    console.log(events_user.value)
     changeNameLocationEvent()
 
     watch([search_global, search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {

@@ -114,8 +114,8 @@
                                 <span class="text-danger">*</span>
                             </div>
                             <div class="form-group">
-                                <label for="aditional-thumbnail">Thumbnail</label>
-                                <input type="file" class="form-control" id="aditional-thumbnail" name="aditional-thumbnail">
+                                <label for="additional_image">Thumbnail</label>
+                                <input type="file" class="form-control" id="additional_image" name="additional_image">
                             </div>
                         </div>
                     </div>
@@ -182,9 +182,9 @@ function addEvent() {
     const thumbnailFile = document.getElementById('thumbnail').files[0];
     formData.append('thumbnail', thumbnailFile);
 
-    const aditionalThumbnail = document.getElementById('aditional-thumbnail').files[1];
-    formData.append('aditional_image', aditionalThumbnail);
-
+    const additionalThumbnailFile = document.getElementById('additional_image').files[0];
+    formData.append('additional_image', additionalThumbnailFile);
+    
     axios.post('/api/events/', formData)
         .then(response => {
             stringSuccess.value = "Evento '" + event.value.name + "' creado correctamente";
@@ -195,8 +195,8 @@ function addEvent() {
             stringError.value = error.response.data.message;
             console.log(error);
         });
-
 }
+
 
 onMounted(() => {
 

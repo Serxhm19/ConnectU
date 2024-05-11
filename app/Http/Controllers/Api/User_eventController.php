@@ -83,4 +83,12 @@ class User_eventController extends Controller
         }
     }
 
+    public function events_user($user_id)
+    {
+        $event_ids = user_event::where('user_id', $user_id)
+            ->pluck('event_id')
+            ->toArray();
+    
+        return $event_ids;
+    }
 }

@@ -6,6 +6,7 @@ export default function useEvents() {
     const promoter = ref([])
     const events = ref([])
     const isLoadingEvents = ref(true);
+    const isLoadingUserEvents = ref(true);
     const promoterEvents = ref([])
     const countParticipants = ref();
     const signedUp = ref();
@@ -24,7 +25,7 @@ export default function useEvents() {
         description: '',
         category_id: '',
     })
-
+    const events_user = ref([])
     const router = useRouter()
     const validationErrors = ref({})
     const isLoading = ref(false)
@@ -71,29 +72,7 @@ export default function useEvents() {
             isLoadingEvents.value = false;
         })
     }
-    const getPosts = async (
-        page = 1,
-        search_category = '',
-        search_id = '',
-        search_title = '',
-        search_content = '',
-        search_global = '',
-        order_column = 'created_at',
-        order_direction = 'desc'
-    ) => {
-        axios.get('/api/posts?page=' + page +
-            '&search_category=' + search_category +
-            '&search_id=' + search_id +
-            '&search_title=' + search_title +
-            '&search_content=' + search_content +
-            '&search_global=' + search_global +
-            '&order_column=' + order_column +
-            '&order_direction=' + order_direction)
-            .then(response => {
-                console.log(response.data);
-                posts.value = response.data;
-            })
-    }
+
     const getEvent = async (id) => {
         const apiUrl = `/api/events/show/${id}`;
 
@@ -172,7 +151,34 @@ export default function useEvents() {
             console.error('Error al obtener usuarios:', error);
         }
     }
+
+    const getEventsUser = async (user_id) => {
+        let apiUrl = `/api/user_event/events_user/${user_id}`;
     
+        axios.get(apiUrl)
+            .then(response => {
+                let id_events = response.data;
+    
+                id_events.forEach(id => {
+                    let eventUrl = `/api/events/show/${id}`;
+    
+                    axios.get(eventUrl)
+                        .then(response => {
+                            events_user.value.push(response.data);
+                        })
+                        .catch(error => {
+                            console.error(`Error al obtener el evento ${id}: `, error);
+                        });
+                });
+
+                isLoadingUserEvents.value = false;
+            })
+            .catch(error => {
+                console.error(`Error de API al obtener los eventos del usaurio ${user_id}: `, error);
+            });  
+    }
+    
+
     const getCountParticipants = async (id) => {
         const apiUrl = `/api/user_event/count/${id}`;
 
@@ -249,6 +255,7 @@ export default function useEvents() {
 
     return {
         isLoadingEvents,
+        isLoadingUserEvents,
         events,
         event,
         promoterEvents,
@@ -256,6 +263,7 @@ export default function useEvents() {
         user,
         promoter,
         countParticipants,
+        events_user,
         signedUp,
         getEvents,
         getEventsFilter,
@@ -264,6 +272,7 @@ export default function useEvents() {
         getPromoterEvent,
         getUsers,
         getCountParticipants,
+        getEventsUser,
         signedUpUser,
         storeEvent,
         signUser,

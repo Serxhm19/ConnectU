@@ -85,7 +85,7 @@ class EventController extends Controller
         }
     
         if ($request->hasFile('additional_image')) { 
-            $media = $event->addMediaFromRequest('additional_image')->preservingOriginal()->toMediaCollection('images/events'); 
+            $media = $event->addMedia($request->file('additional_image'))->toMediaCollection();
             $media->name = 'additional_image';
         }
     
@@ -135,6 +135,4 @@ class EventController extends Controller
         return response()->json($events);
 
     }
-
-
 }
