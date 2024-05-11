@@ -2,9 +2,10 @@
     <div class="col-lg-12">
         <div class="card events">
             <div style="border-radius: 40px;">
-                   <h2>Proximos Eventos</h2>
-                    <a>Mira tu lista de los proximos eventos a los que asistiras!</a>
-                <div v-for="event in filteredEvents" :key="event.id" class="card event-home" style="border-radius: 20px;">
+                <h2>Proximos Eventos</h2>
+                <a>Mira tu lista de los proximos eventos a los que asistiras!</a>
+                <div v-for="event in filteredEvents" :key="event.id" class="card event-home"
+                    style="border-radius: 20px;">
                     <div class="card-body" style="padding: 8px 14px;">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ event.name }}</h5>
@@ -54,33 +55,55 @@ const orderDirection = ref('desc');
 const { categories, getCategories, deleteCategory } = useCategories();
 const { events, users, getEvents, getUsers } = useEvents();
 const { can } = useAbility();
+const { cities, getCities } = useSites()
 
 onMounted(async () => {
     await getEvents();
     await getUsers();
+    await getCities();
+    fetchUserEvents();
+    user.value = users.value.find(user => user.id === 1);
+
+
 });
 
-const user = ref(null); 
-const userEvents = ref([]); 
-
-onMounted(() => {
-    user.value = users.value.find(user => user.id === 1); 
-    fetchUserEvents(); 
-});
+const user = ref(null);
+const userEvents = ref([]);
 
 const fetchUserEvents = () => {
-    axios.get(`/api/userEvent`)
-        .then(response => {
-            userEvents.value = response.data;
-        })
-        .catch(error => {
-            console.error('Error fetching user events:', error);
-        });
-}
+    return new Promise((resolve, reject) => {
+        axios.get(`/api/userEvent`)
+            .then(response => {
+                userEvents.value = response.data;
+                console.log("1" + userEvents.value);
+                resolve(); // Resuelve la promesa una vez que se hayan actualizado todas las ubicaciones
+            })
+            .catch(error => {
+                console.error('Error fetching user events:', error);
+                reject(error); // Rechaza la promesa en caso de error
+            });
+    });
+};
+
+
 
 const filteredEvents = computed(() => {
-    return events.value.filter(event => userEvents.value.some(userEvent => userEvent.event_id === event.id));
+    const filtered = events.value.filter(event =>
+        userEvents.value.some(userEvent => userEvent.event_id === event.id)
+    )
+    console.log("filtered" + events.value);
+
+    filtered.forEach(async event => {
+        const cityId = event.location;
+        const cityName = await getName(cities.value, cityId);
+        event.location = cityName;
+        console.log(event.data);
+    });
+
+    // Devolver los eventos filtrados con las ubicaciones actualizadas
+    return filtered;
 });
+
 
 watch([search_id, search_title, search_global], () => {
     getCategories(1, search_id.value, search_title.value, search_global.value);
@@ -109,6 +132,11 @@ function formatDate(dateString) {
 function sliceData(text) {
     return text.substring(0, 25) + "...";
 }
+
+const getName = (array, id) => {
+    const result = array.find(object => object.id === id);
+    return result ? result.name : 'Categoría no encontrada';
+};
 </script>
 
 <style scoped>
