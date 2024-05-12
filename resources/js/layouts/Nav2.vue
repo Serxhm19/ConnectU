@@ -75,7 +75,6 @@ const { processing, logout } = useAuth();
 
 onMounted(async () => {
 
-    console.log(promoter);
     document.title = 'ConnectU - Event';
     const favicon = document.createElement('link');
     favicon.rel = 'icon';
@@ -90,9 +89,6 @@ onMounted(async () => {
     await getPromoterEvent;
 
     loading.value = false;
-
-    const userId = promoter.id;
-    console.log("Promter" + userId);
 
     axios.get(`/api/getProfileImageUrl`)
         .then(response => {
