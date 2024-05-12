@@ -13,35 +13,36 @@
                         <h3 class="mb-1 mt-1 text-center">My events</h3>
                         <hr>
                         <div class="list-group">
-                        <!-- Contenido de carga de mis eventos -->
-                        <div v-if="isLoadingUserEvents" v-for="x in 3">
-                            <div class="flex mb-3">
-                            <Skeleton shape="circle" size="4rem" class="mr-2" borderRadius="50px"></Skeleton>
-                            <div>
-                                <Skeleton width="10rem" class="mb-2"></Skeleton>
-                                <Skeleton width="5rem" class="mb-2"></Skeleton>
-                                <Skeleton height=".5rem"></Skeleton>
-                            </div>
-                            </div>
-                            <hr>
-                        </div>
-                        <div v-else v-for="event in events_user" :key="event.id">
-                            <!-- Código para eventos del usuario -->
-                            {{ getMediaEvent(event) }}
-                            <div class="d-flex justify-content-between mb-1 w-100">
-                            <div style="display: flex; width: 100%;">
-                                <img src="" alt=""
-                                style="height: 30px; width: 30px; border-radius: 30px;">
-                                <div style="width: 100%;">
-                                <h6 class="ml-3 mb-1 mt-1 text-left">{{ event.name }}</h6>
-                                <p class="mb-1 mt-1 text-center" style="color: #6A6A6A; font-size: 13px;">
-                                    {{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}
-                                </p>
+                            <div class="list-group-item list-group-chat">
+                                <div v-if="isLoadingUserEvents" v-for="x in 3">
+                                    <div class="flex mb-3">
+                                        <Skeleton shape="circle" size="4rem" class="mr-2" borderRadius="50px"></Skeleton>
+                                        <div>
+                                            <Skeleton width="10rem" class="mb-2"></Skeleton>
+                                            <Skeleton width="5rem" class="mb-2"></Skeleton>
+                                            <Skeleton height=".5rem"></Skeleton>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <div v-else v-for="event in events_user" :key="event.id">
+                                    <div class="d-flex justify-content-between mb-1 w-100">
+                                        <div style="display: flex; width: 100%;">
+                                            
+                                            <img src="\images\eventoPrueba.webp" alt=""
+                                                style="height: 30px; width: 30px; border-radius: 30px;">
+                                            <div style="width: 100%;">
+                                                <h6 class="ml-3 mb-1 mt-1 text-left">{{ event.name }}</h6>
+                                                <p class="mb-1 mt-1 text-center" style="color: #6A6A6A; font-size: 13px;">
+                                                {{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}
+                                                </p>        
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
                                 </div>
                             </div>
-                            </div>
-                            <hr>
-                        </div>
+
                         </div>
                     </div>
                 </div>
@@ -77,7 +78,7 @@
                             <p class="mb-1">{{ getName(cities, event.location) }}</p>
                         </div>
                     </div>
-                    <img class="card-img-top" src="" alt="Card image cap"
+                    <img class="card-img-top" src="\images\eventoPrueba.webp" alt="Card image cap"
                         style="height: 350px; border-radius: 0;">
                     <div class="card-body">
                         <div class="d-flex w-100 justify-content-between">
@@ -174,7 +175,7 @@
     </div>
 </template>
 <style scoped>
-.p-inputtext{
+.p-inputtext {
     margin-top: 2px;
 }
 
@@ -412,7 +413,7 @@ onMounted(async () => {
     favicon.rel = 'icon';
     favicon.href = '/images/favicon-32x32.png';
     document.head.appendChild(favicon);
-    
+
     const store = useStore();
     const user = computed(() => store.state.auth.user);
 
@@ -421,6 +422,15 @@ onMounted(async () => {
     await getUsers()
     await getEvents()
     await getEventsUser(user.value.id)
+
+    axios.get('/api/getThumbnail')
+        .then(response => {
+            thumbnail.value = response.data;
+            console.log('Profile image URL:', thumbnail.value);
+        })
+        .catch(error => {
+            console.error('Error al obtener la URL de la imagen de perfil:', error);
+        });
 
     watch([search_global, search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {
         isLoadingEvents.value = true;
@@ -486,6 +496,10 @@ const getName = (array, id) => {
 
 async function filterEvents() {
     await getEventsFilter(1, search_global.value, search_category.value, search_id.value, search_name.value, search_description.value, search_location.value, search_start_date.value, search_end_date.value, search_user_id.value, orderColumn.value, orderDirection.value)
+}
+
+function getEventThumbnail(event) {
+    return event.media.length > 0 ? event.media[0].original_url : '/images/default_thumbnail.png';
 }
 
 function getMediaEvent(event) {

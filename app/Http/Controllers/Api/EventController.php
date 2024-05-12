@@ -76,24 +76,39 @@ class EventController extends Controller
     {
         $validatedData = $request->validated();
         $validatedData['user_id'] = auth()->id();
-    
+
         $event = Event::create($validatedData);
-    
+
         if ($request->hasFile('thumbnail')) {
-            $media = $event->addMedia($request->file('thumbnail'))->toMediaCollection();
+            $media = $event->addMedia($request->file('thumbnail'))->toMediaCollection('thumbnails');
             $media->name = 'thumbnail';
         }
-    
-        if ($request->hasFile('additional_image')) { 
-            $media = $event->addMedia($request->file('additional_image'))->toMediaCollection();
+
+        if ($request->hasFile('additional_image')) {
+            $media = $event->addMedia($request->file('additional_image'))->toMediaCollection('additional_images');
             $media->name = 'additional_image';
         }
-    
+
         $event->save();
-    
+
         return new EventResource($event);
     }
-    
+
+    public function getThumbnail()
+    {
+        $user = auth()->user();
+        $thumbnail = $user->getFirstMediaUrl('thumbnails');
+        return response()->json(['thumbnail' => $thumbnail]);
+    }
+
+    public function getAdditionalImage()
+    {
+        $user = auth()->user();
+        $additionalImage = $user->getFirstMediaUrl('additional_images');
+        return response()->json(['additional_images' => $additionalImage]);
+    }
+
+
 
     public function update($id, StoreEventRequest $request)
     {
@@ -102,13 +117,13 @@ class EventController extends Controller
         $event->update($request->validated());
 
         if ($request->hasFile('thumbnail')) {
-            $event->media()->delete();
-            $event->addMediaFromRequest('thumbnail')->preservingOriginal()->toMediaCollection('images/events');
+            $media = $event->addMedia($request->file('thumbnail'))->toMediaCollection('thumbnails');
+            $media->name = 'thumbnail';
         }
 
-        if ($request->hasFile('aditional-thumbnail')) {
-            $event->media()->delete();
-            $event->addMediaFromRequest('aditional-thumbnail')->preservingOriginal()->toMediaCollection('images/events');
+        if ($request->hasFile('additional_image')) {
+            $media = $event->addMedia($request->file('additional_image'))->toMediaCollection('additional_images');
+            $media->name = 'additional_image';
         }
 
         return new EventResource($event);
@@ -130,10 +145,10 @@ class EventController extends Controller
     public function getImageBanner($id)
     {
         $event = Event::with('media')->find($id);
-    
+
         if ($event) {
-            $media = $event->media->first(); 
-    
+            $media = $event->media->first();
+
             if ($media) {
                 return response()->json(['success' => true, 'data' => $media->original_url]);
             } else {
@@ -143,11 +158,11 @@ class EventController extends Controller
             return response()->json(['success' => false, 'message' => 'Evento no encontrado']);
         }
     }
-    
+
     public function showByPromoter($promoter)
     {
         $events = Event::with('media')->where('user_id', $promoter)->get();
-        
+
         return response()->json($events);
 
     }
