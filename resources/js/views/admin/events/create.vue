@@ -44,9 +44,9 @@
                             <div class="form-gorup mb-2">
                                 <div class="flex">
                                     <h6 class="mr-1">Location</h6>
-                                    <select class="select-ubi" id="city-selector" v-model="search_location">
+                                    <select class="select-ubi" id="city-selector" v-model="event.location">
                                         <option value="" selected>Ciudad</option>
-                                        <AutoComplete v-model="event.location" :suggestions="items" @complete="handleLocationComplete" />
+                                        <AutoComplete  v-model="search_location" :suggestions="items" @complete="handleLocationComplete" />
                                         <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
                                     </select>
                                 </div>
@@ -169,13 +169,14 @@ function addEvent() {
     const userId = vuexArray.auth.user.id;
 
     event.value.description = stripHtmlTags(event.value.description);
+    event.value.more_information = stripHtmlTags(event.value.more_information);
 
     const formData = new FormData();
     formData.append('name', event.value.name);
     formData.append('category_id', event.value.category_id);
     formData.append('description', event.value.description);
     formData.append('more_information', event.value.more_information);
-    formData.append('location', selectedLocation.value); // Utiliza selectedLocation en lugar de event.location
+    formData.append('location', event.value.location);
     formData.append('start_date', event.value.start_date);
     formData.append('end_date', event.value.end_date);
     formData.append('user_id', userId);
@@ -199,8 +200,7 @@ function addEvent() {
 }
 
 function handleLocationComplete(selectedItem) {
-    selectedLocation.value = selectedItem.id; // Establece el ID de la ubicación seleccionada
-    console.log(selectedLocation);
+    selectedLocation.value = selectedItem.id;
 }
 
 onMounted(async () => {

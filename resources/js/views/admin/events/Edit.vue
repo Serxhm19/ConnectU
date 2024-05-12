@@ -37,7 +37,7 @@
                 </div>
                 <div class="ml-2">
                     <select v-model="event.category_id" class="form-control">
-                        <option selected :value="event.category_id">{{ event.category_id }}</option>
+                        <option selected :value="event.category_id">{{ categories.find(category => category.id === event.category_id).name }}</option>
                         <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
                     </select>
                 </div>
@@ -47,7 +47,11 @@
                         <span class="text-danger">*</span>
                     </div>
                     <div class="ml-2">
-                        <input v-model="event.location" type="text" class="form-control" placeholder="Location">
+                        <select class="select-ubi" id="city-selector" v-model="event.location">
+                            <option value="" selected>Ciudad</option>
+                            <AutoComplete  v-model="search_location" :suggestions="items" @complete="handleLocationComplete" />
+                            <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="w-50 m-4">
@@ -103,6 +107,15 @@
                 </div>
                 <div class="form-group mb-2">
                     <div class="flex">
+                        <h6 class="mr-1">Descripción</h6>
+                        <span class="text-danger">*</span>
+                    </div>
+                    <div class="ml-2">
+                        <TextEditorComponent v-model="event.description" />
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <div class="flex">
                         <h6 class="mr-1">Información adicional sobre tu evento</h6>
                         <span class="text-danger">*</span>
                     </div>
@@ -116,9 +129,7 @@
     </div>
 </template>
 
-
 <script setup>
-
 import { ref, onMounted, reactive } from "vue";
 import { useForm, useField } from "vee-validate";
 import { useRoute } from "vue-router";
@@ -126,20 +137,16 @@ import * as yup from 'yup';
 import { es } from 'yup-locales';
 import { setLocale } from 'yup';
 import TextEditorComponent from "@/components/TextEditorComponent.vue";
-
+import useSites from "../../../composables/sites";
 
 const schema = yup.object({
     name: yup.string().required().label('Nombre'),
 })
 
-
 const { validate, errors } = useForm({ validationSchema: schema })
 const route = useRoute()
-
+const { cities, getCities } = useSites();
 setLocale(es);
-
-
-
 
 const { value: name } = useField('name', null, { initialValue: '' });
 const { value: description } = useField('description', null, { initialValue: '' });
@@ -161,8 +168,8 @@ const strSuccess = ref();
 const strError = ref();
 
 const categories = ref();
-onMounted(() => {
-
+onMounted(async () => {
+    await getCities();
     document.title = 'ConnectU - Edit Event';
     const favicon = document.createElement('link');
     favicon.rel = 'icon';
@@ -198,7 +205,7 @@ function saveEvent() {
     validate().then(form => {
         if (form.valid) {
             const formData = new FormData();
-            formData.append('name', event.name); // Accede a 'name' directamente desde 'event'
+            formData.append('name', event.name);
             formData.append('category_id', event.category_id);
             formData.append('description', event.description);
             formData.append('more_information', event.more_information);
@@ -212,7 +219,7 @@ function saveEvent() {
 
             const additionalThumbnailFile = document.getElementById('additional_image').files[0];
             formData.append('additional_image', additionalThumbnailFile);
-            // Envía el formData al servidor
+
             axios.post('/api/events/update/' + route.params.id, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -235,4 +242,12 @@ function saveEvent() {
 </script>
 
 
-<style></style>
+<style scoped>
+.select-ubi {
+    border-radius: 20px;
+    margin-top: 15px;
+    text-align: center;
+    border: 1px solid black;
+    width: 220px;
+}
+</style>
