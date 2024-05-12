@@ -13,69 +13,67 @@
     <div v-else class="grid absolut">
         <section class="card event mt-3 col-12 grid">
 
-            <div class="card background-image" v-if="thumbnail.value"
-                :style="{ 'background-image': 'url(' + thumbnail.value.thumbnail + ')', 'background-size': 'cover', 'border': '2px solid white' }">
-
-                <p class="add-event">
-                    {{ countParticipants }} Ins
-                    <button v-if="!signedUp" @click="inscribirse"
-                        class="btn btn-link add-event-button">Inscribirse</button>
-                    <button v-else @click="cancelar" class="btn btn-link add-event-button">Cancelar</button>
-                </p>
-
-                <div class="name-container">
-                    <h1 class="name-event">{{ event.name }}</h1>
-                    <p class="by-text">By {{ promoter.nickname }}</p>
-                </div>
-
+            <div class="card background-image"
+                :style="{ 'background-image': 'url(/images/default-background-image.png)', 'background-size': 'cover', 'border': '2px solid white' }">
             </div>
-            <div class="content-event col-12">
+            <p class="add-event">
+                {{ countParticipants }} Ins
+                <button v-if="!signedUp" @click="inscribirse" class="btn btn-link add-event-button">Inscribirse</button>
+                <button v-else @click="cancelar" class="btn btn-link add-event-button">Cancelar</button>
+            </p>
 
-                <p>{{ event.description }}</p>
-                <!-- <img v-if="event.media[0]" :src="event.media[0].original_url" alt=""> -->
-                <p>{{ event.more_information }}</p>
+            <div class="name-container">
+                <h1 class="name-event">{{ event.name }}</h1>
+                <p class="by-text">By {{ promoter.nickname }}</p>
             </div>
-            <div class="grid">
-                <div class="col-0 lg:col-0 xl:col-3"></div>
-                <div class="content-promoter col-12 lg:col-12 xl:col-6">
-                                 <img v-if="profileImageUrl.value" :src="profileImageUrl.value.profile_image_url" class="profile-pic"
-                        alt="Profile Picture">
-                    <div class="container-name-promoter d-flex  justify-content-center align-items-center">
-                        <div class="gradient-blue gradient-promoter-right "></div>
-                        <h4 class="name-promoter">{{ promoter.nickname }}</h4>
-                        <div class="gradient-blue gradient-promoter-left"></div>
-                    </div>
-
-                    <p class="description-promoter">
-                        {{ promoter.description }}
-                    </p>
-                </div>
-                <div class="col-0 lg:col-0 xl:col-3"></div>
-            </div>
-
-            <section class="other-events col-12 mb-6">
-                <div class="d-flex mt-8">
-                    <h4 class="title-other ml-0">You may also be interested...</h4>
-                    <div class="gradient-blue gradient-slader"></div>
-                </div>
-
-                <div class="slader-other d-flex justify-content-evenly grid">
-                    <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index"
-                        class="col-12 lg:col-12 xl:col-3 d-flex justify-content-center event-slader">
-                        <div class="card" style="width: 25rem;">
-                            <img class="card-img-top" :src="getEventThumbnail(evento)" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title title-other-event">{{ evento.name }}</h5>
-                                <p class="card-text">{{ sliceData(evento.description, 150) }}</p>
-                            </div>
-                            <router-link :to="{ name: 'publi-event.event', params: { id: evento.id } }"
-                                class="button-slader btn">Ver evento...</router-link>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </section>
     </div>
+    <div class="content-event col-12">
+
+        <p>{{ event.description }}</p>
+        <!-- <img v-if="event.media[0]" :src="event.media[0].original_url" alt=""> -->
+        <p>{{ event.more_information }}</p>
+    </div>
+    <div class="grid">
+        <div class="col-0 lg:col-0 xl:col-3"></div>
+        <div class="content-promoter col-12 lg:col-12 xl:col-6">
+            <img v-if="profileImageUrl.value" :src="profileImageUrl.value.profile_image_url" class="profile-pic"
+                alt="Profile Picture">
+            <div class="container-name-promoter d-flex  justify-content-center align-items-center">
+                <div class="gradient-blue gradient-promoter-right "></div>
+                <h4 class="name-promoter">{{ promoter.nickname }}</h4>
+                <div class="gradient-blue gradient-promoter-left"></div>
+            </div>
+
+            <p class="description-promoter">
+                {{ promoter.description }}
+            </p>
+        </div>
+        <div class="col-0 lg:col-0 xl:col-3"></div>
+    </div>
+
+    <section class="other-events col-12 mb-6">
+        <div class="d-flex mt-8">
+            <h4 class="title-other ml-0">You may also be interested...</h4>
+            <div class="gradient-blue gradient-slader"></div>
+        </div>
+
+        <div class="slader-other d-flex justify-content-evenly grid">
+            <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index"
+                class="col-12 lg:col-12 xl:col-3 d-flex justify-content-center event-slader">
+                <div class="card" style="width: 25rem;">
+                    <img class="card-img-top" :src="getEventThumbnail(evento)" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title title-other-event">{{ evento.name }}</h5>
+                        <p class="card-text">{{ sliceData(evento.description, 150) }}</p>
+                    </div>
+                    <router-link :to="{ name: 'publi-event.event', params: { id: evento.id } }"
+                        class="button-slader btn">Ver evento...</router-link>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </template>
 
 
@@ -200,7 +198,4 @@ signUser
 
 <style scoped lang="scss">
 @import "../../../sass/event.scss";
-
-
-
 </style>
