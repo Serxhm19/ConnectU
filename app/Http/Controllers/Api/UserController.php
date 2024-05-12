@@ -164,6 +164,13 @@ class UserController extends Controller
         return response()->json(['profile_image_url' => $profileImageUrl]);
     }
 
+    public function getProfileImageUrlProfile($userId)
+{
+    $user = User::findOrFail($userId); // Fetch the user by ID
+    $profileImageUrl = $user->getFirstMediaUrl('profile-image');
+    return response()->json(['profile_image_url' => $profileImageUrl]);
+}
+
     public function getBackgroundImageUrl()
     {
         $user = auth()->user();

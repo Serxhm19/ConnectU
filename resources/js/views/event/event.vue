@@ -1,9 +1,11 @@
 <template>
-    
+
     <div v-if="loading" class="grid loading d-flex justify-content-center">
         <section class="card event event-loading ml-6 mr-6 mt-3 col-12 grid">
             <div class="card">
-                <div class="col-12"><ProgressSpinner /></div>
+                <div class="col-12">
+                    <ProgressSpinner />
+                </div>
             </div>
 
         </section>
@@ -11,7 +13,8 @@
     <div v-else class="grid absolut">
         <section class="card event mt-3 col-12 grid">
 
-            <div class="event-header col-12" >
+            <div class="card background-image" v-if="thumbnail.value"
+                :style="{ 'background-image': 'url(' + thumbnail.value.thumbnail + ')', 'background-size': 'cover', 'border': '2px solid white' }">
 
                 <p class="add-event">
                     {{ countParticipants }} Ins
@@ -22,7 +25,7 @@
 
                 <div class="name-container">
                     <h1 class="name-event">{{ event.name }}</h1>
-                    <p class="by-text">By {{promoter.nickname}}</p>
+                    <p class="by-text">By {{ promoter.nickname }}</p>
                 </div>
 
             </div>
@@ -30,12 +33,13 @@
 
                 <p>{{ event.description }}</p>
                 <!-- <img v-if="event.media[0]" :src="event.media[0].original_url" alt=""> -->
-                <p>{{ event.more_information }}</p>                              
+                <p>{{ event.more_information }}</p>
             </div>
             <div class="grid">
                 <div class="col-0 lg:col-0 xl:col-3"></div>
                 <div class="content-promoter col-12 lg:col-12 xl:col-6">
-                    <img class="promoter-icon" src="/images/connectu.svg" alt="">
+                                 <img v-if="profileImageUrl.value" :src="profileImageUrl.value.profile_image_url" class="profile-pic"
+                        alt="Profile Picture">
                     <div class="container-name-promoter d-flex  justify-content-center align-items-center">
                         <div class="gradient-blue gradient-promoter-right "></div>
                         <h4 class="name-promoter">{{ promoter.nickname }}</h4>
@@ -59,7 +63,7 @@
                     <div v-for="(evento, index) in promoterEvents.slice(-3)" :key="index"
                         class="col-12 lg:col-12 xl:col-3 d-flex justify-content-center event-slader">
                         <div class="card" style="width: 25rem;">
-                            <img class="card-img-top" src="/images/eventoPrueba.webp" alt="Card image cap">
+                            <img class="card-img-top" :src="getEventThumbnail(evento)" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title title-other-event">{{ evento.name }}</h5>
                                 <p class="card-text">{{ sliceData(evento.description, 150) }}</p>
@@ -92,13 +96,15 @@ const aditional_image = ref('');
 const user = store.state.auth.user;
 let evento_id = '';
 const loading = ref(true);
-
+const profileImageUrl = reactive({ profile_image_url: null });
+const thumbnail = reactive({ thumbnail: null });
 onMounted(async () => {
 
+    console.log(promoter);
     document.title = 'ConnectU - Event';
     const favicon = document.createElement('link');
     favicon.rel = 'icon';
-    favicon.href = '/images/favicon-32x32.png'; 
+    favicon.href = '/images/favicon-32x32.png';
     document.head.appendChild(favicon);
 
     evento_id = route.params.id;
@@ -106,14 +112,39 @@ onMounted(async () => {
     await getCountParticipants(evento_id);
     await getUsers(event.value.user_id);
     await signedUpUser(user.id, evento_id);
-        
+    await getPromoterEvent;
+
     loading.value = false;
+
+    // Supongamos que event es el objeto que contiene la información del evento
+    const userId = promoter.id; // Obtener el ID del creador del evento
+    console.log("Promter" + userId);
+
+    axios.get(`/api/getProfileImageUrlProfile?userId=${userId}`)
+        .then(response => {
+            profileImageUrl.value = response.data;
+            console.log('URL de la imagen de perfil del usuario:', profileImageUrl.value);
+        })
+        .catch(error => {
+            console.error('Error al obtener la URL de la imagen de perfil del usuario:', error);
+        });
+
+
+    axios.get('/api/getThumbnail')
+        .then(response => {
+            thumbnail.value = response.data;
+            console.log('Profile image URL:', thumbnail.value);
+        })
+        .catch(error => {
+            console.error('Error al obtener la URL de la imagen de perfil:', error);
+        });
+
 });
 
 onUpdated(async () => {
     if (evento_id != route.params.id) {
-        await getEvent(route.params.id);   
-    } 
+        await getEvent(route.params.id);
+    }
     await getEvent(evento_id);
     await getCountParticipants(evento_id);
     await getUsers(event.value.user_id);
@@ -155,112 +186,126 @@ function sliceData(text, numSlice) {
     return text.substring(0, numSlice) + " ...";
 }
 
+function getEventThumbnail(event) {
+    if (event && event.media && event.media.length > 0) {
+        return event.media[0].original_url;
+    } else {
+        return '/images/default_thumbnail.png';
+    }
+}
+
+
 signUser
 </script>
 
 <style>
-    .absolut{
-        margin-top: 80px;
-        display: flex;
-        justify-content: center;
-    }
-    .loading{
-        margin-top: 150px;
-        height: 500px;
-        width: 100%;
-    }
-    .event-loading{
-        height: 500px;
-        width: 500px;
-    }
-    .loading .card{
-        height: 500px;
-        width: 500px;
-    }
-    
+.absolut {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+}
 
-    .event {
-        margin-top: 80px;
-        padding: 0;
-        border-radius: 20px;
-        width: 95%;
-    }
+.loading {
+    margin-top: 150px;
+    height: 500px;
+    width: 100%;
+}
 
-    .event-header {
-        display: flex;
-        flex-direction: column;
-        background-image: url('/images/eventoPrueba.webp');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-        min-height: 400px;
-        width: 100%;
-        position: relative;
-        border-radius: 20px 20px 0px 0px;
-        border-bottom: 6px solid #0094FF;
-    }
+.event-loading {
+    height: 500px;
+    width: 500px;
+}
 
-    .event-header::after {
-        content: "";
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        background-image: linear-gradient(90deg, #303030 0%, rgba(48, 48, 48, 0.735) 42.5%, rgba(48, 48, 48, 0.325957) 80.5%, rgba(48, 48, 48, 0) 100%);
-        border-radius: 20px 20px 0px 0px;
-    }
+.loading .card {
+    height: 500px;
+    width: 500px;
+}
 
-    .event-header h1 {
-        color: white;
-        position: relative;
-        z-index: 1;
-        margin-bottom: 0;
-    }
-    .name-container{
-        margin-top: 50px;
-    }
-    .name-event{
-        margin-left: 7rem;
-        text-align: left;
-    }
 
-    .by-text{
-        color: white;
-        position: relative;
-        z-index: 1;
-        margin-left: 350px;
-        font-size: 20px;
-    }
+.event {
+    margin-top: 80px;
+    padding: 0;
+    border-radius: 20px;
+    width: 95%;
+}
 
-    .add-event{
-        z-index: 1;
-        align-self: flex-end;
-        justify-self:flex-start;
-        color: white;
-        background-color: #6CB4EE;
-        margin: 40px;
-        margin-left: 10px;
-        margin-right: 30px;
-        border-radius: 20px;
-        padding-left: 12px;
-    }
-    .add-event-button{
-        z-index: 1;
-        background-color: #002C6F;
-        border-radius: 20px;
-        padding: 7px 15px;
-        color: white;
-        border: 2px solid white;
-        margin: 0;    
-    }
+.event-header {
+    display: flex;
+    flex-direction: column;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+    width: 100%;
+    position: relative;
+    border-radius: 20px 20px 0px 0px;
+    border-bottom: 6px solid #0094FF;
+}
 
-    .add-event-button:hover{
-        background-color: white;
-        color: #002C6F;
-        border: 2px solid #002C6F;
-        
-    }
+.event-header::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-image: linear-gradient(90deg, #303030 0%, rgba(48, 48, 48, 0.735) 42.5%, rgba(48, 48, 48, 0.325957) 80.5%, rgba(48, 48, 48, 0) 100%);
+    border-radius: 20px 20px 0px 0px;
+}
+
+.event-header h1 {
+    color: white;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0;
+}
+
+.name-container {
+    margin-top: 50px;
+}
+
+.name-event {
+    margin-left: 7rem;
+    text-align: left;
+}
+
+.by-text {
+    color: white;
+    position: relative;
+    z-index: 1;
+    margin-left: 350px;
+    font-size: 20px;
+}
+
+.add-event {
+    z-index: 1;
+    align-self: flex-end;
+    justify-self: flex-start;
+    color: white;
+    background-color: #6CB4EE;
+    margin: 40px;
+    margin-left: 10px;
+    margin-right: 30px;
+    border-radius: 20px;
+    padding-left: 12px;
+}
+
+.add-event-button {
+    z-index: 1;
+    background-color: #002C6F;
+    border-radius: 20px;
+    padding: 7px 15px;
+    color: white;
+    border: 2px solid white;
+    margin: 0;
+}
+
+.add-event-button:hover {
+    background-color: white;
+    color: #002C6F;
+    border: 2px solid #002C6F;
+
+}
 
 .absolut {
     margin-top: 80px;
@@ -282,7 +327,6 @@ signUser
 }
 
 .event-header {
-    background-image: url('/images/eventoPrueba.webp');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -372,11 +416,13 @@ signUser
     max-height: 400px;
     margin: 30px 0;
 }
-.button-slader:hover{
-        border-color: #0070BB;
-        color: white;
-        background-color: #0070BB;
-    }
+
+.button-slader:hover {
+    border-color: #0070BB;
+    color: white;
+    background-color: #0070BB;
+}
+
 .content-promoter {
     padding: 0px 70px;
     display: flex;
@@ -467,35 +513,42 @@ signUser
 }
 
 @media (max-width: 768px) {
-        .event-header{
-            min-height: 300px;
-            flex-direction: column-reverse;
-        }
-        .event-header::after{
-            max-height: 300px;
-            flex-direction: column-reverse;
-        }
-        .by-text{
-            display: none;
-        }
-        .add-event{
-            align-self: center;
-        }
-        .name-promoter{
-            width: auto;
-            padding: 2px 15px
-        }
-        .name-event{
-            margin: 0;
-            text-align: center;
-        }
-        .title-other{
-            margin-top: 40px;
-            padding-left: 20px;
-            text-align: left;
-        }
-        .gradient-blue{
-            display: none;
-        }
+    .event-header {
+        min-height: 300px;
+        flex-direction: column-reverse;
     }
+
+    .event-header::after {
+        max-height: 300px;
+        flex-direction: column-reverse;
+    }
+
+    .by-text {
+        display: none;
+    }
+
+    .add-event {
+        align-self: center;
+    }
+
+    .name-promoter {
+        width: auto;
+        padding: 2px 15px
+    }
+
+    .name-event {
+        margin: 0;
+        text-align: center;
+    }
+
+    .title-other {
+        margin-top: 40px;
+        padding-left: 20px;
+        text-align: left;
+    }
+
+    .gradient-blue {
+        display: none;
+    }
+}
 </style>
