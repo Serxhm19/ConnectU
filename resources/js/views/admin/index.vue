@@ -26,18 +26,20 @@
                                     <hr>
                                 </div>
                                 <div v-else v-for="event in events_user" :key="event.id">
-                                    <div class="d-flex justify-content-between mb-1 w-100">
-                                        <div style="display: flex; width: 100%;">
-                                            <img :src="getEventThumbnail(event)" alt=""
-                                                style="height: 30px; width: 30px; border-radius: 30px;">
-                                            <div style="width: 100%;">
-                                                <h6 class="ml-3 mb-1 mt-1 text-left">{{ event.name }}</h6>
-                                                <p class="mb-1 mt-1 text-center" style="color: #6A6A6A; font-size: 13px;">
-                                                {{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}
-                                                </p>        
+                                    <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }">
+                                        <div class="d-flex justify-content-between mb-1 w-100">
+                                            <div style="display: flex; width: 100%;">
+                                                <img :src="getEventThumbnail(event)" alt=""
+                                                    style="height: 30px; width: 30px; border-radius: 30px;">
+                                                <div style="width: 100%;">
+                                                    <h6 class="ml-3 mb-1 mt-1 text-left">{{ event.name }}</h6>
+                                                    <p class="mb-1 mt-1 text-center" style="color: #6A6A6A; font-size: 13px;">
+                                                    {{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}
+                                                    </p>        
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </router-link>
                                     <hr>
                                 </div>
                             </div>
@@ -72,7 +74,7 @@
                 <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;">
 
                     <div class="card-body" style="padding: 8px 14px;">
-                        <div class="d-flex w-100 justify-content-between">
+                        <div class="event-header d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ event.name }}</h5>
                             <p class="mb-1">{{ getName(cities, event.location) }}</p>
                         </div>
@@ -204,7 +206,7 @@
     }
 
     .button-view-events{
-        width: 150%;
+        width: 150px;
         background-color: #fff;
         border-color: #0070BB;
         color: #0070BB;
@@ -225,7 +227,12 @@
         padding-right: 10px;
         margin-top: 70px;
     }
-
+    .event-header{
+        flex-direction: column;
+    }
+    .event-header p{
+        align-self: center;
+    }
     .col-filters{
         z-index: 1;
     }
@@ -403,7 +410,7 @@ const search_end_date = ref('')
 const search_user_id = ref('')
 const orderColumn = ref('created_at')
 const orderDirection = ref('desc')
-
+const thumbnail = ref();
 
 onMounted(async () => {
 
@@ -500,11 +507,6 @@ async function filterEvents() {
 function getEventThumbnail(event) {
     return event.media.length > 0 ? event.media[0].original_url : '/images/default_thumbnail.png';
 }
-
-function getMediaEvent(event) {
-    getUrlBannerEvent(event.id);
-}
-
 
 const showEvents = ref(false);
 const showFilters = ref(false);

@@ -1,7 +1,7 @@
 <template>
-  <div class="chat-container container-fluid">
+  <div class="row chat-container container-fluid">
     <!-- Chat Header -->
-    <div class="card chat-header">
+    <div class="col-12 card chat-header">
       <div class="chat-text">
         <template v-if="selectedEvent && selectedEvent.id">
           <router-link :to="{ name: 'publi-event.event', params: { id: selectedEvent.id } }">
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Chat Body -->
-    <div class="row">
+    <div class="col-12 row">
       <!-- Columna Izquierda -->
       <div class="col-lg-4 col-sm-12">
         <div class="card events-list">
@@ -279,7 +279,7 @@ body {
 
 .chat-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 500px;
 }
 
@@ -316,7 +316,7 @@ body {
   width: 1000px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 500px) {
   .chat-footer input {
     flex: 1;
     margin-right: 10px;

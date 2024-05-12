@@ -58,9 +58,8 @@ class EventController extends Controller
                         ->orWhere('end_date', 'like', '%' . $searchGlobal . '%');
                 });
             })
-
             ->orderBy($orderColumn, $orderDirection)
-            ->paginate(10);
+            ->paginate(50);
 
         return $events;
     }
