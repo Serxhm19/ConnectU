@@ -20,16 +20,18 @@
                                     <hr>
                                 </div>
                                 <div v-else v-for="event in events_user" :key="event.id">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <div style="display: flex;">
+                                    <div class="d-flex justify-content-between mb-1 w-100">
+                                        <div style="display: flex; width: 100%;">
+                                            
                                             <img src="\images\eventoPrueba.webp" alt=""
                                                 style="height: 30px; width: 30px; border-radius: 30px;">
-                                            <h6 class="ml-3 mb-1 mt-1 text-left">{{ sliceData(event.name) }}</h6>
+                                            <div style="width: 100%;">
+                                                <h6 class="ml-3 mb-1 mt-1 text-left">{{ event.name }}</h6>
+                                                <p class="mb-1 mt-1 text-center" style="color: #6A6A6A; font-size: 13px;">
+                                                {{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}
+                                                </p>        
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="d-flex w-100 justify-content-center">
-                                        <p class="mb-1 mt-1 text-center" style="color: #6A6A6A; font-size: 13px;">{{
-                                    formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</p>
                                     </div>
                                     <hr>
                                 </div>
@@ -159,6 +161,10 @@
     </div>
 </template>
 <style scoped>
+.p-inputtext{
+    margin-top: 2px;
+}
+
 .content-events {
     margin-top: 0rem;
 }
@@ -226,7 +232,6 @@
     background-color: white;
     border-radius: 20px;
     margin-bottom: 20px;
-    border: 1px solid black;
 }
 
 .searchLabel span {
@@ -351,7 +356,7 @@ import Skeleton from "primevue/skeleton";
 import AutoComplete from "primevue/autocomplete";
 
 const { loadingCategories, categories, getCategories, deleteCategory } = useCategories()
-const { isLoadingEvents, isLoadingUserEvents, events, users, events_user, getEvents, getEventsFilter, getUsers, getEventsUser } = useEvents()
+const { bannerEvent, isLoadingEvents, isLoadingUserEvents, events, users, events_user, getEvents, getUrlBannerEvent, getEventsFilter, getUsers, getEventsUser } = useEvents()
 const { cities, getCities } = useSites()
 
 const search_global = ref('')

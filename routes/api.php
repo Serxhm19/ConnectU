@@ -59,6 +59,7 @@ Route::delete('events/{id}', [EventController::class, 'destroy']);
 Route::get('events/show/{id}', [EventController::class, 'show']);
 Route::get('events/show/promoter/{promoter}', [EventController::class, 'showByPromoter']);
 Route::get('events/search/promoter/', [EventController::class, 'searchPromoter']);
+Route::get('events/getImageBanner/{id}', [EventController::class, 'getImageBanner']);
 //---------------------------------------------------------------//
 
 //--------------------------Sites----------------------------------//

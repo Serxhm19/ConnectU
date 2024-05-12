@@ -5,6 +5,7 @@ import axios from 'axios' // Importa axios para realizar solicitudes HTTP
 export default function useEvents() {
     const promoter = ref([])
     const events = ref([])
+    const bannerEvent = ref ()
     const isLoadingEvents = ref(true);
     const isLoadingUserEvents = ref(true);
     const promoterEvents = ref([])
@@ -138,17 +139,24 @@ export default function useEvents() {
             const response = await axios.get('/api/users/getUsers');
 
             let user = response.data;
-            console.log(user);
-            // Verifica si se encontró el usuario
+
             if (user) {
-                // Si se encontró, asigna el usuario a users.value
                 users.value = user;
             } else {
-                // Si no se encontró, asigna un array vacío a users.value
                 users.value = [];
             }
         } catch (error) {
             console.error('Error al obtener usuarios:', error);
+        }
+    }
+
+    const getUrlBannerEvent = async (id) => {
+        try {
+            const response = await axios.get(`/api/events/getImageBanner/${id}`);
+
+            bannerEvent.value = response.data;
+        } catch (error) {
+            console.error('Error al obtener media del evento: ', error);
         }
     }
 
@@ -256,6 +264,7 @@ export default function useEvents() {
     return {
         isLoadingEvents,
         isLoadingUserEvents,
+        bannerEvent,
         events,
         event,
         promoterEvents,
@@ -268,6 +277,7 @@ export default function useEvents() {
         getEvents,
         getEventsFilter,
         getEvent,
+        getUrlBannerEvent,
         getEventsPromoter,
         getPromoterEvent,
         getUsers,

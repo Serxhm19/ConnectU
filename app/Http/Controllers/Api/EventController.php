@@ -127,7 +127,23 @@ class EventController extends Controller
         return response()->json($event);
 
     }
-
+    public function getImageBanner($id)
+    {
+        $event = Event::with('media')->find($id);
+    
+        if ($event) {
+            $media = $event->media->first(); 
+    
+            if ($media) {
+                return response()->json(['success' => true, 'data' => $media->original_url]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'No se encontraron medios para el evento']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Evento no encontrado']);
+        }
+    }
+    
     public function showByPromoter($promoter)
     {
         $events = Event::with('media')->where('user_id', $promoter)->get();
