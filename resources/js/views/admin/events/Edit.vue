@@ -16,28 +16,18 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 <strong>{{ strError }}</strong>
             </div>
-
+            {{ event }}
 
             <form @submit.prevent="saveEvent">
-
-
                 <div class="form-group mb-2">
                     <label>Nombre</label><span class="text-danger"> *</span>
-                    <input type="text" class="form-control" v-model="event.name" placeholder="Nombre tarea">
-                    <div class="text-danger mt-1">
-                        {{ errors.name }}
-                    </div>
+                    <input type="text" class="form-control" v-model="event.name" placeholder="Nombre evento">
                 </div>
 
-
-                <div class="form-group mb-2">
-                    <label>Descripción</label><span class="text-danger"> *</span>
-                    <textarea class="form-control" rows="3" v-model="event.description"
-                        placeholder="Descripción"></textarea>
-                </div>
                 <div class="ml-2">
+                    <label>Category event</label><span class="text-danger"> *</span>
                     <select v-model="event.category_id" class="form-control">
-                        <option selected :value="event.category_id">{{ categories.find(category => category.id === event.category_id).name }}</option>
+                        <option v-if="categories && event" selected :value="event.category_id">{{ getName(categories, event.category_id) }}</option>
                         <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
                     </select>
                 </div>
@@ -48,7 +38,7 @@
                     </div>
                     <div class="ml-2">
                         <select class="select-ubi" id="city-selector" v-model="event.location">
-                            <option value="" selected>Ciudad</option>
+                            <option :value="event.location" selected>{{ getName(cities, event.location) }}</option>
                             <AutoComplete  v-model="search_location" :suggestions="items" @complete="handleLocationComplete" />
                             <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
                         </select>
@@ -131,7 +121,7 @@
 
 <script setup>
 import { ref, onMounted, reactive } from "vue";
-import { useForm, useField } from "vee-validate";
+import { useForm } from "vee-validate";
 import { useRoute } from "vue-router";
 import * as yup from 'yup';
 import { es } from 'yup-locales';
@@ -148,18 +138,15 @@ const route = useRoute()
 const { cities, getCities } = useSites();
 setLocale(es);
 
-const { value: name } = useField('name', null, { initialValue: '' });
-const { value: description } = useField('description', null, { initialValue: '' });
-const { value: start_date } = useField('start_date', null, { initialValue: '' });
-const { value: end_date } = useField('end_date', null, { initialValue: '' });
-
 
 const event = reactive({
     user_id: '',
-    name,
-    description,
-    start_date,
-    end_date,
+    name: '',
+    description: '',
+    more_information: '',
+    category_id: '',
+    start_date: '',
+    end_date: '',
     thumbnail: ''
 })
 
@@ -181,6 +168,8 @@ onMounted(async () => {
             event.user_id = response.data.user_id;
             event.name = response.data.name;
             event.description = response.data.description;
+            event.more_information = response.data.more_information;
+            event.category_id = response.data.category_id;
             event.start_date = response.data.start_date;
             event.end_date = response.data.end_date;
         })
@@ -213,12 +202,15 @@ function saveEvent() {
             formData.append('start_date', event.start_date);
             formData.append('end_date', event.end_date);
             formData.append('user_id', userId);
+            if (document.getElementById('thumbnail').files[0]) {
+                const thumbnailFile = document.getElementById('thumbnail').files[0];
+                formData.append('thumbnail', thumbnailFile);
+            }
 
-            const thumbnailFile = document.getElementById('thumbnail').files[0];
-            formData.append('thumbnail', thumbnailFile);
-
-            const additionalThumbnailFile = document.getElementById('additional_image').files[0];
-            formData.append('additional_image', additionalThumbnailFile);
+            if (document.getElementById('additional_image').files[0]) {
+                const additionalThumbnailFile = document.getElementById('additional_image').files[0];
+                formData.append('additional_image', additionalThumbnailFile);
+            }
 
             axios.post('/api/events/update/' + route.params.id, formData, {
                 headers: {
@@ -237,7 +229,14 @@ function saveEvent() {
     })
 }
 
-
+function getName(objects, id){
+    const filteredData = objects.filter(object => object.id === id);
+    if (filteredData.length > 0) {
+        return filteredData[0].name;
+    } else {
+        return "";
+    }
+}
 
 </script>
 

@@ -2,7 +2,8 @@
   <div class="row chat-container container-fluid">
     <!-- Chat Header -->
     <div class="col-12 card chat-header">
-      <div class="chat-text">
+      <button @click="toggleEventList" class="toggle-button btn btn-primary mb-4" >CHATS</button>
+      <div class="chat-text" :class="{ 'hide-chat': !showChat }">
         <template v-if="selectedEvent && selectedEvent.id">
           <router-link :to="{ name: 'publi-event.event', params: { id: selectedEvent.id } }">
             {{ selectedEvent.eventData.name }}
@@ -24,18 +25,20 @@
     <!-- Chat Body -->
     <div class="col-12 row">
       <!-- Columna Izquierda -->
-      <div class="col-lg-4 col-sm-12">
-        <div class="card events-list">
-          <div class="My-Events">
+      <div class="col-xs-12 col-sm-4">
+        <div class="card events-list" :class="{ 'hide-event-list': !showEventList }">
+          <div class="My-Events" >
             <h2 class="buscarEvento">Buscar Evento</h2>
             <input type="text" v-model="searchQuery" placeholder="Search events..." class="inputSearch">
             <hr>
             <ul class="list-group list-group-flush">
               <li v-for="event in filteredEvents" :key="event.event_id" @click="selectEvent(event.event_id)" class="list-group-item EventsButton">
-                <div class="events">
-                  <img src="\images\eventoPrueba.webp" class="chat-pic" alt="Profile Picture">
-                  <div class="event-name">{{ event.eventData ? event.eventData.name : 'Cargando...' }}</div>
-                </div>
+                <button @click="toggleEventList" class="toggle-button">
+                  <div class="events">
+                    <img src="\images\eventoPrueba.webp" class="chat-pic" alt="Profile Picture">
+                    <div class="event-name">{{ event.eventData ? event.eventData.name : 'Cargando...' }}</div>
+                  </div>
+                </button>
               </li>
             </ul>
             <hr>
@@ -43,8 +46,8 @@
         </div>
       </div>
       <!-- Chat Body -->
-      <div class="col-lg-8 col-sm-12">
-        <div class="chat col-sm-12">
+      <div class="col-xs-12 col-sm-8">
+        <div class="chat" :class="{ 'hide-chat': !showChat }">
           <!-- Card de Mensajes -->
           <div class="card chat-body">
             <ul class="list-group list-group-flush chat">
@@ -102,13 +105,14 @@ export default {
       selectedEvent: null,
       lastMessage: null,
       searchQuery: '',
-
-
-    }
+      showEventList: true,
+      showChat: false
+    } 
   },
 
 
   mounted() {
+    
     setInterval(this.fetchMessages, 3000);
     this.fetchUserEvents();
 
@@ -124,7 +128,10 @@ export default {
     const user = store.state.auth.user;
     return user;
   },
-
+  toggleEventList() {
+    this.showEventList = !this.showEventList;
+    this.showChat = !this.showEventChat;
+  },
   reversedMessages() {
     return this.messages.slice().reverse();
   },
@@ -179,8 +186,6 @@ export default {
           });
       }
     },
-
-
 
     formatDateToText(date) {
       const messageDate = new Date(date);
@@ -316,13 +321,7 @@ body {
   width: 1000px;
 }
 
-@media (max-width: 500px) {
-  .chat-footer input {
-    flex: 1;
-    margin-right: 10px;
-    width: 200px;
-  }
-}
+
 
 .chat-text {
   display: flex;
@@ -561,20 +560,66 @@ h2.buscarEvento {
     font-size: 22px;
     color: #0070bb;
 }
+.toggle-button{
+    display: none;
+  }
+@media (max-width: 500px) {
+  .toggle-button{
+    background-color: #fff;
+    border-color: #0070BB;
+    color: #0070BB;
+    width: 100%;
+  }
 
-@media (max-width: 768px) {
+  .toggle-button:hover{
+    background-color: #0070BB;
+    border-color: #0070BB;
+    color: #fff;
+  }
   .chat-container {
     width: 450px;
   }
-}
+  .chat-body{
+    width: 100%;
+  }
+  .no-event-img{
+    margin: 0;
+    width: 100%;
+  }
+  .chat-footer input {
+    flex: 1;
+    margin-right: 10px;
+    width: 200px;
+  }
 
+  .chat-header{
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chat-text a{
+    width: 100%;
+    text-align: center;
+  }
+  .user-profile{
+    display: none;
+  }
+  .hide-event-list {
+    display: none;
+  }
+
+  .hide-chat {
+    display: none;
+  }
+}
 .profile-pic-small img {
   width: 30px;
   height: 30px;
 }
 
 .inputSearch {
-    width: 300px;
+    width: 100%;
     border-radius: 30px;
     border: 1px solid black;
     height: 30px;
