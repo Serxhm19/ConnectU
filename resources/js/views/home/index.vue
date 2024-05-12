@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid login-view">
         <div class="row">
             <!-- Columna para el logo -->
             <div class="col-md-4 col-sm-12">
@@ -111,18 +111,10 @@
 
 </template>
 <style scoped lang="scss">
-@import "../../../sass/login.scss";
+@import "../../../sass/login";
 
-.layout-main-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    justify-content: space-between;
-    padding: 1rem 1rem 1rem 1rem;
-    transition: margin-left 0.2s;
-    margin: 0;
-    background: white !important;
-}
+
+
 </style>
 
 <script setup>

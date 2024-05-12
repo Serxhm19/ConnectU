@@ -13,10 +13,9 @@
                     <div class="card-body" style="padding: 8px 14px;">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ event.name }}</h5>
-                            <p class="mb-1">{{ event.location }}</p>
                         </div>
                     </div>
-                    <img class="card-img-top" src="\images\logo.png" alt="Card image cap"
+                    <img class="card-img-top" :src="getEventThumbnail(event)" alt="Card image cap"
                         style="height: 350px; border-radius: 0;">
                     <div class="card-body">
                         <div class="d-flex w-100 justify-content-between">
@@ -70,6 +69,10 @@ onMounted(async () => {
 
 
 });
+
+function getEventThumbnail(event) {
+    return event && event.media && event.media.length > 0 ? event.media[0].original_url : '/images/default_thumbnail.png';
+}
 
 const user = ref(null);
 const userEvents = ref([]);
