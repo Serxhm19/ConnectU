@@ -28,8 +28,7 @@
                                 <div v-else v-for="event in events_user" :key="event.id">
                                     <div class="d-flex justify-content-between mb-1 w-100">
                                         <div style="display: flex; width: 100%;">
-                                            
-                                            <img src="\images\eventoPrueba.webp" alt=""
+                                            <img :src="getEventThumbnail(event)" alt=""
                                                 style="height: 30px; width: 30px; border-radius: 30px;">
                                             <div style="width: 100%;">
                                                 <h6 class="ml-3 mb-1 mt-1 text-left">{{ event.name }}</h6>
@@ -78,7 +77,7 @@
                             <p class="mb-1">{{ getName(cities, event.location) }}</p>
                         </div>
                     </div>
-                    <img class="card-img-top" src="\images\eventoPrueba.webp" alt="Card image cap"
+                    <img class="card-img-top" :src="getEventThumbnail(event)" alt="Card image cap"
                         style="height: 350px; border-radius: 0;">
                     <div class="card-body">
                         <div class="d-flex w-100 justify-content-between">
