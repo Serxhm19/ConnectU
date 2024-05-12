@@ -155,7 +155,7 @@ const getName = (array, id) => {
 
 </script>
 <style scoped lang="scss">
-@import "../../../../../sass/promoter.scss";
+@import "../../../../sass/promoter.scss";
 
 
 

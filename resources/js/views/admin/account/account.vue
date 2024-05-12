@@ -345,7 +345,7 @@ function sliceData(text, numSlice) {
 }
 </script>
 <style scoped lang="scss">
-@import "../../../../../sass/account.scss";
+@import "../../../../sass/account.scss";
 
 
 

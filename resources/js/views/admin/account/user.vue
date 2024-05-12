@@ -147,7 +147,7 @@ const getName = (array, id) => {
 </script>
 
 <style scoped lang="scss">
-@import "./../../../../sass/user.scss";
+@import "../../../../sass/user";
 
 
 
