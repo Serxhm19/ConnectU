@@ -116,11 +116,10 @@ onMounted(async () => {
 
     loading.value = false;
 
-    // Supongamos que event es el objeto que contiene la información del evento
-    const userId = promoter.id; // Obtener el ID del creador del evento
+    const userId = promoter.id; 
     console.log("Promter" + userId);
 
-    axios.get(`/api/getProfileImageUrlProfile?userId=${userId}`)
+    axios.get(`/api/getProfileImageUrl`)
         .then(response => {
             profileImageUrl.value = response.data;
             console.log('URL de la imagen de perfil del usuario:', profileImageUrl.value);
