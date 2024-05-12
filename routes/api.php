@@ -105,6 +105,8 @@ Route::post('updateProfileImage', [UserController::class, 'uploadProfileImage'])
 Route::post('updateBackgroundImage', [UserController::class, 'uploadBackgroundImage']);
 
 Route::get('/getProfileImageUrl', [UserController::class, 'getProfileImageUrl']);
+Route::get('/getProfileImageUrlProfile', [UserController::class, 'getProfileImageUrlProfile']);
+
 Route::get('/getBackgroundImageUrl', [UserController::class, 'getBackgroundImageUrl']);
 
 Route::get('/getThumbnail', [EventController::class, 'getThumbnail']);
