@@ -1,46 +1,51 @@
 <template>
     <div class="grid">
         <div class="col-12 lg:col-3 xl:col-3">
-            <div class="card-body content-chats-view gotham">
-                <div class="card mb-4">
+            <div class="card-body content-events-user gotham">
+                <!-- Botón para mostrar apartado de mis eventos -->
+                <button v-if="screenWidth <= 500" @click="showEvents = !showEvents" class="button-view-events btn btn-primary">
+                    {{ showEvents ? 'Ocultar eventos' : 'Mis eventos' }}
+                </button>
+
+                <!-- apartado de eventos -->
+                <div class="card mb-4 container-my-events" v-if="showEvents || screenWidth > 500">
                     <div class="card-body chats">
                         <h3 class="mb-1 mt-1 text-center">My events</h3>
                         <hr>
                         <div class="list-group">
-                            <div class="list-group-item list-group-chat">
-                                <div v-if="isLoadingUserEvents" v-for="x in 3">
-                                    <div class="flex mb-3">
-                                        <Skeleton shape="circle" size="4rem" class="mr-2" borderRadius="50px"></Skeleton>
-                                        <div>
-                                            <Skeleton width="10rem" class="mb-2"></Skeleton>
-                                            <Skeleton width="5rem" class="mb-2"></Skeleton>
-                                            <Skeleton height=".5rem"></Skeleton>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                </div>
-                                <div v-else v-for="event in events_user" :key="event.id">
-                                    <div class="d-flex justify-content-between mb-1 w-100">
-                                        <div style="display: flex; width: 100%;">
-                                            
-                                            <img src="\images\eventoPrueba.webp" alt=""
-                                                style="height: 30px; width: 30px; border-radius: 30px;">
-                                            <div style="width: 100%;">
-                                                <h6 class="ml-3 mb-1 mt-1 text-left">{{ event.name }}</h6>
-                                                <p class="mb-1 mt-1 text-center" style="color: #6A6A6A; font-size: 13px;">
-                                                {{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}
-                                                </p>        
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr>
+                        <!-- Contenido de carga de mis eventos -->
+                        <div v-if="isLoadingUserEvents" v-for="x in 3">
+                            <div class="flex mb-3">
+                            <Skeleton shape="circle" size="4rem" class="mr-2" borderRadius="50px"></Skeleton>
+                            <div>
+                                <Skeleton width="10rem" class="mb-2"></Skeleton>
+                                <Skeleton width="5rem" class="mb-2"></Skeleton>
+                                <Skeleton height=".5rem"></Skeleton>
+                            </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div v-else v-for="event in events_user" :key="event.id">
+                            <!-- Código para eventos del usuario -->
+                            {{ getMediaEvent(event) }}
+                            <div class="d-flex justify-content-between mb-1 w-100">
+                            <div style="display: flex; width: 100%;">
+                                <img src="" alt=""
+                                style="height: 30px; width: 30px; border-radius: 30px;">
+                                <div style="width: 100%;">
+                                <h6 class="ml-3 mb-1 mt-1 text-left">{{ event.name }}</h6>
+                                <p class="mb-1 mt-1 text-center" style="color: #6A6A6A; font-size: 13px;">
+                                    {{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}
+                                </p>
                                 </div>
                             </div>
-
+                            </div>
+                            <hr>
+                        </div>
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-6 gotham content-events">
             <div v-if="isLoadingEvents">
@@ -65,19 +70,23 @@
             </div>
             <div v-else style="border-radius: 40px;">
                 <div v-for="event in events" :key="event.id" class="card event-home" style="border-radius: 20px;">
+
                     <div class="card-body" style="padding: 8px 14px;">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ event.name }}</h5>
                             <p class="mb-1">{{ getName(cities, event.location) }}</p>
                         </div>
                     </div>
-                    <img class="card-img-top" src="\images\eventoPrueba.webp" alt="Card image cap"
+                    <img class="card-img-top" src="" alt="Card image cap"
                         style="height: 350px; border-radius: 0;">
                     <div class="card-body">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ getUserName(event.user_id) }}</h5>
-                            <p class="mb-1" style="color: grey">{{ formatDate(event.start_date) }} - {{
-                                    formatDate(event.end_date) }}</p>
+                            <p class="mb-1" style="color: grey">
+                                {{ formatDate(event.start_date) }} 
+                                - 
+                                {{ formatDate(event.end_date) }}
+                            </p>
                         </div>
                         <div class="d-flex justify-content-center" style="margin: 20px 30px;">
                             <p style="text-align: justify;">
@@ -94,10 +103,14 @@
                     </div>
                 </div>
             </div>
-
         </div>
-        <div class="col-12 lg:col-3 xl:col-3 gotham">
-            <div class="fixed filters">
+        <div class="col-filters col-12 lg:col-3 xl:col-3 gotham">
+            <!-- Botón para mostrar apartado de filtros -->
+            <button v-if="screenWidth <= 500" @click="showFilters = !showFilters" class="button-view-filters btn btn-primary">
+                {{ showFilters ? 'Ocultar filtros' : 'Filtrar' }}
+            </button>
+
+            <div class="fixed filters" v-if="showFilters || screenWidth > 500">
                 <div class="searchLabel">
                     <IconField iconPosition="left">
                         <InputIcon class="pi pi-search"> </InputIcon>
@@ -177,7 +190,7 @@
     border: 0;
 }
 
-.content-chats-view {
+.content-events-user {
     position: fixed;
     top: 7.5rem;
     left: 20px;
@@ -185,17 +198,37 @@
     width: 23%;
 }
 
-@media (max-width: 768px) {
-    .content-chats-view {
-        display: none;
+@media (max-width: 500px) {
+    .content-events-user{
+        margin-top: -50px;
     }
 
+    .button-view-events{
+        width: 150px;
+        background-color: #fff;
+        border-color: #0070BB;
+        color: #0070BB;
+        margin-bottom: 5px;
+    }
+    .button-view-events:hover{
+        background-color: #0070BB;
+        border-color: #0070BB;
+        color: #fff;
+    }
+
+    .container-my-events{
+        width: max-content;
+        border: 2px solid #0070BB;
+    }
     .content-events {
-        padding-left: 20px;
-        padding-right: 20px;
-        margin-top: 80px;
+        padding: 0;
+        padding-right: 10px;
+        margin-top: 70px;
     }
 
+    .col-filters{
+        z-index: 1;
+    }
 }
 
 .chats hr {
@@ -389,12 +422,9 @@ onMounted(async () => {
     await getEvents()
     await getEventsUser(user.value.id)
 
-    changeNameLocationEvent()
-
     watch([search_global, search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {
         isLoadingEvents.value = true;
         filterEvents()
-        changeNameLocationEvent()
     });
 
     const categoryP = document.getElementsByClassName('category-p');
@@ -423,7 +453,6 @@ onMounted(async () => {
 
 watch([search_global, search_category, search_id, search_name, search_description, search_location, search_start_date, search_end_date, search_user_id, orderColumn, orderDirection], () => {
     filterEvents()
-    changeNameLocationEvent()
 });
 
 function getCategoryName(categoryId) {
@@ -459,14 +488,19 @@ async function filterEvents() {
     await getEventsFilter(1, search_global.value, search_category.value, search_id.value, search_name.value, search_description.value, search_location.value, search_start_date.value, search_end_date.value, search_user_id.value, orderColumn.value, orderDirection.value)
 }
 
-function changeNameLocationEvent() {
-    /*events.forEach(evento => {
-        const city = cities.find(c => c.id === evento.location);
-        if (city) {
-            evento.location = city.name; // Añadir una nueva propiedad category_name al evento con el nombre de la categoría
-        }
-    });
-    */
+function getMediaEvent(event) {
+    getUrlBannerEvent(event.id);
 }
+
+
+const showEvents = ref(false);
+const showFilters = ref(false);
+const screenWidth = ref(window.innerWidth);
+
+const updateScreenWidth = () => {
+    screenWidth.value = window.innerWidth;
+};
+
+window.addEventListener("resize", updateScreenWidth);
 
 </script>
