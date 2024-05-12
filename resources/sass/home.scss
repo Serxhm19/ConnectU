@@ -1,0 +1,208 @@
+.p-inputtext {
+    margin-top: 2px;
+}
+
+.content-events {
+    margin-top: 0rem;
+}
+
+.gotham {
+    font-family: Gotham;
+}
+
+.list-group-chat {
+    border: 0;
+}
+
+.content-events-user {
+    position: fixed;
+    top: 7.5rem;
+    left: 20px;
+    z-index: 997;
+    width: 23%;
+}
+
+@media (max-width: 500px) {
+    .content-events-user {
+        margin-top: -50px;
+    }
+
+    .button-view-events {
+        width: 150px;
+        background-color: #fff;
+        border-color: #0070BB;
+        color: #0070BB;
+        margin-bottom: 5px;
+    }
+
+    .button-view-events:hover {
+        background-color: #0070BB;
+        border-color: #0070BB;
+        color: #fff;
+    }
+
+    .container-my-events {
+        width: max-content;
+        border: 2px solid #0070BB;
+    }
+
+    .content-events {
+        padding: 0;
+        padding-right: 10px;
+        margin-top: 70px;
+    }
+
+    .event-header {
+        flex-direction: column;
+    }
+
+    .event-header p {
+        align-self: center;
+    }
+
+    .col-filters {
+        z-index: 1;
+    }
+}
+
+.chats hr {
+    border: 1px solid black;
+}
+
+.event-home {
+    padding: 0;
+}
+
+.event-home img {
+    width: 100%;
+    height: 200px;
+
+}
+
+
+
+
+/* FILTER CSS */
+.filters {
+    width: 24%;
+    max-height: 708px;
+    overflow: auto;
+}
+
+.title-filter {
+    font-size: 20px;
+    text-align: center;
+}
+
+/*SEARCH LABEL CSS */
+.searchLabel {
+    background-color: white;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.searchLabel span {
+    padding: 0 15px;
+    border-right: 1px solid black;
+}
+
+input.p-inputtext {
+    width: 87%;
+    border-radius: 0 20px 20px 0;
+    border: 0;
+}
+
+input.p-inputtext:focus {
+    border: 0;
+}
+
+
+/*FILTER LOCATION CSS */
+.filters-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.p-tree-wrapper ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.select-ubi {
+    border-radius: 20px;
+    margin-top: 15px;
+    text-align: center;
+    border: 1px solid black;
+    width: 220px;
+}
+
+/* FILTER DATE CSS */
+.filter-date {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    width: 60%;
+}
+
+.form-date {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-date__input[type='date'] {
+    appearance: none;
+    color: #1D1D1D;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #838383;
+    background: #ffffff;
+    padding: 4px;
+    display: inline-block;
+    visibility: visible;
+    width: 100%;
+    border-radius: 20px;
+}
+
+.form-date__input[type='date']:focus {
+    color: #0070BB;
+    background-color: #FFFFFF;
+    border-color: #80BDFF;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+/* FILTER CATEGORIES CSS */
+.buttons-categories div {
+    padding: 0;
+}
+
+.buttons-categories div p {
+    color: #5D9EFF;
+    width: auto;
+    text-align: center;
+    cursor: pointer;
+}
+
+.category-p {
+    margin: 5px;
+    transition: 0.5s;
+}
+
+.category-p:hover {
+    color: #003262;
+}
+
+.category-p.selected {
+    background-color: #0070BB;
+    color: #fff;
+    border-radius: 20px;
+    padding: 0 1.5px;
+}

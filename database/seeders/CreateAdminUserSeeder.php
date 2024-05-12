@@ -89,23 +89,55 @@ class CreateAdminUserSeeder extends Seeder
 
         // Crear el usuario administrador
         $promoter = User::create([
-            'name' => 'Test',
-            'surname' => 'Event',
-            'nickname' => 'TestEvent',
+            'name' => 'Test1',
+            'surname' => 'Event1',
+            'nickname' => 'TestEvent1',
             'genre' => 'Other',
-            'email' => 'TestEvent@gmail.com',
+            'email' => 'TestEvent1@gmail.com',
             'password' => bcrypt('12345678'),
-            'NIF' => '123456E',
+            'NIF' => '123336E',
             'description' => 'Nuestra pasión por la aventura y la emoción se fusiona con nuestra experiencia en 
-            la organización de eventos para crear experiencias únicas en el cielo. Nuestro objetivo es llevar a 
-            los participantes a nuevas alturas y hacer que vivan momentos inolvidables nuestraentras disfrutan del 
-            paisaje desde una perspectiva única.',
+    la organización de eventos para crear experiencias únicas en el cielo. Nuestro objetivo es llevar a 
+    los participantes a nuevas alturas y hacer que vivan momentos inolvidables nuestraentras disfrutan del 
+    paisaje desde una perspectiva única.',
             'category_id' => 1
         ]);
-        
+
+        // Crear el usuario promoción
+        $promoter = User::create([
+            'name' => 'Test2',
+            'surname' => 'Event2',
+            'nickname' => 'TestEvent2',
+            'genre' => 'Other',
+            'email' => 'TestEvent2@gmail.com',
+            'password' => bcrypt('12345678'),
+            'NIF' => '133456E',
+            'description' => 'Nuestra pasión por la aventura y la emoción se fusiona con nuestra experiencia en 
+    la organización de eventos para crear experiencias únicas en el cielo. Nuestro objetivo es llevar a 
+    los participantes a nuevas alturas y hacer que vivan momentos inolvidables nuestraentras disfrutan del 
+    paisaje desde una perspectiva única.',
+            'category_id' => 2
+        ]);
+
+        // Crear el usuario organizador
+        $promoter = User::create([
+            'name' => 'Test3',
+            'surname' => 'Event3',
+            'nickname' => 'TestEvent3',
+            'genre' => 'Other',
+            'email' => 'TestEvent3@gmail.com',
+            'password' => bcrypt('12345678'),
+            'NIF' => '123433E',
+            'description' => 'Nuestra pasión por la aventura y la emoción se fusiona con nuestra experiencia en 
+    la organización de eventos para crear experiencias únicas en el cielo. Nuestro objetivo es llevar a 
+    los participantes a nuevas alturas y hacer que vivan momentos inolvidables nuestraentras disfrutan del 
+    paisaje desde una perspectiva única.',
+            'category_id' => 3
+        ]);
+
         // Crear el rol de Admin
         $promoterRole = Role::create(['name' => 'Promoter']);
-        
+
         $promoterPermissions = [
             'user-list',
             'user-edit',
@@ -151,14 +183,33 @@ class CreateAdminUserSeeder extends Seeder
         // Asignar los permisos al rol de Admin
         $promoterRole->syncPermissions($promoterPermissions);
         $promoter->assignRole($promoterRole);
-
-        // Crear el usuario regular
+        // Crear el usuario regular 1
         $user = User::create([
-            'name' => 'Manu',
-            'surname' => 'Caler',
-            'nickname' => 'mcy03',
+            'name' => 'John',
+            'surname' => 'Doe',
+            'nickname' => 'johndoe',
             'genre' => 'Male',
-            'email' => 'mcy03@gmail.com',
+            'email' => 'johndoe@gmail.com',
+            'password' => bcrypt('12345678')
+        ]);
+
+        // Crear el usuario regular 2
+        $user = User::create([
+            'name' => 'Jane',
+            'surname' => 'Doe',
+            'nickname' => 'janedoe',
+            'genre' => 'Female',
+            'email' => 'janedoe@gmail.com',
+            'password' => bcrypt('12345678')
+        ]);
+
+        // Crear el usuario regular 3
+        $user = User::create([
+            'name' => 'Bob',
+            'surname' => 'Smith',
+            'nickname' => 'bobsmith',
+            'genre' => 'Male',
+            'email' => 'bobsmith@gmail.com',
             'password' => bcrypt('12345678')
         ]);
         // Crear el rol de usuario

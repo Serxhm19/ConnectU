@@ -18,52 +18,52 @@ class CreateCategoryEventSeeder extends Seeder
         $categories = [
             [
                 "id"=> 1,
-                "name"=> "conference",
+                "name"=> "Conference",
                 "description"=> "Events where talks, panel discussions, and presentations on specific topics take place, both in person and online."
             ],
             [
                 "id"=> 2,
-                "name"=> "workshop",
+                "name"=> "Workshop",
                 "description"=> "Intensive learning sessions focused on specific skills, such as cooking workshops, professional development seminars, etc."
             ],
             [
                 "id"=> 3,
-                "name"=> "trade fair",
+                "name"=> "Trade fair",
                 "description"=> "Events where companies and organizations showcase their products, services, or ideas, both in physical and virtual environments."
             ],
             [
                 "id"=> 4,
-                "name"=> "live performance",
+                "name"=> "Live performance",
                 "description"=> "Live musical, theatrical, dance, or other forms of entertainment presentations."
             ],
             [
                 "id"=> 5,
-                "name"=> "sports event",
+                "name"=> "Sports event",
                 "description"=> "Sports competitions, tournaments, races, and other sports-related events."
             ],
             [
                 "id"=> 6,
-                "name"=> "professional meeting",
+                "name"=> "Professional meeting",
                 "description"=> "Opportunities to network, exchange ideas, and collaborate with other professionals in your field."
             ],
             [
                 "id"=> 7,
-                "name"=> "cultural event",
+                "name"=> "Cultural event",
                 "description"=> "Art exhibitions, cultural festivals, film screenings, poetry readings, etc."
             ],
             [
                 "id"=> 8,
-                "name"=> "gastronomic event",
+                "name"=> "Gastronomic event",
                 "description"=> "Wine tastings, food festivals, cooking classes, gastronomic tours, etc."
             ],
             [
                 "id"=> 9,
-                "name"=> "lifestyle event",
+                "name"=> "Lifestyle event",
                 "description"=> "Yoga classes, meditation retreats, health and wellness fairs, etc."
             ],
             [
                 "id"=> 10,
-                "name"=> "family event",
+                "name"=> "Family event",
                 "description"=> "Activities and entertainment designed for families and children, such as magic shows, picnics, etc."
             ]
         ];

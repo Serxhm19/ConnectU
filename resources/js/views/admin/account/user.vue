@@ -146,74 +146,9 @@ const getName = (array, id) => {
 };
 </script>
 
-<style scoped>
-.gotham {
-    font-family: Gotham;
-}
-
-.list-group-chat {
-    border: 0;
-}
-
-.content-chats-view {
-    position: fixed;
-    top: 6rem;
-    left: 20px;
-    z-index: 997;
-    width: 23%;
-}
-
-.chats hr {
-    border: 1px solid black;
-}
-
-.event-home {
-    padding: 0;
-}
-
-.event-home img {
-    width: 100%;
-    height: 200px;
-}
-
-.events {
-    height: 772px;
-    overflow-y: auto;
-    margin-left: -5px;
-}
-
-.title-other {
-    background-color: #0070BB;
-    padding: 10px 0;
-    padding-left: 20px;
-    color: #fff;
-    width: 400px;
-    height: 45px;
-    margin-top: -60px;
-    margin-bottom: 10px;
-}
+<style scoped lang="scss">
+@import "./../../../../sass/user.scss";
 
 
-.gradient-blue.gradient-slader {
-    width: 90px;
-    height: 45px;
-    margin-top: -60px;
-    margin-bottom: 10px;
-}
 
-.gradient-blue {
-    background: linear-gradient(to bottom left, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
-
-}
-
-.gradient-blue.gradient-promoter-right {
-    width: 20px;
-    height: 100%;
-    background: linear-gradient(to bottom right, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
-}
-
-.gradient-blue.gradient-promoter-left {
-    width: 20px;
-    height: 100%;
-}
 </style>

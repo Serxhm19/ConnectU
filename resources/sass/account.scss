@@ -10,26 +10,29 @@
     border: 2px solid rgb(255, 255, 255);
 
 }
-
+.info-user{
+    margin-top: 5px;
+}
 .nickname {
-    margin-top: 3rem;
-    color: rgb(0, 0, 0);
-    font-size: 28px;
-    margin-left: 1rem;
+    margin-top: -10px;
+    color: #01afee;
+    font-size: 16px;
+    /* margin-left: -1rem; */
+    font-family: Gotham;
 }
 
 .name {
     color: rgb(0, 0, 0);
-    font-size: 20px;
-    margin-top: -1rem;
-    margin-left: 1rem;
+    font-size: 22px;
+    font-family: Gotham;
 
 }
 
 .email {
-    color: rgb(0, 0, 0);
+    color: rgb(34, 34, 34);
     font-size: 20px;
     margin-top: 2px;
+    width: 200px;
 }
 
 .button-edit {
@@ -40,6 +43,22 @@
     border-radius: 50%;
     margin-left: -1rem;
     margin-top: -1rem;
+    color: #01afee;
+    border: 1px solid #01afee;
+    background-color: #ffffff;
+}
+
+.button-edit:hover {
+    top: 1rem;
+    left: 32.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: -1rem;
+    margin-top: -1rem;
+    color: #ffffff;
+    border: 1px solid #01afee;
+    background-color: #01afee;
 }
 
 .card-event {
@@ -108,6 +127,121 @@
     border: 2px solid white;
 }
 
-.background-image {
-    margin-top: -55px
+.editButton {
+    font-family: Gotham;
+    font-size: 12px;
+    font-weight: bold;
+    color: #01afee;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #01afee;
+    margin-right: -20px;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.editButton:hover {
+    font-family: Gotham;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #01afee;
+
+}
+
+.editButtons {
+    display: flex;
+    align-content: flex-end;
+    align-items: flex-end;
+    flex-direction: column;
+    margin-top: -40px;
+
+}
+
+.custom-dialog .p-dialog-titlebar-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.p-dialog-header-icons {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: stretch;
+}
+
+.card.eventsRecomendations {
+    margin-top: -20px;
+    width: 100%;
+}
+
+.card-img-top {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.title-other {
+    background-color: #0070BB;
+    padding: 10px 0;
+    padding-left: 20px;
+    color: #fff;
+    width: 400px;
+    height: 45px;
+    margin-top: -60px;
+    margin-bottom: 10px;
+}
+
+
+.gradient-blue.gradient-slader {
+    width: 90px;
+    height: 45px;
+    margin-top: -60px;
+    margin-bottom: 10px;
+}
+
+.gradient-blue {
+    background: linear-gradient(to bottom left, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
+
+}
+
+p.card-text {
+    margin-bottom: 5px;
+}
+
+.ViewMore {
+    color: #01afee;
+    font-family: Gotham;
+    margin-top: 30px;
+}
+
+.ViewMore:hover {
+    color: #0070BB;
+    font-family: Gotham;
+    margin-top: 30px;
+}
+
+.view-user{
+    margin-top: 5px;
+    padding-left: 0;
+}
+
+.event-card{
+    margin-bottom: 30px;
+}
+@media (max-width: 500px) {
+    .title-other{
+        width: 100%;
+    }
+    .gradient-blue {
+        display: none;
+    }
+    .event-card{
+        margin-bottom: 30px;
+    }
 }
