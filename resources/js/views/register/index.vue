@@ -215,7 +215,7 @@
 
 import useAuth from '@/composables/auth'
 import axios from "axios";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 const { registerForm, validationErrors, processing, submitRegister, loginForm, submitLogin, registerFormPromoter, submitRegisterPromoter } = useAuth();
 
 

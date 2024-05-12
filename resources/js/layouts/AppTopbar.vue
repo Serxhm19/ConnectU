@@ -35,7 +35,11 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
+                                        <img v-if="user.profile_image_url" :src="user.profile_image_url"
+                                            alt="Profile Picture" class="user-logo">
+                                        <img v-else src="/images/default-profile-image.png"
+                                            alt="Default Profile Picture" class="user-logo">
+                                        {{ user.name }}
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li><router-link class="dropdown-item" to="/admin/account">My
@@ -62,17 +66,60 @@
     </nav>
 </template>
 
+
 <script setup>
 import { useStore } from "vuex";
 import useAuth from "@/composables/auth";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import LocaleSwitcher from "../components/LocaleSwitcher.vue";
 
 const store = useStore();
 const user = computed(() => store.getters["auth/user"])
 const { processing, logout } = useAuth();
-</script>
 
+onMounted(async () => {
+
+    console.log(promoter);
+    document.title = 'ConnectU - Event';
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.href = '/images/favicon-32x32.png';
+    document.head.appendChild(favicon);
+
+    evento_id = route.params.id;
+
+    await getCountParticipants(evento_id);
+    await getUsers(event.value.user_id);
+    await signedUpUser(user.id, evento_id);
+    await getPromoterEvent;
+
+    loading.value = false;
+
+    const userId = promoter.id;
+    console.log("Promter" + userId);
+
+    axios.get(`/api/getProfileImageUrl`)
+        .then(response => {
+            profileImageUrl.value = response.data;
+            console.log('URL de la imagen de perfil del usuario:', profileImageUrl.value);
+        })
+        .catch(error => {
+            console.error('Error al obtener la URL de la imagen de perfil del usuario:', error);
+        });
+
+
+    axios.get('/api/getThumbnail')
+        .then(response => {
+            thumbnail.value = response.data;
+            console.log('Profile image URL:', thumbnail.value);
+        })
+        .catch(error => {
+            console.error('Error al obtener la URL de la imagen de perfil:', error);
+        });
+
+});
+
+</script>
 <style scoped>
 nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
     position: fixed;
@@ -213,10 +260,12 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
         margin-top: 40px;
     }
 
-.Account {
-    margin-left: auto; /* Utiliza márgenes automáticos para desplazar a la derecha */
-    margin-top: 25px; /* Mantén el margen superior según sea necesario */
-}
+    .Account {
+        margin-left: auto;
+        /* Utiliza márgenes automáticos para desplazar a la derecha */
+        margin-top: 25px;
+        /* Mantén el margen superior según sea necesario */
+    }
 
 
 
