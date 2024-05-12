@@ -154,7 +154,7 @@ export default function useEvents() {
         try {
             const response = await axios.get(`/api/events/getImageBanner/${id}`);
 
-            bannerEvent.value = response.data;
+            bannerEvent.value = response.data.data;
         } catch (error) {
             console.error('Error al obtener media del evento: ', error);
         }
