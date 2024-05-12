@@ -1,9 +1,13 @@
 <template>
     <div class="col-lg-12">
         <div class="card events">
+            <div class="d-flex">
+                <div class="d-flex mt-8">
+                    <h4 class="title-other ml-0">Look your next events!</h4>
+                    <div class="gradient-blue gradient-slader"></div>
+                </div>
+            </div>
             <div style="border-radius: 40px;">
-                <h2>Proximos Eventos</h2>
-                <a>Mira tu lista de los proximos eventos a los que asistiras!</a>
                 <div v-for="event in filteredEvents" :key="event.id" class="card event-home"
                     style="border-radius: 20px;">
                     <div class="card-body" style="padding: 8px 14px;">
@@ -170,7 +174,43 @@ const getName = (array, id) => {
 }
 
 .events {
-    height: 600px;
+    height: 772px;
     overflow-y: auto;
+    margin-left: -5px;
+}
+
+.title-other {
+    background-color: #0070BB;
+    padding: 10px 0;
+    padding-left: 20px;
+    color: #fff;
+    width: 400px;
+    height: 45px;
+    margin-top: -60px;
+    margin-bottom: 10px;
+}
+
+
+.gradient-blue.gradient-slader {
+    width: 90px;
+    height: 45px;
+    margin-top: -60px;
+    margin-bottom: 10px;
+}
+
+.gradient-blue {
+    background: linear-gradient(to bottom left, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
+
+}
+
+.gradient-blue.gradient-promoter-right {
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to bottom right, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
+}
+
+.gradient-blue.gradient-promoter-left {
+    width: 20px;
+    height: 100%;
 }
 </style>

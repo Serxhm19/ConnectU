@@ -45,12 +45,16 @@
             </div>
             <div class="col-12">
                 <div class="col-12">
-                    <div class="card">
-                        <h2>Te podria interesar</h2>
+                    <div class="card eventsRecomendations">
+                        <div class="d-flex mt-8">
+                            <h4 class="title-other ml-0">You may also be interested...</h4>
+                            <div class="gradient-blue gradient-slader"></div>
+                        </div>
                         <div v-for="event in randomEvents" :key="event.id" class="event-card">
-                            <h3>{{ event.name }}</h3>
-                            <p>{{ event.location }}</p>
-                            <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }">Ver
+                            <h5 class="card-title title-other-event">{{ event.name }}</h5>
+                            <p class="card-text">{{ sliceData(event.description, 150) }}</p>
+                            <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }"
+                                class="Viewmore">Ver
                                 más</router-link>
                         </div>
                     </div>
@@ -238,10 +242,10 @@ onMounted(async () => {
             events.value = response.data;
 
             events.value.forEach(event => {
-        const cityId = event.location;
-        const cityName = getName(cities.value, cityId);
-        event.location = cityName;
-      });
+                const cityId = event.location;
+                const cityName = getName(cities.value, cityId);
+                event.location = cityName;
+            });
         });
 
     axios.get('/api/getProfileImageUrl')
@@ -332,6 +336,10 @@ function generateRandomEvents() {
         }
     }
     randomEvents.value = randomIndices.map(index => events.value[index]);
+}
+
+function sliceData(text, numSlice) {
+    return text.substring(0, numSlice) + " ...";
 }
 </script>
 <style scoped>
@@ -509,6 +517,59 @@ function generateRandomEvents() {
     justify-content: flex-start;
     align-items: flex-start;
     align-content: stretch;
+}
+
+.card.eventsRecomendations {
+    margin-top: -35px;
+    width: 543px;
+    margin-left: -15px;
+}
+
+.card-img-top {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.title-other {
+    background-color: #0070BB;
+    padding: 10px 0;
+    padding-left: 20px;
+    color: #fff;
+    width: 400px;
+    height: 45px;
+    margin-top: -60px;
+    margin-bottom: 10px;
+}
+
+
+.gradient-blue.gradient-slader {
+    width: 90px;
+    height: 45px;
+    margin-top: -60px;
+    margin-bottom: 10px;
+}
+
+.gradient-blue {
+    background: linear-gradient(to bottom left, transparent 49.5%, #0070BB 49.5%, #0070BB 30%);
+
+}
+
+p.card-text {
+    margin-bottom: 5px;
+}
+
+.ViewMore {
+    color: #01afee;
+    font-family: Gotham;
+    margin-top: 30px;
+}
+
+.ViewMore:hover {
+    color: #0070BB;
+    font-family: Gotham;
+    margin-top: 30px;
 }
 
 @media (max-width: 768px) {}
