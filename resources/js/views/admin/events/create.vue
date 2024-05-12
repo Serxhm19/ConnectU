@@ -44,11 +44,11 @@
                             <div class="form-gorup mb-2">
                                 <div class="flex">
                                     <h6 class="mr-1">Location</h6>
-                                    <span class="text-danger">*</span>
-                                </div>
-                                <div class="ml-2">
-                                    <input v-model="event.location" type="text" class="form-control"
-                                        placeholder="Location">
+                                    <select class="select-ubi" id="city-selector" v-model="search_location">
+                                        <option value="" selected>Ciudad</option>
+                                        <AutoComplete v-model="event.location" :suggestions="items" @complete="handleLocationComplete" />
+                                        <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -147,15 +147,16 @@
 
 <script setup>
 import axios from "axios";
-import { ref, inject, onMounted } from "vue"
-const event = ref({});
+import useSites from "../../../composables/sites";
+import { ref, onMounted } from "vue"
 import TextEditorComponent from "@/components/TextEditorComponent.vue";
 
+const event = ref({});
 const stringError = ref();
 const stringSuccess = ref();
-
-
+const { cities, getCities } = useSites();
 const categories = ref([]);
+const selectedLocation = ref(null);
 
 function stripHtmlTags(html) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -174,7 +175,7 @@ function addEvent() {
     formData.append('category_id', event.value.category_id);
     formData.append('description', event.value.description);
     formData.append('more_information', event.value.more_information);
-    formData.append('location', event.value.location);
+    formData.append('location', selectedLocation.value); // Utiliza selectedLocation en lugar de event.location
     formData.append('start_date', event.value.start_date);
     formData.append('end_date', event.value.end_date);
     formData.append('user_id', userId);
@@ -184,7 +185,7 @@ function addEvent() {
 
     const additionalThumbnailFile = document.getElementById('additional_image').files[0];
     formData.append('additional_image', additionalThumbnailFile);
-    
+
     axios.post('/api/events/', formData)
         .then(response => {
             stringSuccess.value = "Evento '" + event.value.name + "' creado correctamente";
@@ -197,8 +198,13 @@ function addEvent() {
         });
 }
 
+function handleLocationComplete(selectedItem) {
+    selectedLocation.value = selectedItem.id; // Establece el ID de la ubicación seleccionada
+    console.log(selectedLocation);
+}
 
-onMounted(() => {
+onMounted(async () => {
+    await getCities();
 
     document.title = 'ConnectU - Create Event';
     const favicon = document.createElement('link');
@@ -216,7 +222,21 @@ onMounted(() => {
         });
 });
 
+const getName = (array, id) => {
+    const result = array.find(object => object.id === id);
+    return result ? result.name : 'Categoría no encontrada';
+};
+
 </script>
 
 
-<style></style>
+
+<style scoped>
+.select-ubi {
+    border-radius: 20px;
+    margin-top: 15px;
+    text-align: center;
+    border: 1px solid black;
+    width: 220px;
+}
+</style>
