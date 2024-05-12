@@ -13,19 +13,21 @@
     <div v-else class="grid absolut">
         <section class="card event mt-3 col-12 grid">
 
-            <div class="card background-image"
-                :style="{ 'background-image': 'url(/images/default-background-image.png)', 'background-size': 'cover', 'border': '2px solid white' }">
-            </div>
-            <p class="add-event">
-                {{ countParticipants }} Ins
-                <button v-if="!signedUp" @click="inscribirse" class="btn btn-link add-event-button">Inscribirse</button>
-                <button v-else @click="cancelar" class="btn btn-link add-event-button">Cancelar</button>
-            </p>
+            <div class="event-header d-flex flex-column col-12">
 
-            <div class="name-container">
-                <h1 class="name-event">{{ event.name }}</h1>
-                <p class="by-text">By {{ promoter.nickname }}</p>
+                <p class="add-event">
+                    {{ countParticipants }} Ins
+                    <button v-if="!signedUp" @click="inscribirse"
+                        class="btn btn-link add-event-button">Inscribirse</button>
+                    <button v-else @click="cancelar" class="btn btn-link add-event-button">Cancelar</button>
+                </p>
+
+                <div class="name-container">
+                    <h1 class="name-event">{{ event.name }}</h1>
+                    <p class="by-text">By {{ promoter.nickname }}</p>
+                </div>
             </div>
+
         </section>
     </div>
     <div class="content-event col-12">
