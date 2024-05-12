@@ -204,7 +204,7 @@
     }
 
     .button-view-events{
-        width: 150px;
+        width: 150%;
         background-color: #fff;
         border-color: #0070BB;
         color: #0070BB;
