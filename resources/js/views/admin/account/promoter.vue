@@ -1,62 +1,58 @@
 <template>
     <div class="card">
-        <DataTable class="p-datatable w-100" :value="events" paginator :rows="10" filterDisplay="row"
-            :filters="filters">
-            <template #header>
-                <div class="flex justify-content-end">
-                    <h2 style="margin-right: auto;">Event Dashboard</h2>
-                    <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
-                </div>
-            </template>
-            <template #empty class="empty">
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Event Dashboard</h2>
+                <input type="text" class="form-control" placeholder="Keyword Search" v-model="searchTerm" />
+            </div>
+            <div v-if="events.length === 0" class="empty">
                 No events found.
-            </template>
-            <template #loading> Loading events data. Please wait. </template>
-            <Column field="name" header="Name"></Column>
-            <Column field="location" header="Location"></Column>
-            <Column field="start_date" header="Start Date">
-                <template v-slot:body="slotProps">
-                    {{ formatDate(slotProps.data.start_date) }}
-                </template>
-            </Column>
-            <Column field="end_date" header="End Date">
-                <template v-slot:body="slotProps">
-                    {{ formatDate(slotProps.data.end_date) }}
-                </template>
-            </Column>
-            <Column field="status" header="Status">
-                <template v-slot:body="slotProps">
-                    <span v-if="isEventExpired(slotProps.data.end_date)">
-                        <Tag severity="danger" value="Expired"></Tag>
-                    </span>
-                    <span v-else>
-                        <Tag severity="success" value="Active"></Tag>
-                    </span>
-                </template>
-            </Column>
-            <Column header="Actions">
-                <template v-slot:body="slotProps">
-                    <router-link :to="{ name: 'events.update', params: { id: slotProps.data.id } }">
-                        <Button icon="pi pi-pencil" severity="help" text raised rounded>
-                            <template #icon>
-                                <i class="pi pi-pencil"></i>
-                            </template>
-                        </Button> </router-link>
-                    <Button iconClass="my-custom-icon-class" icon="pi pi-trash" severity="danger" text raised rounded
-                        @click="deleteTask(slotProps.data.id)">
-                        <template #icon>
-                            <i class="pi pi-trash"></i>
-                        </template>
-                    </Button>
-                </template>
-            </Column>
-        </DataTable>
-
+            </div>
+            <div v-else class="table-body">
+                <div v-if="loading" class="loading">
+                    Loading events data. Please wait.
+                </div>
+                <div v-else class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="event in events" :key="event.id">
+                                <td>{{ event.name }}</td>
+                                <td>{{ event.location }}</td>
+                                <td>{{ formatDate(event.start_date) }}</td>
+                                <td>{{ formatDate(event.end_date) }}</td>
+                                <td>
+                                    <span v-if="isEventExpired(event.end_date)" class="badge bg-danger">Expired</span>
+                                    <span v-else class="badge bg-success">Active</span>
+                                </td>
+                                <td>
+                                    <router-link :to="{ name: 'events.update', params: { id: event.id } }">
+                                        <button class="btn btn-primary" title="Edit">
+                                            <i class="icon pi pi-pencil"></i>
+                                        </button>
+                                    </router-link>
+                                    <button class="btn btn-danger" title="Delete" @click="deleteTask(event.id)">
+                                        <i class="icon pi pi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
-
 <script setup>
-import Tag from 'primevue/tag';
 
 
 
@@ -68,24 +64,54 @@ import { ref, inject, onMounted, computed } from "vue"
 import useSites from "../../../composables/sites";
 
 const { cities, getCities } = useSites()
-
-
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
-
-const initFilters = () => {
-    filters.value = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    };
-};
-
-
-
-initFilters();
+const loading = ref(true);
+const searchTerm = ref('');
 
 onMounted(() => {
     // console.log('mi vista')
+    const vuexData = localStorage.getItem("vuex");
+    const vuexArray = JSON.parse(vuexData);
+    let id = vuexArray.auth.user.id;
+    axios.get('/api/events/promoter/' + id)
+        .then(response => {
+            events.value = response.data;
+            loading.value = false;
+
+            events.value.forEach(event => {
+                const cityId = event.location;
+                const cityName = getName(cities.value, cityId);
+                event.location = cityName;
+            });
+
+            filterEvents(); // Aplicar el filtrado inicial
+        })
+        .catch(error => {
+            console.error('Error fetching events:', error);
+            loading.value = false;
+        });
+});
+
+
+await getCities()
+const filteredEvents = ref([]);
+
+function filterEvents() {
+    if (!searchTerm.value) {
+        filteredEvents.value = events.value;
+    } else {
+        filteredEvents.value = events.value.filter(event => {
+            return event.name.toLowerCase().includes(searchTerm.value.toLowerCase());
+        });
+    }
+}
+
+
+const store = useStore();
+const user = computed(() => store.state.auth.user)
+const events = ref([]);
+const swal = inject('$swal');
+
+onMounted(() => {
     const vuexData = localStorage.getItem("vuex");
     const vuexArray = JSON.parse(vuexData);
     let id = vuexArray.auth.user.id;
@@ -94,33 +120,14 @@ onMounted(() => {
         .then(response => {
             events.value = response.data;
 
-            console.log(events.value);
+            events.value.forEach(event => {
+                const cityId = event.location;
+                const cityName = getName(cities.value, cityId);
+                event.location = cityName;
+            });
         })
 });
 
-await getCities()
-
-const store = useStore();
-const user = computed(() => store.state.auth.user)
-const events = ref([]);
-const swal = inject('$swal');
-
-onMounted(() => {
-  const vuexData = localStorage.getItem("vuex");
-  const vuexArray = JSON.parse(vuexData);
-  let id = vuexArray.auth.user.id;
-
-  axios.get('/api/events/promoter/' + id)
-   .then(response => {
-      events.value = response.data;
-
-      events.value.forEach(event => {
-        const cityId = event.location;
-        const cityName = getName(cities.value, cityId);
-        event.location = cityName;
-      });
-    })
-});
 function confirm(id, index) {
     swal.fire({
         title: '¿Estás seguro?',
@@ -175,6 +182,8 @@ const getName = (array, id) => {
     const result = array.find(object => object.id === id);
     return result ? result.name : 'Categoría no encontrada';
 };
+
+
 
 </script>
 <style scoped>
