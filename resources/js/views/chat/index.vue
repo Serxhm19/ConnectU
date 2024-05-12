@@ -2,7 +2,7 @@
   <div class="row chat-container container-fluid">
     <!-- Chat Header -->
     <div class="col-12 card chat-header">
-      <button @click="toggleEventList" class="toggle-button btn btn-primary mb-4" >CHATS</button>
+      <button @click="toggleEventList" class="toggle-button btn btn-primary mb-4" :class="{ 'hide-chat': !showChat }">CHATS</button>
       <div class="chat-text" :class="{ 'hide-chat': !showChat }">
         <template v-if="selectedEvent && selectedEvent.id">
           <router-link :to="{ name: 'publi-event.event', params: { id: selectedEvent.id } }">
@@ -10,7 +10,7 @@
           </router-link>
         </template>
       </div>
-      <div class="user-profile">
+      <div class="user-profile" :class="{ 'hide-event-list': !showEventList }">
         <div class="profile-pic">
           <img src="\images\connectu.svg" class="profile-pic" alt="Profile Picture">
         </div>
@@ -32,13 +32,11 @@
             <input type="text" v-model="searchQuery" placeholder="Search events..." class="inputSearch">
             <hr>
             <ul class="list-group list-group-flush">
-              <li v-for="event in filteredEvents" :key="event.event_id" @click="selectEvent(event.event_id)" class="list-group-item EventsButton">
-                <button @click="toggleEventList" class="toggle-button">
+              <li v-for="event in filteredEvents" :key="event.event_id" @click="selectEvent(event.event_id), toggleEventList" class="list-group-item EventsButton">
                   <div class="events">
                     <img src="\images\eventoPrueba.webp" class="chat-pic" alt="Profile Picture">
                     <div class="event-name">{{ event.eventData ? event.eventData.name : 'Cargando...' }}</div>
                   </div>
-                </button>
               </li>
             </ul>
             <hr>
@@ -130,7 +128,7 @@ export default {
   },
   toggleEventList() {
     this.showEventList = !this.showEventList;
-    this.showChat = !this.showEventChat;
+    this.showChat = !this.showChat;
   },
   reversedMessages() {
     return this.messages.slice().reverse();
@@ -565,16 +563,17 @@ h2.buscarEvento {
   }
 @media (max-width: 500px) {
   .toggle-button{
-    background-color: #fff;
+    display: block;
+    background-color: #0070BB;
     border-color: #0070BB;
-    color: #0070BB;
+    color: #fff;
     width: 100%;
   }
 
   .toggle-button:hover{
-    background-color: #0070BB;
+    background-color: #fff;
     border-color: #0070BB;
-    color: #fff;
+    color: #0070BB;
   }
   .chat-container {
     width: 450px;
@@ -602,9 +601,7 @@ h2.buscarEvento {
     width: 100%;
     text-align: center;
   }
-  .user-profile{
-    display: none;
-  }
+
   .hide-event-list {
     display: none;
   }

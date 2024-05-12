@@ -1,7 +1,10 @@
 <template>
-    <div class="grid">
-        <div class="col-12 col-sm-12">
-            <div class="card background-image" v-if="backgroundImageUrl.value"
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div v-if="loadingImgBanner" class="background-image">
+                <Skeleton width="100%" height="300px" borderRadius="10px" class="mb-0 mr-6"></Skeleton>
+            </div>
+            <div v-else class="card background-image" v-if="backgroundImageUrl.value"
                 :style="{ 'background-image': 'url(' + backgroundImageUrl.value.background_image_url + ')', 'background-size': 'cover', 'border': '2px solid white' }">
 
                 <div class="d-flex align-items-left">
@@ -11,9 +14,9 @@
             </div>
         </div>
     </div>
-    <div class="grid">
-        <div class="col-4 col-sm-12">
-            <div class="card">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="card info-user">
                 <div class="col-12">
                     <div>
                         <button type="button" class="btn btn-secondary button-edit pi pi-fw pi-user-edit"
@@ -43,26 +46,28 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                <div class="col-12">
+            <div class="col-xs-12 col-sm-12">
                     <div class="card eventsRecomendations">
                         <div class="d-flex mt-8">
                             <h4 class="title-other ml-0">You may also be interested...</h4>
                             <div class="gradient-blue gradient-slader"></div>
                         </div>
-                        <div v-for="event in randomEvents" :key="event.id" class="event-card">
+                        <div v-if="loadingInterested" v-for="i in 3">
+                            <Skeleton width="40%" height="20px" borderRadius="10px" class="mb-4 mr-6"></Skeleton>
+                            <Skeleton v-for="x in 2" width="100%" height="20px" borderRadius="10px" class="mb-4 mr-6"></Skeleton>
+                            <Skeleton width="50px" height="20px" borderRadius="10px" class="mb-4 mr-6"></Skeleton>
+                        </div>
+                        <div v-else v-for="event in randomEvents" :key="event.id" class="event-card">
                             <h5 class="card-title title-other-event">{{ event.name }}</h5>
                             <p class="card-text">{{ sliceData(event.description, 150) }}</p>
                             <router-link :to="{ name: 'publi-event.event', params: { id: event.id } }"
-                                class="Viewmore">Ver
-                                más</router-link>
+                                class="Viewmore">Ver más</router-link>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
 
-        <div class="col-8 col-sm-12">
+        <div class="col-xs-12 col-sm-8 view-user">
             <div v-if="isPromoter()">
                 <promoterView></promoterView>
             </div>
@@ -128,13 +133,16 @@ const { events, users, getEvents, getUsers } = useEvents();
 import Button from 'primevue/button';
 import { FilterMatchMode } from 'primevue/api';
 import Dialog from 'primevue/dialog';
+import Skeleton from "primevue/skeleton";
 
 import { useStore } from 'vuex';
 import axios from "axios";
 import { ref, inject, onMounted, computed } from "vue";
 
 const randomEvents = ref([]);
-
+const loadingInterested = ref(true);
+const loadingImgBanner = ref(true);
+const loadingImgProfile = ref(true);
 const openEditProfileImageModal = ref(false);
 const openEditBackgroundImageModal = ref(false);
 
@@ -251,7 +259,7 @@ onMounted(async () => {
     axios.get('/api/getProfileImageUrl')
         .then(response => {
             profileImageUrl.value = response.data;
-            console.log('Profile image URL:', profileImageUrl.value);
+            loadingImgProfile.value = false;
         })
         .catch(error => {
             console.error('Error al obtener la URL de la imagen de perfil:', error);
@@ -260,7 +268,7 @@ onMounted(async () => {
     axios.get('/api/getBackgroundImageUrl')
         .then(response => {
             backgroundImageUrl.value = response.data;
-            console.log('background image URL:', backgroundImageUrl.value);
+            loadingImgBanner.value = false;
         })
         .catch(error => {
             console.error('Error al obtener la URL de la imagen de perfil:', error);
@@ -287,43 +295,6 @@ onMounted(() => {
         })
 });
 
-function confirm(id, index) {
-    swal.fire({
-        title: '¿Estás seguro?',
-        text: '¿Quieres eliminar esta tarea?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            deleteTask(id, index);
-        }
-    });
-}
-
-const deleteTask = (id, index) => {
-    axios.delete(`/api/events/${id}`)
-        .then(response => {
-            events.value.splice(index, 1);
-
-            swal.fire({
-                title: 'Tarea eliminada',
-                text: 'La tarea se eliminó correctamente',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
-            });
-        })
-        .catch(error => {
-            swal.fire({
-                title: 'Error',
-                text: 'Ocurrió un error al eliminar el evento',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
-        });
-}
-
 const displayEditDialog = ref(false);
 
 function generateRandomEvents() {
@@ -336,6 +307,7 @@ function generateRandomEvents() {
         }
     }
     randomEvents.value = randomIndices.map(index => events.value[index]);
+    loadingInterested.value = false;
 }
 
 function sliceData(text, numSlice) {
@@ -355,7 +327,9 @@ function sliceData(text, numSlice) {
     border: 2px solid rgb(255, 255, 255);
 
 }
-
+.info-user{
+    margin-top: 5px;
+}
 .nickname {
     margin-top: -10px;
     color: #01afee;
@@ -370,8 +344,6 @@ function sliceData(text, numSlice) {
     font-family: Gotham;
 
 }
-
-
 
 .email {
     color: rgb(34, 34, 34);
@@ -520,9 +492,8 @@ function sliceData(text, numSlice) {
 }
 
 .card.eventsRecomendations {
-    margin-top: -35px;
-    width: 543px;
-    margin-left: -15px;
+    margin-top: -20px;
+    width: 100%;
 }
 
 .card-img-top {
@@ -572,5 +543,23 @@ p.card-text {
     margin-top: 30px;
 }
 
-@media (max-width: 768px) {}
+.view-user{
+    margin-top: 5px;
+    padding-left: 0;
+}
+
+.event-card{
+    margin-bottom: 30px;
+}
+@media (max-width: 500px) {
+    .title-other{
+        width: 100%;
+    }
+    .gradient-blue {
+        display: none;
+    }
+    .event-card{
+        margin-bottom: 30px;
+    }
+}
 </style>
