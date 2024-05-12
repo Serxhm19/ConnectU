@@ -167,12 +167,6 @@ export default [
                 meta: { breadCrumb: 'events' },
                 children: [
                     {
-                        name: 'events.index',
-                        path: '',
-                        component: () => import('../views/admin/events/index.vue'),
-                        meta: { breadCrumb: 'Events' }
-                    },
-                    {
                         name: 'events.create',
                         path: 'create',
                         component: () => import('../views/admin/events/create.vue'),

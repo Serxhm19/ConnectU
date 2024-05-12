@@ -23,8 +23,13 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'surname' => ['nullable', 'string'],
+            'nickname' => ['nullable', 'string'],
             'email' => 'required|string|email|max:255|unique:users,email,'.$this->user->id,
-            'password' => ['nullable', 'string', 'min:8'],
+            'genre' => ['nullable', 'string'],
+            'nif' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
+            'category_id' => ['nullable', 'integer'],
         ];
     }
 }

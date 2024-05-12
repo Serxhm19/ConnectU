@@ -82,12 +82,12 @@ const fetchUserEvents = () => {
         axios.get(`/api/userEvent`)
             .then(response => {
                 userEvents.value = response.data;
-                console.log("1" + userEvents.value);
-                resolve(); // Resuelve la promesa una vez que se hayan actualizado todas las ubicaciones
+
+                resolve();
             })
             .catch(error => {
                 console.error('Error fetching user events:', error);
-                reject(error); // Rechaza la promesa en caso de error
+                reject(error);
             });
     });
 };
@@ -107,7 +107,6 @@ const filteredEvents = computed(() => {
         console.log(event.data);
     });
 
-    // Devolver los eventos filtrados con las ubicaciones actualizadas
     return filtered;
 });
 

@@ -103,11 +103,11 @@
         <span class="p-text-secondary block mb-5">Update your information.</span>
         <div class="flex align-items-center gap-3 mb-3">
             <label for="username" class="font-semibold w-6rem">Username</label>
-            <input id="username" class="flex-auto" autocomplete="off" />
+            <input v-model="name" id="username" class="flex-auto" autocomplete="off" />
         </div>
         <div class="flex align-items-center gap-3 mb-2">
             <label for="email" class="font-semibold w-6rem">Email</label>
-            <Input id="email" class="flex-auto" autocomplete="off" />
+            <Input v-model="email" :value="email" id="email" class="flex-auto" autocomplete="off" />
         </div>
         <template #footer>
             <button type="submit" class="btn btn-primary mt-4 mb-4" @click="saveUser">Actualizar</button>
@@ -146,7 +146,14 @@ const loadingImgProfile = ref(true);
 const openEditProfileImageModal = ref(false);
 const openEditBackgroundImageModal = ref(false);
 
+const store = useStore();
+const user = computed(() => store.state.auth.user);
 
+function isPromoter() {
+    return user.value.NIF;
+}
+const name = ref(user.value.nickname);
+const email = ref(user.value.email);
 const getName = (array, id) => {
     const result = array.find(object => object.id === id);
     return result ? result.name : 'Categoría no encontrada';
@@ -222,21 +229,26 @@ function saveUser() {
     const vuexArray = JSON.parse(vuexData);
     const userId = vuexArray.auth.user.id;
     const route = useRoute()
-    const name = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
+
+    const user = computed(() => store.state.auth.user);
 
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('user_id', userId);
+    formData.append('id', userId);
+    formData.append('name', vuexArray.auth.user.name);
+    formData.append('surname', vuexArray.auth.user.surname);
+    formData.append('nickname', name.value);
+    formData.append('email', email.value);
+    formData.append('genre', vuexArray.auth.user.genre);
+    formData.append('nif', vuexArray.auth.user.nif);
+    formData.append('description', vuexArray.auth.user.description);
+    formData.append('category_id', vuexArray.auth.user.category_id);
 
-
-    axios.post('/api/user/update/' + route.params.id, formData, {
+    axios.put(`/api/users/${userId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     })
-        .then(response => {
+    .then(response => {
             console.log(response.data);
             swal.fire({
                 icon: 'success',
@@ -305,12 +317,7 @@ onMounted(async () => {
         });
 });
 
-const store = useStore();
-const user = computed(() => store.state.auth.user);
 
-function isPromoter() {
-    return user.value.NIF;
-}
 
 const swal = inject('$swal');
 

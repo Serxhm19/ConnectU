@@ -124,6 +124,8 @@ Route::get('/user_event/events_user/{user_id}', [User_eventController::class, 'e
 Route::get('users/show/{id}', [UserController::class, 'showUser']);
 Route::get('users/getUsers', [UserController::class, 'allUsers']);
 Route::apiResource('posts', PostController::class);
+
+Route::put('/users/{user}', [UserController::class, 'update']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UserController::class);
 
@@ -141,7 +143,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('permissions', PermissionController::class);
     //Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('/user', [ProfileController::class, 'user']);
-    Route::put('/user', [ProfileController::class, 'update']);
+    
 
     Route::get('abilities', function (Request $request) {
         return $request->user()->roles()->with('permissions')
