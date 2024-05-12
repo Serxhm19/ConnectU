@@ -34,23 +34,26 @@
                     </ul>
                 </div>
                 <template v-if="user?.name">
-                    <div class="Account">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><router-link class="dropdown-item" to="/admin/Account">My Account</router-link></li>
-                                <li><router-link to="/chats" class="dropdown-item">Chats</router-link></li>
-                                <li>
-                                    <hr class="dropdown-divider">
+                            <div class="Account">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="/images/connectu.svg" alt="" class="user-logo">{{ user.name }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><router-link class="dropdown-item" to="/admin/account">My
+                                                Account</router-link></li>
+                                        <li><router-link to="/chats" class="dropdown-item">Chats</router-link></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                @click="logout">Logout</a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li><a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a></li>
-                            </ul>
-                        </li>
-                    </div>
-                </template>
+                            </div>
+                        </template>
             </div>
         </nav>
         <!--<p>nav.vue</p>-->
@@ -84,6 +87,8 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
         flex-basis: auto;
         align-items: center;
         justify-content: center;
+        margin-left: 150px;
+
     }
 
     .navbar-nav {
@@ -100,13 +105,11 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
 
     .nav-item.dropdown {
         justify-self: end;
-        width: 100px;
     }
 
 
     .nav-item a {
         font-family: Gotham;
-        width: auto;
     }
 
     .user-logo {
@@ -139,7 +142,6 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
     .menu {
         display: flex;
         justify-content: center;
-        margin-right: -145px;
     }
 
     .menu li {
@@ -191,6 +193,7 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
         font-family: Gotham;
         color: #0070bb;
         margin-top: 15px;
+        width: auto;
     }
 
     .Icon {
@@ -208,16 +211,12 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
         margin-top: 40px;
     }
 
-    .dropdown-menu.show {
-        display: block;
-        width: 100px;
-    }
+.Account {
+    margin-left: auto; /* Utiliza márgenes automáticos para desplazar a la derecha */
+    margin-top: 25px; /* Mantén el margen superior según sea necesario */
+}
 
-    .dropdown-divider {
-        width: fit-content;
-    }
 
-    .Account {}
 
     /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -243,6 +242,102 @@ nav.navbar.navbar-expand-md.navbar-light.bg-white.shadow-sm {
 
     .menu[data-animation="to-left"] a:hover span:first-child {
         transform: translateX(-100%);
+    }
+
+    .logo-wrapper {
+        display: flex;
+        justify-content: center;
+        /* Centra el contenido horizontalmente */
+        width: 100%;
+        /* Ajusta el ancho según sea necesario */
+    }
+
+    .logo-wrapper .layout-topbar-logo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .logo-wrapper .layout-topbar-logo img {
+        height: 50px;
+        margin-top: 40px;
+    }
+
+
+
+}
+
+@media (max-width: 768px) {
+    .navbar-collapse .navbar-expand-md {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu li {
+        list-style: none;
+        margin-right: 20px;
+        text-decoration: none;
+    }
+
+    .layout-topbar-logo img {
+        height: 2.5rem;
+        margin: auto;
+    }
+
+    .menu a span.Text {
+        display: none;
+    }
+
+    .menu a span.Icon {
+        font-size: 24px;
+    }
+
+    .Account {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    ol,
+    ul,
+    dl {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-link.menu-a span.Text {
+        display: none;
+    }
+
+    .nav-link.menu-a span.Icon {
+        font-size: 24px;
+    }
+
+    .logo-wrapper.layout-topbar-logo img {
+        height: 30px;
+    }
+
+    .logo-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ml-auto {
+        margin-left: auto;
+        /* Estilo para alinear a la derecha */
+    }
+
+
+    .user-logo {
+        display: none;
+        /* Ocultar la imagen de perfil en dispositivos móviles */
     }
 }
 </style>

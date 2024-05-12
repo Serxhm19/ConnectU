@@ -48,6 +48,7 @@ Route::post('category/{id}', [Category_eventController::class, 'update']);
 Route::post('category/update/{id}', [Category_eventController::class, 'update']);
 //---------------------------------------------------------------//
 
+Route::post('events/user/{id}', [UserController::class, 'update']);
 
 //--------------------------Event----------------------------------//
 Route::get('/events', [EventController::class, 'index']);

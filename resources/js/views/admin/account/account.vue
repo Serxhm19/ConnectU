@@ -105,8 +105,7 @@
             <Input id="email" class="flex-auto" autocomplete="off" />
         </div>
         <template #footer>
-            <Button label="Cancel" text severity="secondary" @click="visible = false" autofocus />
-            <Button label="Save" outlined severity="secondary" @click="visible = false" autofocus />
+            <button type="submit" class="btn btn-primary mt-4 mb-4" @click="saveUser">Actualizar</button>
         </template>
     </Dialog>
 
@@ -128,6 +127,7 @@ const { events, users, getEvents, getUsers } = useEvents();
 import Button from 'primevue/button';
 import { FilterMatchMode } from 'primevue/api';
 import Dialog from 'primevue/dialog';
+import { useRoute } from "vue-router";
 
 import { useStore } from 'vuex';
 import axios from "axios";
@@ -208,17 +208,47 @@ function updateBackgroundImage(event) {
         });
 }
 
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
 
-const initFilters = () => {
-    filters.value = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    };
-};
+function saveUser() {
+    const vuexData = localStorage.getItem("vuex");
+    const vuexArray = JSON.parse(vuexData);
+    const userId = vuexArray.auth.user.id;
+    const route = useRoute()
+    const name = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
 
-initFilters();
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('user_id', userId);
+
+
+    axios.post('/api/user/update/' + route.params.id, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+        .then(response => {
+            console.log(response.data);
+            swal.fire({
+                icon: 'success',
+                title: '¡Actualización exitosa!',
+                text: 'Los datos del usuario se han actualizado correctamente.',
+            }).then(() => {
+                // Realizar alguna acción adicional si es necesario
+            });
+        })
+        .catch(error => {
+            console.error(error);
+            swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un error al actualizar los datos del usuario',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+}
+
 
 onMounted(async () => {
     await getEvents();
